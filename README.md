@@ -1,3 +1,9 @@
+## 👥 Web Developers
+
+| <img src="https://avatars.githubusercontent.com/u/127809173?v=4" width=100> | <img src="https://avatars.githubusercontent.com/u/163666284?s=96&v=4" width=100> |
+| :---: | :---: |
+| [유진](https://github.com/Yujin1219) | [유상완](https://github.com/wantkdd) |
+
 ### 🌐 Git-flow
 
 - main: 프로젝트가 최종적으로 배포되는 브랜치
