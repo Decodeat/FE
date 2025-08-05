@@ -3,6 +3,7 @@ import ErrorPage from '../pages/errorPage';
 import EnrollPage from '../pages/enrollPage';
 import RootLayout from '../layout/RootLayout';
 import Detail from '../pages/detail/Detail';
+import HomePage from '../pages/homePage';
 
 const router = createBrowserRouter([
   {
@@ -10,6 +11,10 @@ const router = createBrowserRouter([
     element: <RootLayout />,
     errorElement: <ErrorPage />,
     children: [
+      {
+        index: true, // 홈페이지를 기본 경로로 설정
+        element: <HomePage />,
+      },
       {
         path: 'enroll',
         element: <EnrollPage />,

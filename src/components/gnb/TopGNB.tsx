@@ -4,20 +4,20 @@ import { ChevronDown, Sun, Moon, Menu, ShoppingCart } from 'lucide-react';
 const TopGNB = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [openDropdown, setOpenDropdown] = useState(null);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
-  // Dark mode toggle handler
+  // 다크모드 핸들러
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
-    // In a real app, you'd also update localStorage and body class
+    // 실제 앱에서 localStorage와 body 클래스를 업데이트해야 함
   };
 
-  // Dropdown toggle handler
-  const toggleDropdown = (dropdownName) => {
+  // 드롭다운 토글 핸들러
+  const toggleDropdown = (dropdownName: string | null) => {
     setOpenDropdown(openDropdown === dropdownName ? null : dropdownName);
   };
 
-  // Close dropdowns when clicking outside
+  // 바깥 클릭시 드롭다운 닫기
   useEffect(() => {
     const handleClickOutside = () => {
       setOpenDropdown(null);
@@ -131,9 +131,9 @@ const TopGNB = () => {
             </span>
           </a>
 
-          {/* Desktop Navigation */}
+          {/* 데탑 네비게이션 */}
           <div className="hidden lg:flex items-center space-x-8">
-            {/* Landings Dropdown */}
+            {/* 제품 등록 드롭다운 */}
             <div className="relative">
               <button
                 onClick={(e) => {
@@ -177,7 +177,7 @@ const TopGNB = () => {
               )}
             </div>
 
-            {/* Pages Dropdown */}
+            {/* 영양소 정보 드롭다운 */}
             <div className="relative">
               <button
                 onClick={(e) => {
@@ -234,7 +234,7 @@ const TopGNB = () => {
               )}
             </div>
 
-            {/* Account Dropdown */}
+            {/* 추천제품 드롭다운 */}
             <div className="relative">
               <button
                 onClick={(e) => {
@@ -353,18 +353,16 @@ const TopGNB = () => {
               )}
             </button>
 
-            {/* Buy Now Button - Desktop */}
-            <a
-              href="https://themes.getbootstrap.com/product/around-multipurpose-template-ui-kit/"
-              target="_blank"
-              rel="noopener"
+            {/* 데탑 로그인 버튼 */}
+            <button
+              onClick={() => {}}
               className="hidden sm:flex items-center space-x-2 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
             >
               <ShoppingCart className="w-4 h-4" />
               <span>로그인</span>
-            </a>
+            </button>
 
-            {/* Mobile menu button */}
+            {/* 모바일 햄버거 버튼 */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className={`lg:hidden p-2 rounded-lg transition-colors ${
@@ -379,7 +377,7 @@ const TopGNB = () => {
           </div>
         </nav>
 
-        {/* Mobile menu */}
+        {/* 모바일 메뉴 */}
         {isMenuOpen && (
           <div
             className={`lg:hidden border-t ${
@@ -395,7 +393,7 @@ const TopGNB = () => {
                   isDarkMode ? 'text-gray-300' : 'text-gray-900'
                 }`}
               >
-                Landings
+                제품 등록
               </a>
               <a
                 href="/pages"
@@ -403,7 +401,7 @@ const TopGNB = () => {
                   isDarkMode ? 'text-gray-300' : 'text-gray-900'
                 }`}
               >
-                Pages
+                영양소 정보
               </a>
               <a
                 href="/account"
@@ -411,7 +409,7 @@ const TopGNB = () => {
                   isDarkMode ? 'text-gray-300' : 'text-gray-900'
                 }`}
               >
-                Account
+                추천 제품
               </a>
               <a
                 href="/ui-kit"
@@ -419,7 +417,7 @@ const TopGNB = () => {
                   isDarkMode ? 'text-gray-300' : 'text-gray-900'
                 }`}
               >
-                UI Kit
+                문의
               </a>
               <a
                 href="/docs"
@@ -427,20 +425,18 @@ const TopGNB = () => {
                   isDarkMode ? 'text-gray-300' : 'text-gray-900'
                 }`}
               >
-                Docs
+                마이페이지
               </a>
 
-              {/* Mobile Buy Now Button */}
+              {/* 모바일 로그인 버튼  */}
               <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
-                <a
-                  href="https://themes.getbootstrap.com/product/around-multipurpose-template-ui-kit/"
-                  target="_blank"
-                  rel="noopener"
+                <button
+                  onClick={() => {}}
                   className="flex items-center justify-center space-x-2 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-3 rounded-lg text-base font-medium transition-colors w-full"
                 >
                   <ShoppingCart className="w-5 h-5" />
                   <span>로그인</span>
-                </a>
+                </button>
               </div>
             </div>
           </div>
