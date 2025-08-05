@@ -1,6 +1,16 @@
 import { useState, useEffect, useCallback } from 'react';
 import { ShoppingCart } from 'lucide-react';
 
+// Configuration constants
+const CONFIG = {
+  SCROLL_OFFSET_PX: 1000,
+  MAX_PAGES: 5,
+  INITIAL_LOAD_COUNT: 12,
+  LOAD_MORE_COUNT: 12,
+  INITIAL_LOAD_DELAY: 500,
+  LOAD_MORE_DELAY: 1000,
+} as const;
+
 interface Product {
   id: number;
   name: string;
@@ -18,7 +28,7 @@ const ProductGrid = () => {
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
 
-  // 샘플 제품 데이터
+  // 샘플 제품 데이터 생성
   const generateProducts = (startIndex: number, count: number): Product[] => {
     const productNames = [
       '분리유청 단백질 파우더',
@@ -49,43 +59,73 @@ const ProductGrid = () => {
     }));
   };
 
+  // 모의 API 호출 함수
+  const mockFetchProducts = useCallback(
+    (
+      startIndex: number,
+      count: number,
+      delay: number = CONFIG.INITIAL_LOAD_DELAY
+    ): Promise<Product[]> => {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(generateProducts(startIndex, count));
+        }, delay);
+      });
+    },
+    []
+  );
+
   // 초기 데이터 로드
   useEffect(() => {
-    setLoading(true);
-    // API 호출 시뮬레이션
-    setTimeout(() => {
-      const initialProducts = generateProducts(1, 12);
-      setProducts(initialProducts);
-      setLoading(false);
-    }, 500);
-  }, []);
+    const fetchInitialProducts = async () => {
+      setLoading(true);
+      try {
+        const initialProducts = await mockFetchProducts(
+          1,
+          CONFIG.INITIAL_LOAD_COUNT
+        );
+        setProducts(initialProducts);
+      } catch (error) {
+        console.error('Failed to fetch initial products:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchInitialProducts();
+  }, [mockFetchProducts]);
 
   // 더 많은 제품 로드
-  const loadMore = useCallback(() => {
+  const loadMore = useCallback(async () => {
     if (loading || !hasMore) return;
 
     setLoading(true);
-    // API 호출 시뮬레이션
-    setTimeout(() => {
-      const newProducts = generateProducts(products.length + 1, 12);
+    try {
+      const newProducts = await mockFetchProducts(
+        products.length + 1,
+        CONFIG.LOAD_MORE_COUNT,
+        CONFIG.LOAD_MORE_DELAY
+      );
       setProducts((prev) => [...prev, ...newProducts]);
       setPage((prev) => prev + 1);
 
-      // 5페이지 이후에는 더 이상 로드하지 않음
-      if (page >= 5) {
+      // maxPages 페이지 이후에는 더 이상 로드하지 않음
+      if (page >= CONFIG.MAX_PAGES) {
         setHasMore(false);
       }
-
+    } catch (error) {
+      console.error('Failed to load more products:', error);
+    } finally {
       setLoading(false);
-    }, 1000);
-  }, [loading, hasMore, products.length, page]);
+    }
+  }, [loading, hasMore, products.length, page, mockFetchProducts]);
 
   // 무한 스크롤 감지
   useEffect(() => {
     const handleScroll = () => {
       if (
         window.innerHeight + document.documentElement.scrollTop >=
-        document.documentElement.offsetHeight - 1000
+        document.documentElement.offsetHeight - CONFIG.SCROLL_OFFSET_PX
       ) {
         loadMore();
       }

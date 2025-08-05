@@ -1,6 +1,13 @@
+import {
+  createDonutChartPath,
+  calculateTotal,
+  CHART_CONFIG,
+  type ChartDataItem,
+} from '../../utils/chartUtils';
+
 const ProductDetail = () => {
   // 영양 성분 데이터 (임의값)
-  const nutritionData = [
+  const nutritionData: ChartDataItem[] = [
     { name: '단백질', value: 35, color: '#3B82F6' },
     { name: '탄수화물', value: 30, color: '#10B981' },
     { name: '지방', value: 15, color: '#F59E0B' },
@@ -9,31 +16,24 @@ const ProductDetail = () => {
   ];
 
   // 원형 그래프 SVG 컴포넌트
-  const DonutChart = ({ data }: { data: typeof nutritionData }) => {
-    const total = data.reduce((sum, item) => sum + item.value, 0);
+  const DonutChart = ({ data }: { data: ChartDataItem[] }) => {
+    const total = calculateTotal(data);
     let cumulativePercentage = 0;
-
-    const createPath = (percentage: number, cumulativePercentage: number) => {
-      const startAngle = cumulativePercentage * 360;
-      const endAngle = (cumulativePercentage + percentage) * 360;
-
-      const x1 = 50 + 40 * Math.cos(((startAngle - 90) * Math.PI) / 180);
-      const y1 = 50 + 40 * Math.sin(((startAngle - 90) * Math.PI) / 180);
-      const x2 = 50 + 40 * Math.cos(((endAngle - 90) * Math.PI) / 180);
-      const y2 = 50 + 40 * Math.sin(((endAngle - 90) * Math.PI) / 180);
-
-      const largeArcFlag = percentage > 0.5 ? 1 : 0;
-
-      return `M 50 50 L ${x1} ${y1} A 40 40 0 ${largeArcFlag} 1 ${x2} ${y2} Z`;
-    };
 
     return (
       <div className="flex items-center space-x-6">
         <div className="relative">
-          <svg width="200" height="200" viewBox="0 0 100 100">
+          <svg
+            width={CHART_CONFIG.DEFAULT_WIDTH}
+            height={CHART_CONFIG.DEFAULT_HEIGHT}
+            viewBox={CHART_CONFIG.DEFAULT_VIEWBOX}
+          >
             {data.map((item, index) => {
               const percentage = item.value / total;
-              const path = createPath(percentage, cumulativePercentage);
+              const path = createDonutChartPath(
+                percentage,
+                cumulativePercentage
+              );
               cumulativePercentage += percentage;
 
               return (
@@ -42,12 +42,17 @@ const ProductDetail = () => {
                   d={path}
                   fill={item.color}
                   stroke="white"
-                  strokeWidth="0.5"
+                  strokeWidth={CHART_CONFIG.STROKE_WIDTH}
                 />
               );
             })}
             {/* 중앙 원 */}
-            <circle cx="50" cy="50" r="20" fill="white" />
+            <circle
+              cx={CHART_CONFIG.DEFAULT_CENTER_X}
+              cy={CHART_CONFIG.DEFAULT_CENTER_Y}
+              r={CHART_CONFIG.DEFAULT_INNER_RADIUS}
+              fill="white"
+            />
             <text
               x="50"
               y="48"

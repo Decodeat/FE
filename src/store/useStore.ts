@@ -11,15 +11,15 @@ interface FilterState {
   clearAllFilters: () => void;
 }
 
-export const useFilterStore = create<FilterState>((set, get) => ({
-  // 선택된 영양소 필터
+export const useFilterStore = create<FilterState>()((set, get) => ({
+  // 선택된 영양소 필터 - 일관성을 위해 모든 기본값을 false로 설정
   checkedItems: {
     'refined-carbohydrate': false,
     'complex-carbohydrate': false,
-    'whey-protein-isolate': true,
+    'whey-protein-isolate': false,
     'whey-protein-concentrate': false,
     'plant-protein': false,
-    'animal-protein': true,
+    'animal-protein': false,
     'soluble-dietary-fiber': false,
     'insoluble-dietary-fiber': false,
   },
@@ -31,7 +31,7 @@ export const useFilterStore = create<FilterState>((set, get) => ({
   sortBy: 'popular',
 
   // 액션들
-  toggleFilter: (id) =>
+  toggleFilter: (id: string) =>
     set((state) => ({
       checkedItems: {
         ...state.checkedItems,
@@ -39,9 +39,9 @@ export const useFilterStore = create<FilterState>((set, get) => ({
       },
     })),
 
-  setSearchQuery: (query) => set({ searchQuery: query }),
+  setSearchQuery: (query: string) => set({ searchQuery: query }),
 
-  setSortBy: (sortBy) => set({ sortBy }),
+  setSortBy: (sortBy: string) => set({ sortBy }),
 
   // 선택된 필터들만 가져오기
   getSelectedFilters: () => {
@@ -52,9 +52,12 @@ export const useFilterStore = create<FilterState>((set, get) => ({
   // 모든 필터 초기화
   clearAllFilters: () =>
     set((state) => ({
-      checkedItems: Object.keys(state.checkedItems).reduce((acc, key) => {
-        acc[key] = false;
-        return acc;
-      }, {} as Record<string, boolean>),
+      checkedItems: Object.keys(state.checkedItems).reduce(
+        (acc, key) => {
+          acc[key] = false;
+          return acc;
+        },
+        {} as Record<string, boolean>
+      ),
     })),
 }));
