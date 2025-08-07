@@ -28,35 +28,26 @@ export const megaMenuLandings: MenuItem[] = [
 
 export const pagesMenu: MenuSection[] = [
   {
-    title: 'Portfolio',
+    title: '탄수화물',
     items: [
-      { name: 'List View v.1', href: '/portfolio/list-v1' },
-      { name: 'List View v.2', href: '/portfolio/list-v2' },
-      { name: 'Grid View v.1', href: '/portfolio/grid-v1' },
-      { name: 'Grid View v.2', href: '/portfolio/grid-v2' },
-      { name: 'Slider View', href: '/portfolio/slider' },
-      { name: 'Single Project v.1', href: '/portfolio/single-v1' },
-      { name: 'Single Project v.2', href: '/portfolio/single-v2' },
+      { name: '정제 탄수화물', href: '/nutrition/refined-carbohydrate' },
+      { name: '복합 탄수화물', href: '/nutrition/complex-carbohydrate' },
     ],
   },
   {
-    title: 'Shop',
+    title: '단백질',
     items: [
-      { name: 'Catalog (Listing)', href: '/shop/catalog' },
-      { name: 'Product Page', href: '/shop/single' },
-      { name: 'Checkout', href: '/shop/checkout' },
+      { name: '분리유청 단백질', href: '/nutrition/whey-protein-isolate' },
+      { name: '농축유청 단백질', href: '/nutrition/whey-protein-concentrate' },
+      { name: '식물성 단백질', href: '/nutrition/plant-protein' },
+      { name: '동물성 단백질', href: '/nutrition/animal-protein' },
     ],
   },
   {
-    title: 'Blog',
+    title: '식이섬유',
     items: [
-      { name: 'Grid View with Sidebar', href: '/blog/grid-sidebar' },
-      { name: 'Grid View no Sidebar', href: '/blog/grid' },
-      { name: 'List View with Sidebar', href: '/blog/list-sidebar' },
-      { name: 'List View no Sidebar', href: '/blog/list' },
-      { name: 'Single post v.1', href: '/blog/single-v1' },
-      { name: 'Single post v.2', href: '/blog/single-v2' },
-      { name: 'Single post v.3', href: '/blog/single-v3' },
+      { name: '수용성 식이섬유', href: '/nutrition/soluble-fiber' },
+      { name: '불용성 식이섬유', href: '/nutrition/insoluble-fiber' },
     ],
   },
 ];

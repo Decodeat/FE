@@ -1,4 +1,4 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import LeftGNB from '../components/gnb/LeftGNB';
 import TopGNB from '../components/gnb/TopGNB';
 
@@ -10,6 +10,13 @@ const LAYOUT_CONSTANTS = {
 } as const;
 
 const RootLayout = () => {
+  const location = useLocation();
+  const isHomePage = location.pathname === '/';
+  const isEnrollPage = location.pathname === '/enroll'; // 제품 등록 페이지 또는 다른 전체너비 페이지들
+
+  // 전체 너비가 필요한 페이지들
+  const isFullWidthPage = isEnrollPage;
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Top Navigation */}
@@ -17,15 +24,19 @@ const RootLayout = () => {
 
       {/* Main Layout Container */}
       <div className="flex">
-        {/* Left Sidebar */}
-        <LeftGNB />
+        {/* Left Sidebar - 홈페이지에서만 표시 */}
+        {isHomePage && <LeftGNB />}
 
         {/* Main Content Area */}
         <main
-          className={`flex-1 ${LAYOUT_CONSTANTS.SIDEBAR_MARGIN} ${LAYOUT_CONSTANTS.TOP_NAV_HEIGHT}`}
+          className={`flex-1 ${
+            isHomePage ? LAYOUT_CONSTANTS.SIDEBAR_MARGIN : ''
+          } ${LAYOUT_CONSTANTS.TOP_NAV_HEIGHT}`}
         >
-          {/* Margin left for sidebar width, padding top for nav height */}
-          <div className="container mx-auto px-4 py-6">
+          {/* 전체 너비 페이지는 container 제한 없이, 일반 페이지는 container 적용 */}
+          <div
+            className={isFullWidthPage ? 'py-6' : 'container mx-auto px-4 py-6'}
+          >
             <Outlet />
           </div>
         </main>

@@ -2,8 +2,9 @@ import { createBrowserRouter } from 'react-router-dom';
 import ErrorPage from '../pages/ErrorPage';
 import EnrollPage from '../pages/EnrollPage';
 import RootLayout from '../layout/RootLayout';
-import Detail from '../pages/detail/Detail';
+import DetailPage from '../pages/DetailPage';
 import HomePage from '../pages/homePage';
+import MyPage from '../pages/MyPage';
 
 const router = createBrowserRouter([
   {
@@ -21,7 +22,11 @@ const router = createBrowserRouter([
       },
       {
         path: 'detail',
-        element: <Detail />,
+        element: <DetailPage />,
+      },
+      {
+        path: 'myPage',
+        element: <MyPage />,
       },
     ],
   },

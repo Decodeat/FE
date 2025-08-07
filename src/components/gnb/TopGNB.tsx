@@ -1,11 +1,8 @@
 import { useState, useEffect } from 'react';
 import { ChevronDown, Sun, Moon, Menu, ShoppingCart } from 'lucide-react';
-import {
-  megaMenuLandings,
-  pagesMenu,
-  accountMenu,
-  accountPages,
-} from '../../config/menuConfig';
+import { pagesMenu, accountMenu, accountPages } from '../../config/menuConfig';
+
+import Logo from '../../assets/logo/decodeat.svg';
 
 const TopGNB = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -44,70 +41,30 @@ const TopGNB = () => {
       <div className="container mx-auto px-4">
         <nav className="flex items-center justify-between py-3">
           {/* Logo */}
-          <a
-            href="/"
-            className="flex items-center space-x-2 text-xl font-semibold"
-          >
-            <div className="text-emerald-600">
-              <svg
-                width="35"
-                height="32"
-                viewBox="0 0 36 33"
-                className="fill-current"
-              >
-                <path d="M35.6,29c-1.1,3.4-5.4,4.4-7.9,1.9c-2.3-2.2-6.1-3.7-9.4-3.7c-3.1,0-7.5,1.8-10,4.1c-2.2,2-5.8,1.5-7.3-1.1c-1-1.8-1.2-4.1,0-6.2l0.6-1.1l0,0c0.6-0.7,4.4-5.2,12.5-5.7c0.5,1.8,2,3.1,3.9,3.1c2.2,0,4.1-1.9,4.1-4.2s-1.8-4.2-4.1-4.2c-2,0-3.6,1.4-4,3.3H7.7c-0.8,0-1.3-0.9-0.9-1.6l5.6-9.8c2.5-4.5,8.8-4.5,11.3,0L35.1,24C36,25.7,36.1,27.5,35.6,29z" />
-              </svg>
-            </div>
+          <a href="/" className="flex items-center text-2xl font-semibold">
+            <img
+              src={Logo}
+              alt="Decodeat Logo"
+              className="h-14 w-auto text-emerald-600"
+            />
             <span className={isDarkMode ? 'text-white' : 'text-gray-900'}>
-              Decodeat
+              DecodeEat
             </span>
           </a>
 
           {/* 데탑 네비게이션 */}
           <div className="hidden lg:flex items-center space-x-8">
-            {/* 제품 등록 드롭다운 */}
-            <div className="relative">
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  toggleDropdown('landings');
-                }}
-                className={`flex items-center space-x-1 px-4 py-2 text-sm font-medium transition-colors ${
-                  isDarkMode
-                    ? 'text-gray-300 hover:text-white'
-                    : 'text-gray-700 hover:text-emerald-600'
-                }`}
-              >
-                <span>제품 등록</span>
-                <ChevronDown className="w-4 h-4" />
-              </button>
-
-              {openDropdown === 'landings' && (
-                <div
-                  className={`absolute top-full left-0 mt-2 w-96 rounded-lg shadow-lg border ${
-                    isDarkMode
-                      ? 'bg-gray-800 border-gray-700'
-                      : 'bg-white border-gray-200'
-                  } z-50`}
-                >
-                  <div className="grid grid-cols-2 gap-1 p-4">
-                    {megaMenuLandings.map((item, index) => (
-                      <a
-                        key={index}
-                        href={item.href}
-                        className={`block px-3 py-2 text-sm rounded transition-colors ${
-                          isDarkMode
-                            ? 'text-gray-300 hover:text-white hover:bg-gray-700'
-                            : 'text-gray-700 hover:text-emerald-600 hover:bg-gray-50'
-                        }`}
-                      >
-                        {item.name}
-                      </a>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
+            {/* 제품 등록 링크 */}
+            <a
+              href="/enroll"
+              className={`px-4 py-2 text-lg font-medium transition-colors ${
+                isDarkMode
+                  ? 'text-gray-300 hover:text-white'
+                  : 'text-gray-700 hover:text-emerald-600'
+              }`}
+            >
+              제품 등록
+            </a>
 
             {/* 영양소 정보 드롭다운 */}
             <div className="relative">
@@ -116,7 +73,7 @@ const TopGNB = () => {
                   e.stopPropagation();
                   toggleDropdown('pages');
                 }}
-                className={`flex items-center space-x-1 px-4 py-2 text-sm font-medium transition-colors ${
+                className={`flex items-center space-x-1 px-4 py-2 text-lg font-medium transition-colors ${
                   isDarkMode
                     ? 'text-gray-300 hover:text-white'
                     : 'text-gray-700 hover:text-emerald-600'
@@ -173,7 +130,7 @@ const TopGNB = () => {
                   e.stopPropagation();
                   toggleDropdown('account');
                 }}
-                className={`flex items-center space-x-1 px-4 py-2 text-sm font-medium transition-colors ${
+                className={`flex items-center space-x-1 px-4 py-2 text-lg font-medium transition-colors ${
                   isDarkMode
                     ? 'text-gray-300 hover:text-white'
                     : 'text-gray-700 hover:text-emerald-600'
@@ -245,7 +202,7 @@ const TopGNB = () => {
 
             <a
               href="/ui-kit"
-              className={`px-4 py-2 text-sm font-medium transition-colors ${
+              className={`px-4 py-2 text-lg font-medium transition-colors ${
                 isDarkMode
                   ? 'text-gray-300 hover:text-white'
                   : 'text-gray-700 hover:text-emerald-600'
@@ -255,8 +212,8 @@ const TopGNB = () => {
             </a>
 
             <a
-              href="/docs"
-              className={`px-4 py-2 text-sm font-medium transition-colors ${
+              href="/myPage"
+              className={`px-4 py-2 text-lg font-medium transition-colors ${
                 isDarkMode
                   ? 'text-gray-300 hover:text-white'
                   : 'text-gray-700 hover:text-emerald-600'
@@ -267,7 +224,7 @@ const TopGNB = () => {
           </div>
 
           {/* Right side controls */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center">
             {/* Dark mode toggle */}
             <button
               onClick={toggleDarkMode}
@@ -279,18 +236,17 @@ const TopGNB = () => {
               aria-label="Toggle dark mode"
             >
               {isDarkMode ? (
-                <Sun className="w-5 h-5" />
+                <Sun className="w-7 h-7" />
               ) : (
-                <Moon className="w-5 h-5" />
+                <Moon className="w-7 h-7" />
               )}
             </button>
 
-            {/* 데탑 로그인 버튼 */}
+            {/* 데탑 로그인 버튼: sm 이상에서만 flex, 그리고 좌측에 ml-4 추가 */}
             <button
               onClick={() => {}}
-              className="hidden sm:flex items-center space-x-2 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+              className="hidden sm:flex sm:ml-4 items-center bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded-lg text-lg font-medium transition-colors"
             >
-              <ShoppingCart className="w-4 h-4" />
               <span>로그인</span>
             </button>
 
@@ -320,7 +276,7 @@ const TopGNB = () => {
           >
             <div className="px-4 py-6 space-y-4">
               <a
-                href="/landings"
+                href="/enroll"
                 className={`block text-base font-medium ${
                   isDarkMode ? 'text-gray-300' : 'text-gray-900'
                 }`}
@@ -352,7 +308,7 @@ const TopGNB = () => {
                 문의
               </a>
               <a
-                href="/docs"
+                href="/myPage"
                 className={`block text-base font-medium ${
                   isDarkMode ? 'text-gray-300' : 'text-gray-900'
                 }`}

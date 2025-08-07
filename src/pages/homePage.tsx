@@ -14,18 +14,18 @@ const HomePage = () => {
   return (
     <div className="space-y-8">
       {/* 메인 배너 */}
-      <section className="relative bg-[#79CCB1] rounded-xl p-8 text-white overflow-hidden">
-        <div className="relative z-10">
-          <div className="max-w-2xl">
+      <section className="relative mt-8 bg-[#79CCB1] rounded-xl p-8 text-[#2D6451] overflow-hidden">
+        <div className="relative z-10 flex flex-col items-center text-center">
+          <div className="max-w-4xl w-full">
             <h1 className="text-4xl font-bold mb-4">
               건강한 영양소를 찾아보세요
             </h1>
-            <p className="text-xl mb-6 text-emerald-50">
+            <p className="text-xl mb-6">
               당신에게 맞는 영양소 제품을 추천해드립니다
             </p>
 
             {/* 검색바 */}
-            <div className="flex gap-2">
+            <div className="flex gap-2 max-w-2xl mx-auto">
               <div className="flex-1 relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                 <input
@@ -33,13 +33,13 @@ const HomePage = () => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="원하는 영양소나 제품을 검색해보세요..."
-                  className="w-full pl-10 pr-4 py-3 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white/50"
+                  className="w-full pl-10 pr-4 py-3 rounded-lg text-gray-900 placeholder-gray-500 outline-none ring-2 ring-white/50 focus:ring-white"
                   onKeyPress={(e) => e.key === 'Enter' && handleSearch(e)}
                 />
               </div>
               <button
                 onClick={handleSearch}
-                className="bg-white text-emerald-600 px-6 py-3 rounded-lg font-medium hover:bg-gray-100 transition-colors"
+                className="bg-white text-emerald-600 px-6 py-3 rounded-lg font-medium hover:bg-gray-100 transition-colors cursor-pointer"
               >
                 검색
               </button>
