@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useFilterStore } from '../../store/useStore';
+import { TrendingUp, Star, Award } from 'lucide-react';
 
 const LeftGNB = () => {
   const [isLivingRoomOpen, setIsLivingRoomOpen] = useState(true);
@@ -17,9 +18,44 @@ const LeftGNB = () => {
   ];
 
   return (
-    <aside className="fixed left-4 top-24 w-64 bg-white border border-gray-200 z-30 rounded-xl">
-      <div className="p-4">
-        <h3 className="text-lg font-medium mb-4">세부 영양소</h3>
+    <aside className="fixed top-20 w-64 h-[calc(100vh-5rem)] overflow-y-auto z-30 bg-white">
+      {/* 통계카드들 */}
+      <div className="bg-white p-6 rounded-lg ">
+          <div className="flex items-center space-x-3">
+            <div className="p-2 bg-blue-100 rounded-lg">
+              <TrendingUp className="w-6 h-6 text-blue-600" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-gray-900">인기 제품</h3>
+              <p className="text-sm text-gray-600">1,234개 제품</p>
+            </div>
+          </div>
+        </div>
+        <div className="bg-white p-6 rounded-lg ">
+          <div className="flex items-center space-x-3">
+            <div className="p-2 bg-yellow-100 rounded-lg">
+              <Star className="w-6 h-6 text-yellow-600" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-gray-900">높은 평점</h3>
+              <p className="text-sm text-gray-600">평균 4.8점</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white p-6 rounded-lg">
+          <div className="flex items-center space-x-3">
+            <div className="p-2 bg-green-100 rounded-lg">
+              <Award className="w-6 h-6 text-green-600" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-gray-900">인증 제품</h3>
+              <p className="text-sm text-gray-600">567개 제품</p>
+            </div>
+          </div>
+        </div>
+      <div className="pr-4 pl-4">
+        {/* <h3 className="text-lg font-medium mb-4">세부 영양소</h3> */}
         <div className="mb-0">
           <h4>
             <button
@@ -28,7 +64,7 @@ const LeftGNB = () => {
               onClick={() => setIsLivingRoomOpen(!isLivingRoomOpen)}
               aria-expanded={isLivingRoomOpen}
             >
-              <span className="text-base">영양소 리스트</span>
+              <span className="text-lg font-bold text-[#2D5945]">세부 영양소 리스트</span>
               <svg
                 className={`w-4 h-4 transition-transform duration-200 ${
                   isLivingRoomOpen ? 'rotate-180' : ''

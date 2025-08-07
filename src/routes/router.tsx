@@ -5,6 +5,7 @@ import RootLayout from '../layout/RootLayout';
 import DetailPage from '../pages/DetailPage';
 import HomePage from '../pages/homePage';
 import MyPage from '../pages/MyPage';
+import SearchPage from '../pages/searchPage';
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
       {
         path: 'myPage',
         element: <MyPage />,
+      },
+      {
+        path: 'search',
+        element: <SearchPage />,
       },
     ],
   },

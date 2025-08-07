@@ -1,4 +1,4 @@
-import { Search, TrendingUp, Star, Award } from 'lucide-react';
+import { Search} from 'lucide-react';
 import ProductGrid from '../components/search/ProductGrid.tsx';
 import { useFilterStore } from '../store/useStore';
 
@@ -14,14 +14,14 @@ const HomePage = () => {
   return (
     <div className="space-y-8">
       {/* 메인 배너 */}
-      <section className="relative mt-8 bg-[#79CCB1] rounded-xl p-8 text-[#2D6451] overflow-hidden">
+      <section className="relative bg-[#D2EDE4] p-8 text-[#2D6451] overflow-hidden">
         <div className="relative z-10 flex flex-col items-center text-center">
           <div className="max-w-4xl w-full">
-            <h1 className="text-4xl font-bold mb-4">
-              건강한 영양소를 찾아보세요
+            <h1 className="text-2xl mt-2 md:text-3xl font-bold text-[#2D5945] mb-2">
+              어떤 제품이든, 궁금한 영양정보를 찾아보세요!
             </h1>
-            <p className="text-xl mb-6">
-              당신에게 맞는 영양소 제품을 추천해드립니다
+            <p className="text-xl text-gray-700 mb-6">
+              영양 성분을 쉽고 빠르게 확인할 수 있어요.
             </p>
 
             {/* 검색바 */}
@@ -39,7 +39,7 @@ const HomePage = () => {
               </div>
               <button
                 onClick={handleSearch}
-                className="bg-white text-emerald-600 px-6 py-3 rounded-lg font-medium hover:bg-gray-100 transition-colors cursor-pointer"
+                className="bg-white text-[#2D5945] px-6 py-3 rounded-lg font-medium hover:bg-gray-100 transition-colors cursor-pointer"
               >
                 검색
               </button>
@@ -53,7 +53,7 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* 통계 카드들 */}
+      {/* 통계 카드들
       <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-white p-6 rounded-lg border border-gray-200">
           <div className="flex items-center space-x-3">
@@ -90,37 +90,37 @@ const HomePage = () => {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* 추천 카테고리 */}
       <section>
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">인기 카테고리</h2>
+        <h2 className="text-xl font-bold text-[#2D5945] mb-3">인기 카테고리</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
             {
               name: '단백질',
               icon: '💪',
-              color: 'bg-red-50 border-red-200 text-red-700',
+              color: 'bg-red-100 border-red-200 text-red-700',
             },
             {
               name: '탄수화물',
               icon: '🌾',
-              color: 'bg-yellow-50 border-yellow-200 text-yellow-700',
+              color: 'bg-yellow-100 border-yellow-200 text-yellow-700',
             },
             {
               name: '식이섬유',
               icon: '🥬',
-              color: 'bg-green-50 border-green-200 text-green-700',
+              color: 'bg-green-100 border-green-200 text-green-700',
             },
             {
               name: '비타민',
               icon: '🍊',
-              color: 'bg-orange-50 border-orange-200 text-orange-700',
+              color: 'bg-orange-100 border-orange-200 text-orange-700',
             },
           ].map((category, index) => (
             <button
               key={index}
-              className={`p-4 rounded-lg border-2 transition-all hover:shadow-md ${category.color}`}
+              className={`p-4 rounded-lg transition-all hover:border-2 hover:shadow-md ${category.color}`}
             >
               <div className="text-2xl mb-2">{category.icon}</div>
               <div className="font-medium">{category.name}</div>
@@ -131,12 +131,12 @@ const HomePage = () => {
 
       {/* 추천 제품 그리드 */}
       <section>
-        <div className="flex items-center justify-between mb-6">
+        {/* <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold text-gray-900">추천 제품</h2>
           <button className="text-emerald-600 hover:text-emerald-700 font-medium">
             전체보기 →
           </button>
-        </div>
+        </div> */}
 
         <ProductGrid />
       </section>

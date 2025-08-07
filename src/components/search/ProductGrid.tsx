@@ -149,7 +149,7 @@ const ProductGrid = () => {
       {/* 검색 결과 헤더 */}
       <div className="flex items-start justify-between mb-6">
         <div className="flex-1">
-          <h2 className="text-xl font-bold text-gray-900 mb-2">영양소 제품</h2>
+          <h2 className="text-xl font-bold text-[#2D5945] mb-2">영양소 제품</h2>
           <p className="text-gray-600 text-sm">
             총 {products.length}개의 제품을 찾았습니다
           </p>
