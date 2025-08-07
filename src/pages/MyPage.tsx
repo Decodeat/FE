@@ -1,5 +1,4 @@
 import type { FC } from 'react';
-import { Camera } from 'lucide-react';
 import { MyProductForm } from '../components/myPage/MyProductForm';
 import { useState } from 'react';
 
@@ -75,68 +74,107 @@ export const MyPage: FC<MyPageProps> = ({
   email = '—',
 }) => {
   const [filter, setFilter] = useState('all');
+  const [activeTab, setActiveTab] = useState('analysis'); // 현재 활성 탭
 
   // (필터 로직: 예시로 전체만 반환)
   const filtered = dummyAnalyses.filter(() => true);
 
+  // 활성 탭에 따른 컨텐츠 렌더링
+  const renderContent = () => {
+    switch (activeTab) {
+      case 'overview':
+        return (
+          <div className="bg-white rounded-xl p-6 shadow-sm">
+            <h2 className="text-xl font-bold mb-4">Overview</h2>
+            <p className="text-gray-600">계정 개요 정보가 여기에 표시됩니다.</p>
+          </div>
+        );
+      case 'settings':
+        return (
+          <div className="bg-white rounded-xl p-6 shadow-sm">
+            <h2 className="text-xl font-bold mb-4">Settings</h2>
+            <p className="text-gray-600">계정 설정이 여기에 표시됩니다.</p>
+          </div>
+        );
+      case 'analysis':
+        return (
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <h1 className="text-2xl font-bold">내가 등록한 제품 분석 결과</h1>
+              <MyProductForm filter={filter} onFilterChange={setFilter} />
+            </div>
+            <div className="bg-white rounded-xl p-6 space-y-4 shadow-sm">
+              {filtered.map((a) => (
+                <div
+                  key={a.id}
+                  className="flex items-center justify-between border-b last:border-b-0 pb-4"
+                >
+                  <div className="flex items-center space-x-6">
+                    <span className="text-sm text-gray-500">{a.id}</span>
+                    <span
+                      className={`
+                        ${statusStyles[a.status]}
+                        px-2 py-1 rounded text-xs font-medium
+                      `}
+                    >
+                      {statusLabels[a.status]}
+                    </span>
+                    <div className="text-sm text-gray-500">
+                      분석일: {a.date}
+                    </div>
+                    <div className="text-sm text-gray-500">총: {a.total}</div>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    {a.images.map((src, i) => (
+                      <img
+                        key={i}
+                        src={src}
+                        alt={`${a.id}-img${i}`}
+                        className="w-10 h-10 rounded-md object-cover"
+                      />
+                    ))}
+                    <button
+                      type="button"
+                      aria-label="Expand"
+                      className="p-1 hover:bg-gray-100 rounded"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5 text-gray-400"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M6 10a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      case 'signout':
+        return (
+          <div className="bg-white rounded-xl p-6 shadow-sm">
+            <h2 className="text-xl font-bold mb-4">Sign out</h2>
+            <p className="text-gray-600">로그아웃 하시겠습니까?</p>
+            <button className="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
+              로그아웃
+            </button>
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
     <div className="pt-16 bg-secondary min-h-screen">
       {/* 헤더 */}
-      <header className="fixed top-0 left-0 right-0 h-16 bg-white shadow z-30">
-        <div className="container mx-auto h-full flex items-center px-4">
-          <a href="/" className="flex items-center space-x-2">
-            <Camera className="w-8 h-8 text-primary" />
-            <span className="text-xl font-bold">Around</span>
-          </a>
-          <div className="ml-auto flex items-center space-x-4">
-            <button
-              className="p-2 rounded hover:bg-gray-100"
-              aria-label="Toggle dark mode"
-            >
-              🌓
-            </button>
-            <div className="relative group">
-              <button className="flex items-center space-x-2 focus:outline-none">
-                <img
-                  src={photo}
-                  alt={name}
-                  className="w-10 h-10 rounded-full border"
-                />
-                <div className="text-left">
-                  <div className="text-xs text-gray-500">Hello,</div>
-                  <div className="text-sm font-medium">{name}</div>
-                </div>
-              </button>
-              <ul className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-md hidden group-hover:block">
-                <li>
-                  <a
-                    href="/account-overview"
-                    className="block px-4 py-2 hover:bg-gray-50"
-                  >
-                    Overview
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="/account-settings"
-                    className="block px-4 py-2 hover:bg-gray-50"
-                  >
-                    Settings
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="/account-signout"
-                    className="block px-4 py-2 hover:bg-gray-50"
-                  >
-                    Sign out
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </header>
 
       {/* 컨텐츠 */}
       <div className="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-4 gap-6">
@@ -152,90 +190,51 @@ export const MyPage: FC<MyPageProps> = ({
             <p className="text-sm text-gray-500">{email}</p>
           </div>
           <nav className="space-y-1">
-            <a
-              href="/account-overview"
-              className="flex items-center px-3 py-2 rounded hover:bg-gray-100"
+            <button
+              onClick={() => setActiveTab('overview')}
+              className={`w-full text-left flex items-center px-3 py-2 rounded hover:bg-gray-100 ${
+                activeTab === 'overview'
+                  ? 'bg-emerald-100 text-emerald-700 font-medium'
+                  : ''
+              }`}
             >
               Overview
-            </a>
-            <a
-              href="/account-settings"
-              className="flex items-center px-3 py-2 rounded hover:bg-gray-100"
+            </button>
+            <button
+              onClick={() => setActiveTab('settings')}
+              className={`w-full text-left flex items-center px-3 py-2 rounded hover:bg-gray-100 ${
+                activeTab === 'settings'
+                  ? 'bg-emerald-100 text-emerald-700 font-medium'
+                  : ''
+              }`}
             >
               Settings
-            </a>
-            <a
-              href="/account-analysis"
-              className="flex items-center px-3 py-2 rounded bg-emerald-100 text-emerald-700 font-medium"
+            </button>
+            <button
+              onClick={() => setActiveTab('analysis')}
+              className={`w-full text-left flex items-center px-3 py-2 rounded hover:bg-gray-100 ${
+                activeTab === 'analysis'
+                  ? 'bg-emerald-100 text-emerald-700 font-medium'
+                  : ''
+              }`}
             >
               내 제품 분석 결과
-            </a>
-            <a
-              href="/account-signout"
-              className="flex items-center px-3 py-2 rounded hover:bg-gray-100"
+            </button>
+            <button
+              onClick={() => setActiveTab('signout')}
+              className={`w-full text-left flex items-center px-3 py-2 rounded hover:bg-gray-100 ${
+                activeTab === 'signout'
+                  ? 'bg-emerald-100 text-emerald-700 font-medium'
+                  : ''
+              }`}
             >
               Sign out
-            </a>
+            </button>
           </nav>
         </aside>
 
         {/* 대시보드 */}
-        <main className="col-span-3 space-y-6">
-          <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold">내가 등록한 제품 분석 결과</h1>
-            <MyProductForm filter={filter} onFilterChange={setFilter} />
-          </div>
-          <div className="bg-white rounded-xl p-6 space-y-4 shadow-sm">
-            {filtered.map((a) => (
-              <div
-                key={a.id}
-                className="flex items-center justify-between border-b last:border-b-0 pb-4"
-              >
-                <div className="flex items-center space-x-6">
-                  <span className="text-sm text-gray-500">{a.id}</span>
-                  <span
-                    className={`
-                      ${statusStyles[a.status]}
-                      px-2 py-1 rounded text-xs font-medium
-                    `}
-                  >
-                    {statusLabels[a.status]}
-                  </span>
-                  <div className="text-sm text-gray-500">분석일: {a.date}</div>
-                  <div className="text-sm text-gray-500">총: {a.total}</div>
-                </div>
-                <div className="flex items-center space-x-2">
-                  {a.images.map((src, i) => (
-                    <img
-                      key={i}
-                      src={src}
-                      alt={`${a.id}-img${i}`}
-                      className="w-10 h-10 rounded-md object-cover"
-                    />
-                  ))}
-                  <button
-                    type="button"
-                    aria-label="Expand"
-                    className="p-1 hover:bg-gray-100 rounded"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5 text-gray-400"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M6 10a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </main>
+        <main className="col-span-3">{renderContent()}</main>
       </div>
 
       {/* 푸터 */}
