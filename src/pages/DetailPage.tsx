@@ -3,7 +3,7 @@ import {
   calculateTotal,
   CHART_CONFIG,
   type ChartDataItem,
-} from '../../utils/chartUtils';
+} from '../utils/chartUtils';
 
 const ProductDetail = () => {
   // 영양 성분 데이터 (임의값)

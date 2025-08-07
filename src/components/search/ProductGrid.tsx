@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ShoppingCart } from 'lucide-react';
 
 // Configuration constants
@@ -23,10 +24,18 @@ interface Product {
 }
 
 const ProductGrid = () => {
+  const navigate = useNavigate();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
+
+  // 제품 클릭 핸들러
+  const handleProductClick = () => {
+    //productId: number 넣기
+    // navigate(`/detail/${productId}`);
+    navigate(`/detail/`);
+  };
 
   // 샘플 제품 데이터 생성
   const generateProducts = (startIndex: number, count: number): Product[] => {
@@ -164,7 +173,8 @@ const ProductGrid = () => {
         {products.map((product) => (
           <div
             key={product.id}
-            className="group relative bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow duration-200"
+            className="group relative bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow duration-200 cursor-pointer"
+            onClick={() => handleProductClick()} //product.id 넣기
           >
             {/* 제품 이미지 */}
             <div className="aspect-square bg-gray-100 overflow-hidden">
