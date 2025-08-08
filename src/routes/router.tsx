@@ -1,11 +1,12 @@
 import { createBrowserRouter } from 'react-router-dom';
-import ErrorPage from '../pages/ErrorPage';
-import EnrollPage from '../pages/EnrollPage';
+import ErrorPage from '../pages/errorPage';
+import EnrollPage from '../pages/enrollPage';
 import RootLayout from '../layout/RootLayout';
 import DetailPage from '../pages/DetailPage';
 import HomePage from '../pages/homePage';
 import MyPage from '../pages/MyPage';
 import SearchPage from '../pages/searchPage';
+import OnBoardingPage from '../pages/OnboardingPage';
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
         path: 'search',
         element: <SearchPage />,
       },
+      {
+        path: 'onboarding',
+        element: <OnBoardingPage />
+      }
     ],
   },
 ]);
