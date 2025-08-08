@@ -13,9 +13,10 @@ const RootLayout = () => {
   const location = useLocation();
   const isHomePage = location.pathname === '/';
   const isEnrollPage = location.pathname === '/enroll'; // 제품 등록 페이지 또는 다른 전체너비 페이지들
+  const isOnboardingPage = location.pathname === '/onboarding'
 
   // 전체 너비가 필요한 페이지들
-  const isFullWidthPage = isEnrollPage;
+  const isFullWidthPage = isEnrollPage || isOnboardingPage;
 
   return (
     <div className="min-h-screen bg-gray-50">
