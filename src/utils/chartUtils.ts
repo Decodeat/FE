@@ -48,8 +48,8 @@ export const calculateTotal = (data: ChartDataItem[]): number => {
  * 도넛 차트의 기본 설정값들
  */
 export const CHART_CONFIG = {
-  DEFAULT_WIDTH: 200,
-  DEFAULT_HEIGHT: 200,
+  DEFAULT_WIDTH: 300,
+  DEFAULT_HEIGHT: 300,
   DEFAULT_VIEWBOX: '0 0 100 100',
   DEFAULT_CENTER_X: 50,
   DEFAULT_CENTER_Y: 50,
