@@ -10,11 +10,10 @@ import {
 const ProductDetail = () => {
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [liked, setLiked] = useState(false);
 
   const product = {
     name: '단백질 쉐이크',
-    company: '잇더핏',
+    brand: '잇더핏',
     images: [
       'https://m.eatthefit.com/web/product/extra/big/202507/e182b729685f4c8f52151ae9d5de5c68.png',
       'https://mblogthumb-phinf.pstatic.net/MjAyNDA0MjRfMTM3/MDAxNzEzOTI1OTk4NjY1.aO4D680NpqgkzzsXG0AXT9s3J4oCeaJxR5wV52hgIDAg.OmnTbuKIg6SUmch57TTfI3jSyQsCa3zMUvzwxfrLLwsg.JPEG/IMG_0707.jpg?type=w800',
@@ -172,7 +171,7 @@ const ProductDetail = () => {
           <div className="space-y-2">
             {/* 회사명 */}
             <div className="flex items-center mt-6">
-              <span className="text-xl font-semibold text-[#2D5945]">{product.company}</span>
+              <span className="text-xl font-semibold text-[#2D5945]">{product.brand}</span>
             </div>
             {/* 상품명 */}
             <div className="hidden md:block">
