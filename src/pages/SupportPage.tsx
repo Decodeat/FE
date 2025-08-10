@@ -24,17 +24,20 @@ const SupportPage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-8 mt-8">
+    <div className="space-y-8">
       {/* 헤더 */}
-      <section className="text-center">
-        <h1 className="text-3xl font-bold">문의하기</h1>
-        <p className="mt-2 text-gray-600">
+      <section className="w-full bg-[#D2EDE4] py-20 text-center">
+        <h2 className="text-2xl md:text-3xl font-bold text-[#2D5945] mb-2">
+          문의하기
+        </h2>
+        <p className="text-gray-700 mb-4">
           서비스 이용 중 궁금한 점을 남겨 주세요. 최대한 빠르게 도와드릴게요.
         </p>
       </section>
-
+     
+      <div className="mx-auto max-w-screen-xl px-4 md:px-8">
       {/* 연락 카드 */}
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <section className="grid grid-cols-1 md:grid-cols-3 gap-4 ">
         <div className="bg-white rounded-xl p-5 border border-gray-200">
           <div className="flex items-center gap-3">
             <Mail className="w-5 h-5 text-emerald-600" />
@@ -83,7 +86,7 @@ const SupportPage: React.FC = () => {
       </section>
 
       {/* 문의 폼 */}
-      <section className="bg-white rounded-xl p-6 border border-gray-200">
+      <section className="bg-white rounded-xl p-6 border border-gray-200 mt-5">
         <h2 className="text-xl font-semibold mb-4">문의 남기기</h2>
         {submitted && (
           <div className="mb-4 rounded-lg bg-emerald-50 text-emerald-800 px-4 py-2 text-sm">
@@ -170,7 +173,7 @@ const SupportPage: React.FC = () => {
       {/* FAQ */}
       <section
         id="faq"
-        className="bg-white rounded-xl p-6 border border-gray-200"
+        className="bg-white rounded-xl p-6 border border-gray-200 mt-5"
       >
         <h2 className="text-xl font-semibold mb-4">자주 묻는 질문</h2>
         <div className="divide-y divide-gray-200">
@@ -211,6 +214,7 @@ const SupportPage: React.FC = () => {
           </details>
         </div>
       </section>
+      </div>
     </div>
   );
 };
