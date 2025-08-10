@@ -37,8 +37,74 @@ const ProductGrid = () => {
     navigate(`/detail/`);
   };
 
-  // 샘플 제품 데이터 생성
-  const generateProducts = (startIndex: number, count: number): Product[] => {
+  // 샘플 제품 데이터
+const sampleProducts = [
+  {
+    name: '단백질 쉐이크',
+    brand: '잇더핏',
+    image: 'https://m.eatthefit.com/web/product/extra/big/202507/e182b729685f4c8f52151ae9d5de5c68.png'
+  },
+  {
+    name: '분리유청 단백질 파우더',
+    brand: '뉴트리원',
+    image: 'https://thumbnail9.coupangcdn.com/thumbnails/remote/492x492ex/image/vendor_inventory/56ec/e7b427f72876491f57c9ee85fb329a93145024bfa7ce0e7285e536c6f0ce.jpg'
+  },
+  {
+    name: '복합 탄수화물 보충제',
+    brand: '헬스플러스',
+    image: 'https://image10.coupangcdn.com/image/retail/images/2018/03/12/16/0/324e1e7d-ca9a-402f-94a8-a63a2b12c435.jpg'
+  },
+  {
+    name: '식물성 단백질 바',
+    brand: '바이탈케어',
+    image: 'https://sitem.ssgcdn.com/58/68/78/item/1000059786858_i2_750.jpg'
+  },
+  {
+    name: '수용성 식이섬유 드링크',
+    brand: '웰니스랩',
+    image: 'https://media.amway.co.kr/sys-master/images/h1f/h77/9302395256862/NU_316555_2_640.jpg'
+  },
+  {
+    name: '농축유청 단백질',
+    brand: '뉴트리원',
+    image: 'https://m.jherb.com/web/product/big/202303/93e6a823f5dba0e62cda644cab951c02.jpg'
+  },
+  {
+    name: '동물성 단백질 스낵',
+    brand: '헬스플러스',
+    image: 'https://asset.m-gs.kr/prod/1087604105/1/550'
+  },
+  {
+    name: '불용성 식이섬유 캡슐',
+    brand: '스톰',
+    image: 'https://product-image.kurly.com/product/image/b807fb84-e46a-4cab-8f1f-dff06afa85ee.jpg'
+  },
+  {
+    name: '정제 탄수화물 젤리',
+    brand: '웰니스랩',
+    image: 'https://mblogthumb-phinf.pstatic.net/MjAyNDA0MTJfMTYg/MDAxNzEyOTMzNDEzNjU1.PMLn9I--dR4NiC25gQSLUqKzR1O-0VLTOziV-Rj48ZAg.aKMutYb5mILCMpfSv2mulGoO23PpZW41mzHQdZkpHj0g.JPEG/SE-d31f8382-4284-4e2b-ad53-70cc15a899c8.jpg?type=w800'
+  },
+  {
+    name: '멀티비타민 & 미네랄',
+    brand: '뉴트리원',
+    image: 'https://img.danawa.com/prod_img/500000/728/926/img/6926728_1.jpg?_v=20250311101842'
+  },
+  {
+    name: '오메가3 캡슐',
+    brand: '헬스플러스',
+    image: 'https://imgproxy.pillyze.io/egjPRqRifm62O2ClNyMoNHwiRgG6_KMTKsVm5V-w9gw/rs:fill:500:500/czM6Ly9waWxseXplLXByZC1pbWFnZS9wcm9kdWN0cy92MS8xay9mMmE2MzhhMS0xNjc4LzEwMDA'
+  },
+  {
+    name: '프로바이오틱스 파우더',
+    brand: '바이탈케어',
+    image: 'https://m.media-amazon.com/images/I/71S7dvct+ML._AC_SL1500_.jpg'
+  },
+  {
+    name: '콜라겐 펩타이드 드링크',
+    brand: '웰니스랩',
+    image: 'https://s.alicdn.com/@sc04/kf/H2dd74b0359ce4793bf0a83d25954002cn.jpg'
+  }
+];
     const productNames = [
       '분리유청 단백질 파우더',
       '복합 탄수화물 보충제',
@@ -53,19 +119,22 @@ const ProductGrid = () => {
     const brands = ['뉴트리원', '헬스플러스', '바이탈케어', '웰니스랩'];
     const badges = ['Sale', 'New', null];
 
-    return Array.from({ length: count }, (_, i) => ({
+    // 제품 생성 함수
+const generateProducts = (startIndex: number, count: number): Product[] => {
+  return Array.from({ length: count }, (_, i) => {
+    const productData = sampleProducts[i % sampleProducts.length]; // 순환
+    return {
       id: startIndex + i,
-      name: productNames[i % productNames.length],
-      brand: brands[i % brands.length],
-      price: Math.floor(Math.random() * 50000) + 10000,
+      name: productData.name,
+      brand: productData.brand,
+      price: Math.floor(Math.random() * 50000) + 10000, // 1~5만원 랜덤
       originalPrice:
-        Math.random() > 0.5 ? Math.floor(Math.random() * 70000) + 30000 : null,
+        Math.random() > 0.5 ? Math.floor(Math.random() * 70000) + 30000 : null, // 3~10만원 랜덤 or null
       badge: badges[i % badges.length],
-      image: `https://via.placeholder.com/226x200/f3f4f6/6b7280?text=Product+${
-        startIndex + i
-      }`,
-      isPopular: Math.random() > 0.7,
-    }));
+      image: productData.image,
+      isPopular: Math.random() > 0.7 // 30% 확률 인기상품
+    };
+  });
   };
 
   // 모의 API 호출 함수
@@ -150,9 +219,9 @@ const ProductGrid = () => {
       <div className="flex items-start justify-between mb-6">
         <div className="flex-1">
           <h2 className="text-xl font-bold text-[#2D5945] mb-2">영양소 제품</h2>
-          <p className="text-gray-600 text-sm">
+          {/* <p className="text-gray-600 text-sm">
             총 {products.length}개의 제품을 찾았습니다
-          </p>
+          </p> */}
         </div>
 
         {/* 정렬 옵션 */}

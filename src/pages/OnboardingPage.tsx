@@ -105,7 +105,7 @@ const OnboardingPage = () =>{
   };
 
   const isSelected = (questionId: string, optionId: string) =>
-    answers[questionId]?.includes(optionId);
+  (answers[questionId] ?? []).includes(optionId);
 
   const hasSelection = answers[currentQuestion.id]?.length > 0;
 
