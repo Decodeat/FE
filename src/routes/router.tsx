@@ -9,6 +9,7 @@ import SearchPage from '../pages/searchPage';
 import OnBoardingPage from '../pages/OnboardingPage';
 import AuthPage from '../pages/AuthPage';
 import LoginPage from '../pages/LoginPage';
+import SupportPage from '../pages/SupportPage';
 
 const router = createBrowserRouter([
   {
@@ -47,6 +48,11 @@ const router = createBrowserRouter([
       {
         path: 'login',
         element: <LoginPage />
+        element: <OnBoardingPage />,
+      },
+      {
+        path: 'support',
+        element: <SupportPage />,
       },
     ],
   },
