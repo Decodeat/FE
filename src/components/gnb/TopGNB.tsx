@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { ChevronDown, Sun, Moon, Menu, ShoppingCart } from 'lucide-react';
 import { pagesMenu, accountMenu, accountPages } from '../../config/menuConfig';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 
 import Logo from '../../assets/logo/decodeat.svg';
 
@@ -10,6 +10,7 @@ const TopGNB = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const location = useLocation();
+  const navigate = useNavigate();
 
   // 현재 경로 기반 상위 메뉴 활성화 감지
   const nutritionHrefs = pagesMenu.flatMap((s) => s.items.map((i) => i.href));
@@ -284,7 +285,7 @@ const TopGNB = () => {
 
             {/* 데탑 로그인 버튼: sm 이상에서만 flex, 그리고 좌측에 ml-4 추가 */}
             <button
-              onClick={() => {}}
+              onClick={() => navigate('/login')}
               className="hidden sm:flex sm:ml-4 items-center bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded-lg text-lg font-medium transition-colors"
             >
               <span>로그인</span>
@@ -386,7 +387,10 @@ const TopGNB = () => {
               {/* 모바일 로그인 버튼  */}
               <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
                 <button
-                  onClick={() => {}}
+                  onClick={() => {
+                    setIsMenuOpen(false);
+                    navigate('/login');
+                  }}
                   className="flex items-center justify-center space-x-2 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-3 rounded-lg text-base font-medium transition-colors w-full"
                 >
                   <ShoppingCart className="w-5 h-5" />

@@ -52,7 +52,7 @@ const dummyAnalyses: Analysis[] = [
   },
   {
     id: '#502TR872W2',
-    status: 'inProgress',
+    status: 'completed', // 변경: 완료로 전환하여 완료 2개가 하단에 위치하도록 함
     date: 'May 11, 2022',
     total: '$17.00',
     images: ['/assets/img/account/orders/06.png'],
@@ -70,6 +70,21 @@ const statusLabels: Record<Status, string> = {
   failed: '분석 실패',
   inProgress: '분석 중',
 };
+
+// 날짜 헬퍼: offset일 전(0=오늘) 날짜를 YYYY-MM-DD로 반환
+const getDateStrByOffset = (offset: number) => {
+  const d = new Date();
+  d.setDate(d.getDate() - offset);
+  return d.toISOString().slice(0, 10);
+};
+
+// 상태별 대표 이미지
+const successImages = [
+  'https://mblogthumb-phinf.pstatic.net/20110708_253/dnflspfh_1310079088851XbyVr_JPEG/%B6%F3%BA%A7%C7%A5%BD%C302.jpg?type=w420',
+  'https://pds.dailypharm.com/news_image/201809/243460_1.jpg',
+];
+const failedImage =
+  'https://cdn.kormedi.com/wp-content/uploads/2023/09/1000-f-183522176-okzyzg6l7n6ozo0wuxi5cxy6ihhp9iwo-700x424.jpg.webp';
 
 export const MyPage: FC<MyPageProps> = ({
   photo = 'data:image/jpeg;base64,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',
@@ -356,80 +371,109 @@ export const MyPage: FC<MyPageProps> = ({
               <MyProductForm filter={filter} onFilterChange={setFilter} />
             </div>
             <div className="bg-white rounded-xl p-6 space-y-4 shadow-sm">
-              {filtered.map((a) => {
-                const isInProgressOpen =
-                  a.status === 'inProgress' && openInProgressId === a.id;
-                return (
-                  <div
-                    key={a.id}
-                    className="flex items-center justify-between border-b last:border-b-0 pb-4"
-                  >
-                    <div className="flex items-center gap-6">
-                      <span className="text-sm text-gray-500 w-40 truncate">
-                        {a.id}
-                      </span>
-                      <span
-                        className={`
+              {(() => {
+                // 최신순 표현: 분석중 > 실패 > 완료 순으로 정렬
+                const priority: Record<Status, number> = {
+                  inProgress: 0,
+                  failed: 1,
+                  completed: 2,
+                };
+                const ordered = [...filtered].sort(
+                  (a, b) => priority[a.status] - priority[b.status]
+                );
+
+                let completedIdx = 0;
+                return ordered.map((a, idx) => {
+                  const isInProgressOpen =
+                    a.status === 'inProgress' && openInProgressId === a.id;
+
+                  // 상태별 이미지 선택
+                  let imgSrc: string;
+                  if (a.id === '#34VB5540K83' && a.status === 'inProgress') {
+                    imgSrc =
+                      'https://image.next-engine.co.kr/data/uploads/editor/img/9679403577/tmp/202311091200267495.jpg';
+                  } else if (a.status === 'failed') {
+                    imgSrc = failedImage;
+                  } else if (a.status === 'completed') {
+                    imgSrc = successImages[completedIdx % successImages.length];
+                    completedIdx += 1;
+                  } else {
+                    imgSrc =
+                      'https://m.eatthefit.com/web/product/extra/big/202507/e182b729685f4c8f52151ae9d5de5c68.png';
+                  }
+
+                  return (
+                    <div
+                      key={a.id}
+                      className="flex items-center justify-between border-b last:border-b-0 pb-4"
+                    >
+                      <div className="flex items-center gap-6">
+                        <span className="text-sm text-gray-500 w-40 truncate">
+                          {a.id}
+                        </span>
+                        <span
+                          className={`
                           ${statusStyles[a.status]}
                           px-2 py-1 rounded text-xs font-medium w-24 text-center whitespace-nowrap
                         `}
-                      >
-                        {statusLabels[a.status]}
-                      </span>
-                      <div className="text-sm text-gray-500 w-40 whitespace-nowrap">
-                        분석일: {a.date}
-                      </div>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <img
-                        src="https://m.eatthefit.com/web/product/extra/big/202507/e182b729685f4c8f52151ae9d5de5c68.png"
-                        alt={`${a.id}-img`}
-                        className="w-10 h-10 rounded-md object-cover"
-                      />
-                      <div className="relative ml-4">
-                        <button
-                          type="button"
-                          aria-label={
-                            a.status === 'completed'
-                              ? '상세 보기'
-                              : a.status === 'failed'
-                                ? '실패 사유'
-                                : '분석 중'
-                          }
-                          onClick={() => {
-                            if (a.status === 'completed') {
-                              navigate('/detail');
-                            } else if (a.status === 'inProgress') {
-                              setOpenInProgressId((prev) =>
-                                prev === a.id ? null : a.id
-                              );
-                            } else if (a.status === 'failed') {
-                              setOpenFailed({
-                                id: a.id,
-                                reason: a.failReason || '분석 실패',
-                              });
-                            }
-                          }}
-                          className={
-                            `p-1 rounded ` +
-                            (a.status === 'completed'
-                              ? 'hover:bg-gray-100 cursor-pointer'
-                              : a.status === 'failed'
-                                ? 'cursor-pointer hover:bg-red-50'
-                                : 'cursor-pointer')
-                          }
                         >
-                          {a.status === 'inProgress'
-                            ? isInProgressOpen
-                              ? 'v'
-                              : '>'
-                            : '>'}
-                        </button>
+                          {statusLabels[a.status]}
+                        </span>
+                        <div className="text-sm text-gray-500 w-40 whitespace-nowrap">
+                          분석일: {getDateStrByOffset(idx)}
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <img
+                          src={imgSrc}
+                          alt={`${a.id}-img`}
+                          className="w-10 h-10 rounded-md object-cover"
+                        />
+                        <div className="relative ml-4">
+                          <button
+                            type="button"
+                            aria-label={
+                              a.status === 'completed'
+                                ? '상세 보기'
+                                : a.status === 'failed'
+                                  ? '실패 사유'
+                                  : '분석 중'
+                            }
+                            onClick={() => {
+                              if (a.status === 'completed') {
+                                navigate('/detail');
+                              } else if (a.status === 'inProgress') {
+                                setOpenInProgressId((prev) =>
+                                  prev === a.id ? null : a.id
+                                );
+                              } else if (a.status === 'failed') {
+                                setOpenFailed({
+                                  id: a.id,
+                                  reason: a.failReason || '분석 실패',
+                                });
+                              }
+                            }}
+                            className={
+                              `p-1 rounded ` +
+                              (a.status === 'completed'
+                                ? 'hover:bg-gray-100 cursor-pointer'
+                                : a.status === 'failed'
+                                  ? 'cursor-pointer hover:bg-red-50'
+                                  : 'cursor-pointer')
+                            }
+                          >
+                            {a.status === 'inProgress'
+                              ? isInProgressOpen
+                                ? 'v'
+                                : '>'
+                              : '>'}
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                });
+              })()}
             </div>
             {openInProgressId && (
               <div className="fixed inset-0 z-40 flex items-center justify-center">

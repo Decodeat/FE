@@ -10,6 +10,7 @@ import OnBoardingPage from '../pages/OnboardingPage';
 import AuthPage from '../pages/AuthPage';
 import LoginPage from '../pages/LoginPage';
 import SupportPage from '../pages/SupportPage';
+import AuthLayout from '../layout/AuthLayout';
 
 const router = createBrowserRouter([
   {
@@ -39,20 +40,21 @@ const router = createBrowserRouter([
       },
       {
         path: 'onboarding',
-        element: <OnBoardingPage />
-      },
-      {
-        path: 'auth',
-        element: <AuthPage />
-      },
-      {
-        path: 'login',
-        element: <LoginPage />
+        element: <OnBoardingPage />,
       },
       {
         path: 'support',
         element: <SupportPage />,
       },
+    ],
+  },
+  // 인증 전용 레이아웃: 상단바 없이 렌더링
+  {
+    element: <AuthLayout />,
+    errorElement: <ErrorPage />,
+    children: [
+      { path: '/auth', element: <AuthPage /> },
+      { path: '/login', element: <LoginPage /> },
     ],
   },
 ]);
