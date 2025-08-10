@@ -48,7 +48,6 @@ const router = createBrowserRouter([
       {
         path: 'login',
         element: <LoginPage />
-        element: <OnBoardingPage />,
       },
       {
         path: 'support',
