@@ -1,8 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import type { FC, ChangeEvent, FormEvent } from 'react';
 import { Camera, X } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const EnrollPage: FC = () => {
+  const navigate = useNavigate();
   // --- State 정의 ---
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
@@ -48,42 +50,46 @@ const EnrollPage: FC = () => {
   }, [preview]);
 
   // --- 폼 제출 핸들러 ---
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
-    e.preventDefault();
-    if (!file || !companyName.trim() || !productName.trim()) {
-      alert('사진, 회사명, 제품명은 필수 입력 항목입니다.');
-      return;
-    }
+  // const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
+  //   e.preventDefault();
+  //   if (!file || !companyName.trim() || !productName.trim()) {
+  //     alert('사진, 회사명, 제품명은 필수 입력 항목입니다.');
+  //     return;
+  //   }
 
-    setIsSubmitting(true);
-    try {
-      const formData = new FormData();
-      formData.append('image', file);
-      formData.append('company', companyName);
-      formData.append('product', productName);
-      formData.append('description', description);
+  //   setIsSubmitting(true);
+  //   try {
+  //     const formData = new FormData();
+  //     formData.append('image', file);
+  //     formData.append('company', companyName);
+  //     formData.append('product', productName);
+  //     formData.append('description', description);
 
-      // TODO: 실제 API 엔드포인트로 수정하세요
-      const res = await fetch('/api/products', {
-        method: 'POST',
-        body: formData,
-      });
-      if (!res.ok) throw new Error('서버 오류');
-      alert('제품 등록 요청이 정상적으로 완료되었습니다.');
+  //     // TODO: 실제 API 엔드포인트로 수정하세요
+  //     const res = await fetch('/api/products', {
+  //       method: 'POST',
+  //       body: formData,
+  //     });
+  //     if (!res.ok) throw new Error('서버 오류');
+  //     alert('제품 등록 요청이 정상적으로 완료되었습니다.');
 
-      // 초기화
-      handleClearImage();
-      setCompanyName('');
-      setProductName('');
-      setDescription('');
-    } catch (err) {
-      console.error(err);
-      alert('등록 중 오류가 발생했습니다. 다시 시도해주세요.');
-    } finally {
-      setIsSubmitting(false);
-    }
+  //     // 초기화
+  //     handleClearImage();
+  //     setCompanyName('');
+  //     setProductName('');
+  //     setDescription('');
+  //   } catch (err) {
+  //     console.error(err);
+  //     alert('등록 중 오류가 발생했습니다. 다시 시도해주세요.');
+  //   } finally {
+  //     setIsSubmitting(false);
+  //   }
+  // };
+
+  const handleSubmit = () => {
+    alert('제품 등록 요청이 정상적으로 완료되었습니다.');
+    navigate('/');
   };
-
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
       {/* 메인 배너 */}
