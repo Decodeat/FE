@@ -87,10 +87,12 @@ const EnrollPage: FC = () => {
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
       {/* 메인 배너 */}
-      <section className="relative mt-8 bg-[#79CCB1] p-8 text-[#2D6451] overflow-hidden min-h-[300px] flex items-center justify-center">
+      <section className="w-full bg-[#D2EDE4] py-20 text-center relative overflow-hidden">
         <div className="relative z-10 text-center max-w-2xl mx-auto">
-          <h1 className="text-5xl font-bold mb-10">제품 등록하기</h1>
-          <p className="text-xl mb-6">
+          <h1 className="text-2xl md:text-3xl font-bold text-[#2D5945] mb-2">
+            제품 등록하기
+          </h1>
+          <p className="text-gray-700 mb-4">
             Tip. 영양정보 라벨이 잘 보이게 찍어주세요!
           </p>
         </div>
@@ -202,7 +204,7 @@ const EnrollPage: FC = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full bg-[#79CCB1] text-[#2D6451] py-4 rounded-lg font-medium hover:bg-[#6BB89F] transition-colors text-lg mt-4 disabled:opacity-50"
+              className="w-full bg-[#D2EDE4] text-[#2D6451] py-4 rounded-lg font-medium hover:bg-[#6BB89F] transition-colors text-lg mt-4 disabled:opacity-50"
             >
               {isSubmitting ? '등록 중…' : '제품 등록 요청하기'}
             </button>
