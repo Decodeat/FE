@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { ChevronDown, Sun, Moon, Menu, ShoppingCart } from 'lucide-react';
 import { pagesMenu, accountMenu, accountPages } from '../../config/menuConfig';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 
 import Logo from '../../assets/logo/decodeat.svg';
 
@@ -9,13 +9,22 @@ const TopGNB = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const location = useLocation();
 
-  // 화면 까맣게 되는 이슈 방지: 과거에 남아있을 수 있는 html.dark 제거
-  useEffect(() => {
-    document.documentElement.classList.remove('dark');
-  }, []);
+  // 현재 경로 기반 상위 메뉴 활성화 감지
+  const nutritionHrefs = pagesMenu.flatMap((s) => s.items.map((i) => i.href));
+  const accountHrefs = [
+    ...accountMenu.flatMap((s) => s.items.map((i) => i.href)),
+    ...accountPages.map((i) => i.href),
+  ];
+  const isNutritionActive = nutritionHrefs.some((h) =>
+    location.pathname.startsWith(h)
+  );
+  const isAccountActive = accountHrefs.some((h) =>
+    location.pathname.startsWith(h)
+  );
 
-  // 다크모드 핸들러 (지역 상태만 유지)
+  // 다크모드 핸들러 (상단바에만 적용)
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
   };
@@ -39,7 +48,9 @@ const TopGNB = () => {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-100 bg-white border-b border-gray-200`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-100 ${
+        isDarkMode ? 'bg-gray-900' : 'bg-white'
+      } border-b ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}
     >
       <div className="container mx-auto px-4">
         <nav className="flex items-center justify-between py-3">
@@ -67,7 +78,7 @@ const TopGNB = () => {
                     : 'text-gray-700 hover:text-emerald-600'
                 } ${
                   isActive
-                    ? 'text-inherit font-semibold text-[1.125rem] border-b-2 border-emerald-500'
+                    ? `font-semibold text-[1.125rem] border-b-2 border-emerald-500 ${isDarkMode ? 'text-white' : ''}`
                     : 'text-[1rem]'
                 }`
               }
@@ -82,10 +93,14 @@ const TopGNB = () => {
                   e.stopPropagation();
                   toggleDropdown('pages');
                 }}
-                className={`flex items-center space-x-1 px-4 py-2  font-medium transition-colors ${
+                className={`flex items-center space-x-1 px-4 py-2 font-medium transition-colors ${
                   isDarkMode
                     ? 'text-gray-300 hover:text-white'
                     : 'text-gray-700 hover:text-emerald-600'
+                } ${
+                  isNutritionActive
+                    ? `text-[1.125rem] border-b-2 border-emerald-500 ${isDarkMode ? 'text-white' : 'font-semibold'}`
+                    : 'text-[1rem]'
                 }`}
               >
                 <span>영양소 정보</span>
@@ -143,6 +158,10 @@ const TopGNB = () => {
                   isDarkMode
                     ? 'text-gray-300 hover:text-white'
                     : 'text-gray-700 hover:text-emerald-600'
+                } ${
+                  isAccountActive
+                    ? `text-[1.125rem] border-b-2 border-emerald-500 ${isDarkMode ? 'text-white' : 'font-semibold'}`
+                    : 'text-[1rem]'
                 }`}
               >
                 <span>추천 제품</span>
@@ -218,7 +237,7 @@ const TopGNB = () => {
                     : 'text-gray-700 hover:text-emerald-600'
                 } ${
                   isActive
-                    ? 'text-inherit font-semibold text-[1.125rem] border-b-2 border-emerald-500'
+                    ? `font-semibold text-[1.125rem] border-b-2 border-emerald-500 ${isDarkMode ? 'text-white' : ''}`
                     : 'text-[1rem]'
                 }`
               }
@@ -235,7 +254,7 @@ const TopGNB = () => {
                     : 'text-gray-700 hover:text-emerald-600'
                 } ${
                   isActive
-                    ? 'text-inherit font-semibold text-[1.125rem] border-b-2 border-emerald-500'
+                    ? `font-semibold text-[1.125rem] border-b-2 border-emerald-500 ${isDarkMode ? 'text-white' : ''}`
                     : 'text-[1rem]'
                 }`
               }
