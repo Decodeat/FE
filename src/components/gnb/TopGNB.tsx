@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { ChevronDown, Sun, Moon, Menu, ShoppingCart } from 'lucide-react';
 import { pagesMenu, accountMenu, accountPages } from '../../config/menuConfig';
+import { NavLink } from 'react-router-dom';
 
 import Logo from '../../assets/logo/decodeat.svg';
 
@@ -9,10 +10,14 @@ const TopGNB = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
-  // 다크모드 핸들러
+  // 화면 까맣게 되는 이슈 방지: 과거에 남아있을 수 있는 html.dark 제거
+  useEffect(() => {
+    document.documentElement.classList.remove('dark');
+  }, []);
+
+  // 다크모드 핸들러 (지역 상태만 유지)
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
-    // 실제 앱에서 localStorage와 body 클래스를 업데이트해야 함
   };
 
   // 드롭다운 토글 핸들러
@@ -34,9 +39,7 @@ const TopGNB = () => {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-100 ${
-        isDarkMode ? 'dark bg-gray-900' : 'bg-white'
-      } border-b border-gray-200 dark:border-gray-700`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-100 bg-white border-b border-gray-200`}
     >
       <div className="container mx-auto px-4">
         <nav className="flex items-center justify-between py-3">
@@ -55,16 +58,22 @@ const TopGNB = () => {
           {/* 데탑 네비게이션 */}
           <div className="hidden lg:flex items-center space-x-8">
             {/* 제품 등록 링크 */}
-            <a
-              href="/enroll"
-              className={`px-4 py-2 text-lg font-medium transition-colors ${
-                isDarkMode
-                  ? 'text-gray-300 hover:text-white'
-                  : 'text-gray-700 hover:text-emerald-600'
-              }`}
+            <NavLink
+              to="/enroll"
+              className={({ isActive }) =>
+                `px-4 py-2 transition-colors ${
+                  isDarkMode
+                    ? 'text-gray-300 hover:text-white'
+                    : 'text-gray-700 hover:text-emerald-600'
+                } ${
+                  isActive
+                    ? 'text-inherit font-semibold text-[1.125rem] border-b-2 border-emerald-500'
+                    : 'text-[1rem]'
+                }`
+              }
             >
               제품 등록
-            </a>
+            </NavLink>
 
             {/* 영양소 정보 드롭다운 */}
             <div className="relative">
@@ -73,7 +82,7 @@ const TopGNB = () => {
                   e.stopPropagation();
                   toggleDropdown('pages');
                 }}
-                className={`flex items-center space-x-1 px-4 py-2 text-lg font-medium transition-colors ${
+                className={`flex items-center space-x-1 px-4 py-2  font-medium transition-colors ${
                   isDarkMode
                     ? 'text-gray-300 hover:text-white'
                     : 'text-gray-700 hover:text-emerald-600'
@@ -130,7 +139,7 @@ const TopGNB = () => {
                   e.stopPropagation();
                   toggleDropdown('account');
                 }}
-                className={`flex items-center space-x-1 px-4 py-2 text-lg font-medium transition-colors ${
+                className={`flex items-center space-x-1 px-4 py-2 font-medium transition-colors ${
                   isDarkMode
                     ? 'text-gray-300 hover:text-white'
                     : 'text-gray-700 hover:text-emerald-600'
@@ -200,27 +209,39 @@ const TopGNB = () => {
               )}
             </div>
 
-            <a
-              href="/ui-kit"
-              className={`px-4 py-2 text-lg font-medium transition-colors ${
-                isDarkMode
-                  ? 'text-gray-300 hover:text-white'
-                  : 'text-gray-700 hover:text-emerald-600'
-              }`}
+            <NavLink
+              to="/support"
+              className={({ isActive }) =>
+                `px-4 py-2 transition-colors ${
+                  isDarkMode
+                    ? 'text-gray-300 hover:text-white'
+                    : 'text-gray-700 hover:text-emerald-600'
+                } ${
+                  isActive
+                    ? 'text-inherit font-semibold text-[1.125rem] border-b-2 border-emerald-500'
+                    : 'text-[1rem]'
+                }`
+              }
             >
               문의
-            </a>
+            </NavLink>
 
-            <a
-              href="/myPage"
-              className={`px-4 py-2 text-lg font-medium transition-colors ${
-                isDarkMode
-                  ? 'text-gray-300 hover:text-white'
-                  : 'text-gray-700 hover:text-emerald-600'
-              }`}
+            <NavLink
+              to="/myPage"
+              className={({ isActive }) =>
+                `px-4 py-2 transition-colors ${
+                  isDarkMode
+                    ? 'text-gray-300 hover:text-white'
+                    : 'text-gray-700 hover:text-emerald-600'
+                } ${
+                  isActive
+                    ? 'text-inherit font-semibold text-[1.125rem] border-b-2 border-emerald-500'
+                    : 'text-[1rem]'
+                }`
+              }
             >
               마이페이지
-            </a>
+            </NavLink>
           </div>
 
           {/* Right side controls */}
@@ -275,14 +296,23 @@ const TopGNB = () => {
             }`}
           >
             <div className="px-4 py-6 space-y-4">
-              <a
-                href="/enroll"
-                className={`block text-base font-medium ${
-                  isDarkMode ? 'text-gray-300' : 'text-gray-900'
-                }`}
+              <NavLink
+                to="/enroll"
+                onClick={() => setIsMenuOpen(false)}
+                className={({ isActive }) =>
+                  `block text-base font-medium ${
+                    isDarkMode
+                      ? isActive
+                        ? 'text-white'
+                        : 'text-gray-300'
+                      : isActive
+                        ? 'text-gray-900'
+                        : 'text-gray-900'
+                  } ${isActive ? 'underline underline-offset-4' : ''}`
+                }
               >
                 제품 등록
-              </a>
+              </NavLink>
               <a
                 href="/pages"
                 className={`block text-base font-medium ${
@@ -299,22 +329,40 @@ const TopGNB = () => {
               >
                 추천 제품
               </a>
-              <a
-                href="/ui-kit"
-                className={`block text-base font-medium ${
-                  isDarkMode ? 'text-gray-300' : 'text-gray-900'
-                }`}
+              <NavLink
+                to="/support"
+                onClick={() => setIsMenuOpen(false)}
+                className={({ isActive }) =>
+                  `block text-base font-medium ${
+                    isDarkMode
+                      ? isActive
+                        ? 'text-white'
+                        : 'text-gray-300'
+                      : isActive
+                        ? 'text-gray-900'
+                        : 'text-gray-900'
+                  } ${isActive ? 'underline underline-offset-4' : ''}`
+                }
               >
                 문의
-              </a>
-              <a
-                href="/myPage"
-                className={`block text-base font-medium ${
-                  isDarkMode ? 'text-gray-300' : 'text-gray-900'
-                }`}
+              </NavLink>
+              <NavLink
+                to="/myPage"
+                onClick={() => setIsMenuOpen(false)}
+                className={({ isActive }) =>
+                  `block text-base font-medium ${
+                    isDarkMode
+                      ? isActive
+                        ? 'text-white'
+                        : 'text-gray-300'
+                      : isActive
+                        ? 'text-gray-900'
+                        : 'text-gray-900'
+                  } ${isActive ? 'underline underline-offset-4' : ''}`
+                }
               >
                 마이페이지
-              </a>
+              </NavLink>
 
               {/* 모바일 로그인 버튼  */}
               <div className="pt-4 border-t border-gray-200 dark:border-gray-700">

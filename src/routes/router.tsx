@@ -7,6 +7,7 @@ import HomePage from '../pages/homePage';
 import MyPage from '../pages/MyPage';
 import SearchPage from '../pages/searchPage';
 import OnBoardingPage from '../pages/OnboardingPage';
+import SupportPage from '../pages/SupportPage';
 
 const router = createBrowserRouter([
   {
@@ -36,8 +37,12 @@ const router = createBrowserRouter([
       },
       {
         path: 'onboarding',
-        element: <OnBoardingPage />
-      }
+        element: <OnBoardingPage />,
+      },
+      {
+        path: 'support',
+        element: <SupportPage />,
+      },
     ],
   },
 ]);
