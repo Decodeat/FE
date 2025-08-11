@@ -14,7 +14,7 @@ declare const authApi: {
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
 
-  const [username, setUsername] = useState<string>("decodeat1234");
+  const [username, setUsername] = useState<string>("ryusangwan12@gmail.com");
   const [password, setPassword] = useState<string>("1234");
   const [passwordHidden, setPasswordHidden] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(false);
@@ -137,7 +137,7 @@ const LoginPage: React.FC = () => {
 
             {/* Submit */}
             <Link
-                to="/"
+                to="/onboarding"
                 className="mt-4 inline-flex w-full h-[50px] items-center justify-center rounded-[13px] bg-[#44BB44] text-white font-semibold text-[17px] hover:bg-[#3aa33a]"
                 >
                 로그인
