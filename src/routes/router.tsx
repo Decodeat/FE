@@ -5,7 +5,6 @@ import RootLayout from "../layout/RootLayout";
 import DetailPage from "../pages/DetailPage";
 import HomePage from "../pages/homePage";
 import MyPage from "../pages/MyPage";
-import SearchPage from "../pages/searchPage";
 import OnBoardingPage from "../pages/OnboardingPage";
 import LoginPage from "../pages/LoginPage";
 import SupportPage from "../pages/SupportPage";
@@ -32,10 +31,6 @@ const router = createBrowserRouter([
       {
         path: "myPage",
         element: <MyPage />,
-      },
-      {
-        path: "search",
-        element: <SearchPage />,
       },
       {
         path: "onboarding",
