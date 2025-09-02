@@ -1,9 +1,9 @@
 import { createBrowserRouter } from "react-router-dom";
-import ErrorPage from "../pages/errorPage";
+import ErrorPage from "../pages/error";
 import EnrollPage from "../pages/EnrollPage";
 import RootLayout from "../layout/RootLayout";
 import DetailPage from "../pages/DetailPage";
-import HomePage from "../pages/home";
+import HomePage from "../pages/HomePage";
 import MyPage from "../pages/MyPage";
 import OnBoardingPage from "../pages/OnboardingPage";
 import LoginPage from "../pages/LoginPage";
