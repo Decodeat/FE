@@ -74,7 +74,7 @@ const questions: Question[] = [
   },
 ];
 
-const OnboardingPage = () =>{
+const OnboardingPage = () => {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string[]>>({});
 
@@ -100,12 +100,12 @@ const OnboardingPage = () =>{
     } else {
       console.log("제출 데이터:", answers);
       alert("설문이 제출되었습니다! 콘솔을 확인하세요.");
-      navigate('/'); // 홈으로 이동
+      navigate("/"); // 홈으로 이동
     }
   };
 
   const isSelected = (questionId: string, optionId: string) =>
-  (answers[questionId] ?? []).includes(optionId);
+    (answers[questionId] ?? []).includes(optionId);
 
   const hasSelection = answers[currentQuestion.id]?.length > 0;
 
@@ -119,7 +119,9 @@ const OnboardingPage = () =>{
         <p className="text-gray-700 mb-4">
           당신의 라이프스타일과 건강 목표에 맞춰 제품을 찾아드릴게요.
         </p>
-        <p className="text-gray-500">Step {step + 1} / {questions.length}</p>
+        <p className="text-gray-500">
+          Step {step + 1} / {questions.length}
+        </p>
       </section>
 
       {/* 질문 영역 */}
@@ -142,9 +144,7 @@ const OnboardingPage = () =>{
                 name={currentQuestion.id}
                 value={opt.id}
                 checked={isSelected(currentQuestion.id, opt.id)}
-                onChange={() =>
-                  toggleOption(currentQuestion.id, opt.id, currentQuestion.multiple)
-                }
+                onChange={() => toggleOption(currentQuestion.id, opt.id, currentQuestion.multiple)}
                 className="hidden"
               />
               {opt.label}
@@ -166,9 +166,7 @@ const OnboardingPage = () =>{
             onClick={handleNext}
             disabled={!hasSelection}
             className={`px-6 py-3 rounded-full text-white font-semibold transition ${
-              hasSelection
-                ? "bg-[#2D5945] hover:bg-[#244838]"
-                : "bg-gray-300 cursor-not-allowed"
+              hasSelection ? "bg-[#2D5945] hover:bg-[#244838]" : "bg-gray-300 cursor-not-allowed"
             }`}
           >
             {step < questions.length - 1 ? "다음" : "제출하기"}
@@ -177,6 +175,6 @@ const OnboardingPage = () =>{
       </div>
     </div>
   );
-}
+};
 
-export default OnboardingPage; 
+export default OnboardingPage;

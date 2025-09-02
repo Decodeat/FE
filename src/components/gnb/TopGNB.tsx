@@ -1,12 +1,11 @@
-import { useState, useEffect } from 'react';
-import { ChevronDown, Sun, Moon, Menu, ShoppingCart } from 'lucide-react';
-import { pagesMenu, accountMenu, accountPages } from '../../config/menuConfig';
-import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from "react";
+import { ChevronDown, Menu, ShoppingCart } from "lucide-react";
+import { pagesMenu, accountMenu, accountPages } from "../../config/menuConfig";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 
-import Logo from '../../assets/logo/decodeat.svg';
+import Logo from "../../assets/logo/decodeat.svg";
 
 const TopGNB = () => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const location = useLocation();
@@ -18,17 +17,8 @@ const TopGNB = () => {
     ...accountMenu.flatMap((s) => s.items.map((i) => i.href)),
     ...accountPages.map((i) => i.href),
   ];
-  const isNutritionActive = nutritionHrefs.some((h) =>
-    location.pathname.startsWith(h)
-  );
-  const isAccountActive = accountHrefs.some((h) =>
-    location.pathname.startsWith(h)
-  );
-
-  // 다크모드 핸들러 (상단바에만 적용)
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
-  };
+  const isNutritionActive = nutritionHrefs.some((h) => location.pathname.startsWith(h));
+  const isAccountActive = accountHrefs.some((h) => location.pathname.startsWith(h));
 
   // 드롭다운 토글 핸들러
   const toggleDropdown = (dropdownName: string | null) => {
@@ -42,29 +32,19 @@ const TopGNB = () => {
     };
 
     if (openDropdown) {
-      document.addEventListener('click', handleClickOutside);
-      return () => document.removeEventListener('click', handleClickOutside);
+      document.addEventListener("click", handleClickOutside);
+      return () => document.removeEventListener("click", handleClickOutside);
     }
   }, [openDropdown]);
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-100 ${
-        isDarkMode ? 'bg-gray-900' : 'bg-white'
-      } border-b ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}
-    >
+    <header className="fixed top-0 left-0 right-0 z-50 transition-all duration-100 bg-white border-b border-gray-200">
       <div className="container mx-auto px-4">
         <nav className="flex items-center justify-between py-3">
           {/* Logo */}
           <a href="/" className="flex items-center text-2xl font-semibold">
-            <img
-              src={Logo}
-              alt="Decodeat Logo"
-              className="h-14 w-auto text-emerald-600"
-            />
-            <span className={isDarkMode ? 'text-white' : 'text-gray-900'}>
-              DecodeEat
-            </span>
+            <img src={Logo} alt="Decodeat Logo" className="h-14 w-auto text-emerald-600" />
+            <span className="text-gray-900">DecodeEat</span>
           </a>
 
           {/* 데탑 네비게이션 */}
@@ -73,14 +53,10 @@ const TopGNB = () => {
             <NavLink
               to="/enroll"
               className={({ isActive }) =>
-                `px-4 py-2 transition-colors ${
-                  isDarkMode
-                    ? 'text-gray-300 hover:text-white'
-                    : 'text-gray-700 hover:text-emerald-600'
-                } ${
+                `px-4 py-2 transition-colors text-gray-700 hover:text-emerald-600 ${
                   isActive
-                    ? `font-semibold text-[1.125rem] border-b-2 border-emerald-500 ${isDarkMode ? 'text-white' : ''}`
-                    : 'text-[1rem]'
+                    ? "font-semibold text-[1.125rem] border-b-2 border-emerald-500"
+                    : "text-[1rem]"
                 }`
               }
             >
@@ -92,50 +68,30 @@ const TopGNB = () => {
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  toggleDropdown('pages');
+                  toggleDropdown("pages");
                 }}
-                className={`flex items-center space-x-1 px-4 py-2 font-medium transition-colors ${
-                  isDarkMode
-                    ? 'text-gray-300 hover:text-white'
-                    : 'text-gray-700 hover:text-emerald-600'
-                } ${
+                className={`flex items-center space-x-1 px-4 py-2 font-medium transition-colors text-gray-700 hover:text-emerald-600 ${
                   isNutritionActive
-                    ? `text-[1.125rem] border-b-2 border-emerald-500 ${isDarkMode ? 'text-white' : 'font-semibold'}`
-                    : 'text-[1rem]'
+                    ? "text-[1.125rem] border-b-2 border-emerald-500 font-semibold"
+                    : "text-[1rem]"
                 }`}
               >
                 <span>영양소 정보</span>
                 <ChevronDown className="w-4 h-4" />
               </button>
 
-              {openDropdown === 'pages' && (
-                <div
-                  className={`absolute top-full left-0 mt-2 w-80 rounded-lg shadow-lg border ${
-                    isDarkMode
-                      ? 'bg-gray-800 border-gray-700'
-                      : 'bg-white border-gray-200'
-                  } z-50`}
-                >
+              {openDropdown === "pages" && (
+                <div className="absolute top-full left-0 mt-2 w-80 rounded-lg shadow-lg border bg-white border-gray-200 z-50">
                   <div className="p-4 space-y-4">
                     {pagesMenu.map((section, index) => (
                       <div key={index}>
-                        <h4
-                          className={`font-medium text-sm mb-2 ${
-                            isDarkMode ? 'text-white' : 'text-gray-900'
-                          }`}
-                        >
-                          {section.title}
-                        </h4>
+                        <h4 className="font-medium text-sm mb-2 text-gray-900">{section.title}</h4>
                         <div className="space-y-1">
                           {section.items.map((item, itemIndex) => (
                             <a
                               key={itemIndex}
                               href={item.href}
-                              className={`block px-3 py-1 text-sm rounded transition-colors ${
-                                isDarkMode
-                                  ? 'text-gray-300 hover:text-white hover:bg-gray-700'
-                                  : 'text-gray-600 hover:text-emerald-600 hover:bg-gray-50'
-                              }`}
+                              className="block px-3 py-1 text-sm rounded transition-colors text-gray-600 hover:text-emerald-600 hover:bg-gray-50"
                             >
                               {item.name}
                             </a>
@@ -153,50 +109,30 @@ const TopGNB = () => {
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  toggleDropdown('account');
+                  toggleDropdown("account");
                 }}
-                className={`flex items-center space-x-1 px-4 py-2 font-medium transition-colors ${
-                  isDarkMode
-                    ? 'text-gray-300 hover:text-white'
-                    : 'text-gray-700 hover:text-emerald-600'
-                } ${
+                className={`flex items-center space-x-1 px-4 py-2 font-medium transition-colors text-gray-700 hover:text-emerald-600 ${
                   isAccountActive
-                    ? `text-[1.125rem] border-b-2 border-emerald-500 ${isDarkMode ? 'text-white' : 'font-semibold'}`
-                    : 'text-[1rem]'
+                    ? "text-[1.125rem] border-b-2 border-emerald-500 font-semibold"
+                    : "text-[1rem]"
                 }`}
               >
                 <span>추천 제품</span>
                 <ChevronDown className="w-4 h-4" />
               </button>
 
-              {openDropdown === 'account' && (
-                <div
-                  className={`absolute top-full left-0 mt-2 w-64 rounded-lg shadow-lg border ${
-                    isDarkMode
-                      ? 'bg-gray-800 border-gray-700'
-                      : 'bg-white border-gray-200'
-                  } z-50`}
-                >
+              {openDropdown === "account" && (
+                <div className="absolute top-full left-0 mt-2 w-64 rounded-lg shadow-lg border bg-white border-gray-200 z-50">
                   <div className="p-4 space-y-4">
                     {accountMenu.map((section, index) => (
                       <div key={index}>
-                        <h4
-                          className={`font-medium text-sm mb-2 ${
-                            isDarkMode ? 'text-white' : 'text-gray-900'
-                          }`}
-                        >
-                          {section.title}
-                        </h4>
+                        <h4 className="font-medium text-sm mb-2 text-gray-900">{section.title}</h4>
                         <div className="space-y-1">
                           {section.items.map((item, itemIndex) => (
                             <a
                               key={itemIndex}
                               href={item.href}
-                              className={`block px-3 py-1 text-sm rounded transition-colors ${
-                                isDarkMode
-                                  ? 'text-gray-300 hover:text-white hover:bg-gray-700'
-                                  : 'text-gray-600 hover:text-emerald-600 hover:bg-gray-50'
-                              }`}
+                              className="block px-3 py-1 text-sm rounded transition-colors text-gray-600 hover:text-emerald-600 hover:bg-gray-50"
                             >
                               {item.name}
                             </a>
@@ -204,21 +140,13 @@ const TopGNB = () => {
                         </div>
                       </div>
                     ))}
-                    <hr
-                      className={`my-2 ${
-                        isDarkMode ? 'border-gray-700' : 'border-gray-200'
-                      }`}
-                    />
+                    <hr className="my-2 border-gray-200" />
                     <div className="space-y-1">
                       {accountPages.map((item, index) => (
                         <a
                           key={index}
                           href={item.href}
-                          className={`block px-3 py-1 text-sm rounded transition-colors ${
-                            isDarkMode
-                              ? 'text-gray-300 hover:text-white hover:bg-gray-700'
-                              : 'text-gray-600 hover:text-emerald-600 hover:bg-gray-50'
-                          }`}
+                          className="block px-3 py-1 text-sm rounded transition-colors text-gray-600 hover:text-emerald-600 hover:bg-gray-50"
                         >
                           {item.name}
                         </a>
@@ -232,14 +160,10 @@ const TopGNB = () => {
             <NavLink
               to="/support"
               className={({ isActive }) =>
-                `px-4 py-2 transition-colors ${
-                  isDarkMode
-                    ? 'text-gray-300 hover:text-white'
-                    : 'text-gray-700 hover:text-emerald-600'
-                } ${
+                `px-4 py-2 transition-colors text-gray-700 hover:text-emerald-600 ${
                   isActive
-                    ? `font-semibold text-[1.125rem] border-b-2 border-emerald-500 ${isDarkMode ? 'text-white' : ''}`
-                    : 'text-[1rem]'
+                    ? "font-semibold text-[1.125rem] border-b-2 border-emerald-500"
+                    : "text-[1rem]"
                 }`
               }
             >
@@ -249,14 +173,10 @@ const TopGNB = () => {
             <NavLink
               to="/myPage"
               className={({ isActive }) =>
-                `px-4 py-2 transition-colors ${
-                  isDarkMode
-                    ? 'text-gray-300 hover:text-white'
-                    : 'text-gray-700 hover:text-emerald-600'
-                } ${
+                `px-4 py-2 transition-colors text-gray-700 hover:text-emerald-600 ${
                   isActive
-                    ? `font-semibold text-[1.125rem] border-b-2 border-emerald-500 ${isDarkMode ? 'text-white' : ''}`
-                    : 'text-[1rem]'
+                    ? "font-semibold text-[1.125rem] border-b-2 border-emerald-500"
+                    : "text-[1rem]"
                 }`
               }
             >
@@ -266,27 +186,10 @@ const TopGNB = () => {
 
           {/* Right side controls */}
           <div className="flex items-center">
-            {/* Dark mode toggle */}
-            <button
-              onClick={toggleDarkMode}
-              className={`p-2 rounded-lg transition-colors ${
-                isDarkMode
-                  ? 'text-gray-300 hover:text-white hover:bg-gray-700'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-              }`}
-              aria-label="Toggle dark mode"
-            >
-              {isDarkMode ? (
-                <Sun className="w-7 h-7" />
-              ) : (
-                <Moon className="w-7 h-7" />
-              )}
-            </button>
-
             {/* 데탑 로그인 버튼: sm 이상에서만 flex, 그리고 좌측에 ml-4 추가 */}
             <button
-              onClick={() => navigate('/login')}
-              className="hidden sm:flex sm:ml-4 items-center bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded-lg text-lg font-medium transition-colors"
+              onClick={() => navigate("/login")}
+              className="hidden sm:flex items-center bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded-lg text-lg font-medium transition-colors"
             >
               <span>로그인</span>
             </button>
@@ -294,11 +197,7 @@ const TopGNB = () => {
             {/* 모바일 햄버거 버튼 */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className={`lg:hidden p-2 rounded-lg transition-colors ${
-                isDarkMode
-                  ? 'text-gray-300 hover:text-white hover:bg-gray-700'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-              }`}
+              className="lg:hidden p-2 rounded-lg transition-colors text-gray-600 hover:text-gray-900 hover:bg-gray-100 ml-4"
               aria-label="Toggle menu"
             >
               <Menu className="w-6 h-6" />
@@ -308,60 +207,28 @@ const TopGNB = () => {
 
         {/* 모바일 메뉴 */}
         {isMenuOpen && (
-          <div
-            className={`lg:hidden border-t ${
-              isDarkMode
-                ? 'border-gray-700 bg-gray-800'
-                : 'border-gray-200 bg-white'
-            }`}
-          >
+          <div className="lg:hidden border-t border-gray-200 bg-white">
             <div className="px-4 py-6 space-y-4">
               <NavLink
                 to="/enroll"
                 onClick={() => setIsMenuOpen(false)}
                 className={({ isActive }) =>
-                  `block text-base font-medium ${
-                    isDarkMode
-                      ? isActive
-                        ? 'text-white'
-                        : 'text-gray-300'
-                      : isActive
-                        ? 'text-gray-900'
-                        : 'text-gray-900'
-                  } ${isActive ? 'underline underline-offset-4' : ''}`
+                  `block text-base font-medium text-gray-900 ${isActive ? "underline underline-offset-4" : ""}`
                 }
               >
                 제품 등록
               </NavLink>
-              <a
-                href="/pages"
-                className={`block text-base font-medium ${
-                  isDarkMode ? 'text-gray-300' : 'text-gray-900'
-                }`}
-              >
+              <a href="/pages" className="block text-base font-medium text-gray-900">
                 영양소 정보
               </a>
-              <a
-                href="/account"
-                className={`block text-base font-medium ${
-                  isDarkMode ? 'text-gray-300' : 'text-gray-900'
-                }`}
-              >
+              <a href="/account" className="block text-base font-medium text-gray-900">
                 추천 제품
               </a>
               <NavLink
                 to="/support"
                 onClick={() => setIsMenuOpen(false)}
                 className={({ isActive }) =>
-                  `block text-base font-medium ${
-                    isDarkMode
-                      ? isActive
-                        ? 'text-white'
-                        : 'text-gray-300'
-                      : isActive
-                        ? 'text-gray-900'
-                        : 'text-gray-900'
-                  } ${isActive ? 'underline underline-offset-4' : ''}`
+                  `block text-base font-medium text-gray-900 ${isActive ? "underline underline-offset-4" : ""}`
                 }
               >
                 문의
@@ -370,26 +237,18 @@ const TopGNB = () => {
                 to="/myPage"
                 onClick={() => setIsMenuOpen(false)}
                 className={({ isActive }) =>
-                  `block text-base font-medium ${
-                    isDarkMode
-                      ? isActive
-                        ? 'text-white'
-                        : 'text-gray-300'
-                      : isActive
-                        ? 'text-gray-900'
-                        : 'text-gray-900'
-                  } ${isActive ? 'underline underline-offset-4' : ''}`
+                  `block text-base font-medium text-gray-900 ${isActive ? "underline underline-offset-4" : ""}`
                 }
               >
                 마이페이지
               </NavLink>
 
               {/* 모바일 로그인 버튼  */}
-              <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+              <div className="pt-4 border-t border-gray-200">
                 <button
                   onClick={() => {
                     setIsMenuOpen(false);
-                    navigate('/login');
+                    navigate("/login");
                   }}
                   className="flex items-center justify-center space-x-2 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-3 rounded-lg text-base font-medium transition-colors w-full"
                 >

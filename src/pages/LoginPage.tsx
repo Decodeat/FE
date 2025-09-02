@@ -28,8 +28,8 @@ const DecodEatLoginPage: React.FC = () => {
       </button>
 
       {/* 이미지/브랜딩 */}
-      <div className='w-full lg:w-1/2 flex flex-col items-center justify-center text-black py-8'>
-        <div className='flex items-center justify-center gap-2 mb-4'>
+      <div className='w-full lg:w-1/2 h-full flex flex-col items-center justify-center text-black py-8'>
+        <div className='flex items-center gap-2 mb-6'>
           <img src={logoUrl} alt='logo' className='h-16 w-auto' />
           <button
             onClick={handleGoHome}
@@ -46,38 +46,38 @@ const DecodEatLoginPage: React.FC = () => {
       </div>
 
       {/* 로그인 폼 */}
-      <div className='flex-1 lg:w-1/2 flex items-center justify-center px-4'>
-        <div className='w-full max-w-md'>
-          <div className='bg-white rounded-2xl shadow-lg p-8 text-center mt-4'>
-            <h1 className='text-2xl font-bold text-[#2D5945] mb-2'>로그인</h1>
-            <p className='text-gray-600 mb-8'>카카오 계정으로 간편하게 시작하세요</p>
+      <div className='w-full lg:w-1/2 h-full flex items-center justify-center px-8'>
+        <div className='w-full max-w-lg'>
+          <div className='bg-white rounded-2xl shadow-lg p-10 text-center'>
+            <h1 className='text-3xl font-bold text-[#2D5945] mb-4'>로그인</h1>
+            <p className='text-gray-600 mb-10 text-lg'>카카오 계정으로 간편하게 시작하세요</p>
 
             <button
               onClick={handleKakaoLogin}
-              className='w-full bg-[#FEE500] hover:bg-[#FEE500]/90 text-black font-medium py-4 px-6 rounded-xl flex items-center justify-center space-x-3 transition-colors duration-200 shadow-sm hover:shadow-md'
+              className='w-full bg-[#FEE500] hover:bg-[#FEE500]/90 text-black font-medium py-5 px-8 rounded-xl flex items-center justify-center space-x-3 transition-colors duration-200 shadow-sm hover:shadow-md'
               style={{
                 backgroundColor: "#FEE500",
                 borderRadius: "12px",
-                fontSize: "16px",
+                fontSize: "18px",
                 fontWeight: "500",
               }}
             >
-              <img src={kakaoLogo} alt='kakao logo' className='w-5 h-5 mr-2' />
+              <img src={kakaoLogo} alt='kakao logo' className='w-6 h-6 mr-3' />
               <span style={{ color: "rgba(0, 0, 0, 0.85)" }}>카카오 로그인</span>
             </button>
 
-            <div className='text-center pt-6 mt-6 border-t border-gray-100'>
-              <p className='text-xs text-gray-500'>
+            <div className='text-center pt-8 mt-8 border-t border-gray-100'>
+              <p className='text-sm text-gray-500'>
                 로그인하면 서비스 이용약관 및 개인정보처리방침에 동의하게 됩니다
               </p>
             </div>
           </div>
 
-          <footer className='text-center mt-6'>
-            <p className='text-sm text-gray-500'>
+          <footer className='text-center mt-8'>
+            <p className='text-base text-gray-500'>
               © All rights reserved. Made by{" "}
               <a
-                href='https://createx.studio/'
+                href='https://github.com/wantkdd'
                 target='_blank'
                 rel='noopener noreferrer'
                 className='text-[#2D5945] hover:text-[#2D5945]/80 transition-colors duration-200'

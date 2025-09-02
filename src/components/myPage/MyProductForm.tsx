@@ -1,14 +1,11 @@
-import type { FC } from 'react';
+import type { FC } from "react";
 
 export interface MyProductFormProps {
   filter: string;
   onFilterChange: (value: string) => void;
 }
 
-export const MyProductForm: FC<MyProductFormProps> = ({
-  filter,
-  onFilterChange,
-}) => {
+export const MyProductForm: FC<MyProductFormProps> = ({ filter, onFilterChange }) => {
   return (
     <form className="inline-block">
       <label htmlFor="timeFilter" className="sr-only">

@@ -1,59 +1,59 @@
-import { useState } from 'react';
-import { useFilterStore } from '../../store/useStore';
-import { TrendingUp, Star, Award } from 'lucide-react';
+import { useState } from "react";
+import { useFilterStore } from "../../store/useStore";
+import { TrendingUp, Star, Award } from "lucide-react";
 
 const LeftGNB = () => {
   const [isLivingRoomOpen, setIsLivingRoomOpen] = useState(true);
   const { checkedItems, toggleFilter } = useFilterStore();
 
   const categories = [
-    { id: 'refined-carbohydrate', label: '정제 탄수화물', count: 697 },
-    { id: 'complex-carbohydrate', label: '복합 탄수화물', count: 234 },
-    { id: 'whey-protein-isolate', label: '분리유청 단백질', count: 182 },
-    { id: 'whey-protein-concentrate', label: '농축유청 단백질', count: 133 },
-    { id: 'plant-protein', label: '식물성 단백질', count: 24 },
-    { id: 'animal-protein', label: '동물성 단백질', count: 49 },
-    { id: 'soluble-dietary-fiber', label: '수용성 식이섬유', count: 75 },
-    { id: 'insoluble-dietary-fiber', label: '불용성 식이섬유', count: 75 },
+    { id: "refined-carbohydrate", label: "정제 탄수화물", count: 697 },
+    { id: "complex-carbohydrate", label: "복합 탄수화물", count: 234 },
+    { id: "whey-protein-isolate", label: "분리유청 단백질", count: 182 },
+    { id: "whey-protein-concentrate", label: "농축유청 단백질", count: 133 },
+    { id: "plant-protein", label: "식물성 단백질", count: 24 },
+    { id: "animal-protein", label: "동물성 단백질", count: 49 },
+    { id: "soluble-dietary-fiber", label: "수용성 식이섬유", count: 75 },
+    { id: "insoluble-dietary-fiber", label: "불용성 식이섬유", count: 75 },
   ];
 
   return (
     <aside className="fixed top-20 w-64 h-[calc(100vh-5rem)] overflow-y-auto z-30 bg-white">
       {/* 통계카드들 */}
       <div className="bg-white p-6 rounded-lg ">
-          <div className="flex items-center space-x-3">
-            <div className="p-2 bg-blue-100 rounded-lg">
-              <TrendingUp className="w-6 h-6 text-blue-600" />
-            </div>
-            <div>
-              <h3 className="font-semibold text-gray-900">인기 제품</h3>
-              <p className="text-sm text-gray-600">1,234개 제품</p>
-            </div>
+        <div className="flex items-center space-x-3">
+          <div className="p-2 bg-blue-100 rounded-lg">
+            <TrendingUp className="w-6 h-6 text-blue-600" />
+          </div>
+          <div>
+            <h3 className="font-semibold text-gray-900">인기 제품</h3>
+            <p className="text-sm text-gray-600">1,234개 제품</p>
           </div>
         </div>
-        <div className="bg-white p-6 rounded-lg ">
-          <div className="flex items-center space-x-3">
-            <div className="p-2 bg-yellow-100 rounded-lg">
-              <Star className="w-6 h-6 text-yellow-600" />
-            </div>
-            <div>
-              <h3 className="font-semibold text-gray-900">높은 평점</h3>
-              <p className="text-sm text-gray-600">평균 4.8점</p>
-            </div>
+      </div>
+      <div className="bg-white p-6 rounded-lg ">
+        <div className="flex items-center space-x-3">
+          <div className="p-2 bg-yellow-100 rounded-lg">
+            <Star className="w-6 h-6 text-yellow-600" />
+          </div>
+          <div>
+            <h3 className="font-semibold text-gray-900">높은 평점</h3>
+            <p className="text-sm text-gray-600">평균 4.8점</p>
           </div>
         </div>
+      </div>
 
-        <div className="bg-white p-6 rounded-lg">
-          <div className="flex items-center space-x-3">
-            <div className="p-2 bg-green-100 rounded-lg">
-              <Award className="w-6 h-6 text-green-600" />
-            </div>
-            <div>
-              <h3 className="font-semibold text-gray-900">인증 제품</h3>
-              <p className="text-sm text-gray-600">567개 제품</p>
-            </div>
+      <div className="bg-white p-6 rounded-lg">
+        <div className="flex items-center space-x-3">
+          <div className="p-2 bg-green-100 rounded-lg">
+            <Award className="w-6 h-6 text-green-600" />
+          </div>
+          <div>
+            <h3 className="font-semibold text-gray-900">인증 제품</h3>
+            <p className="text-sm text-gray-600">567개 제품</p>
           </div>
         </div>
+      </div>
       <div className="pr-4 pl-4">
         {/* <h3 className="text-lg font-medium mb-4">세부 영양소</h3> */}
         <div className="mb-0">
@@ -67,7 +67,7 @@ const LeftGNB = () => {
               <span className="text-lg font-bold text-[#2D5945]">세부 영양소 리스트</span>
               <svg
                 className={`w-4 h-4 transition-transform duration-200 ${
-                  isLivingRoomOpen ? 'rotate-180' : ''
+                  isLivingRoomOpen ? "rotate-180" : ""
                 }`}
                 fill="none"
                 stroke="currentColor"
@@ -82,11 +82,7 @@ const LeftGNB = () => {
               </svg>
             </button>
           </h4>
-          <div
-            className={`transition-all duration-200 ${
-              isLivingRoomOpen ? 'block' : 'hidden'
-            }`}
-          >
+          <div className={`transition-all duration-200 ${isLivingRoomOpen ? "block" : "hidden"}`}>
             <div className="py-1 mb-1 ml-2">
               {categories.map((category) => (
                 <div
@@ -104,12 +100,8 @@ const LeftGNB = () => {
                     className="flex items-center justify-between w-full ml-2 cursor-pointer"
                     htmlFor={category.id}
                   >
-                    <span className="text-gray-700 font-medium text-sm">
-                      {category.label}
-                    </span>
-                    <span className="text-xs text-gray-500 ml-auto">
-                      {category.count}
-                    </span>
+                    <span className="text-gray-700 font-medium text-sm">{category.label}</span>
+                    <span className="text-xs text-gray-500 ml-auto">{category.count}</span>
                   </label>
                 </div>
               ))}

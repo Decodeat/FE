@@ -1,6 +1,6 @@
-import { Search} from 'lucide-react';
-import ProductGrid from '../components/search/ProductGrid.tsx';
-import { useFilterStore } from '../store/useStore';
+import { Search } from "lucide-react";
+import ProductGrid from "../components/search/ProductGrid.tsx";
+import { useFilterStore } from "../store/useStore";
 
 const HomePage = () => {
   const { searchQuery, setSearchQuery } = useFilterStore();
@@ -8,48 +8,41 @@ const HomePage = () => {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     // 검색 로직 구현
-    console.log('검색어:', searchQuery);
+    console.log("검색어:", searchQuery);
   };
 
   return (
-    <div className="space-y-8">
+    <div className='space-y-8'>
       {/* 메인 배너 */}
-      <section className="relative bg-[#D2EDE4] p-8 text-[#2D6451] overflow-hidden">
-        <div className="relative z-10 flex flex-col items-center text-center">
-          <div className="max-w-4xl w-full">
-            <h1 className="text-2xl mt-2 md:text-3xl font-bold text-[#2D5945] mb-2">
+      <section className='relative bg-[#D2EDE4] p-8 text-[#2D6451] overflow-hidden'>
+        <div className='relative z-10 flex flex-col items-center text-center'>
+          <div className='max-w-4xl w-full'>
+            <h1 className='text-2xl mt-2 md:text-3xl font-bold text-[#2D5945] mb-2'>
               어떤 제품이든, 궁금한 영양정보를 찾아보세요!
             </h1>
-            <p className="text-xl text-gray-700 mb-6">
-              영양 성분을 쉽고 빠르게 확인할 수 있어요.
-            </p>
+            <p className='text-xl text-gray-700 mb-6'>영양 성분을 쉽고 빠르게 확인할 수 있어요.</p>
 
             {/* 검색바 */}
-            <div className="flex gap-2 max-w-2xl mx-auto">
-              <div className="flex-1 relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <div className='flex gap-2 max-w-2xl mx-auto'>
+              <div className='flex-1 relative'>
+                <Search className='absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5' />
                 <input
-                  type="text"
+                  type='text'
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="원하는 영양소나 제품을 검색해보세요..."
-                  className="w-full pl-10 pr-4 py-3 rounded-lg text-gray-900 placeholder-gray-500 outline-none ring-2 ring-white/50 focus:ring-white"
-                  onKeyPress={(e) => e.key === 'Enter' && handleSearch(e)}
+                  placeholder='원하는 영양소나 제품을 검색해보세요...'
+                  className='w-full pl-10 pr-4 py-3 rounded-lg text-gray-900 placeholder-gray-500 outline-none ring-2 ring-white/50 focus:ring-white'
+                  onKeyPress={(e) => e.key === "Enter" && handleSearch(e)}
                 />
               </div>
               <button
                 onClick={handleSearch}
-                className="bg-white text-[#2D5945] px-6 py-3 rounded-lg font-medium hover:bg-gray-100 transition-colors cursor-pointer"
+                className='bg-white text-[#2D5945] px-6 py-3 rounded-lg font-medium hover:bg-gray-100 transition-colors cursor-pointer'
               >
                 검색
               </button>
             </div>
           </div>
-        </div>
-
-        {/* 배경 장식 */}
-        <div className="absolute top-0 right-0 w-1/2 h-full opacity-10">
-          <div className="w-full h-full bg-gradient-to-l from-white/20 to-transparent"></div>
         </div>
       </section>
 
@@ -91,43 +84,6 @@ const HomePage = () => {
           </div>
         </div>
       </section> */}
-
-      {/* 추천 카테고리 */}
-      <section>
-        <h2 className="text-xl font-bold text-[#2D5945] mb-3">인기 카테고리</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {[
-            {
-              name: '단백질',
-              icon: '💪',
-              color: 'bg-red-100 border-red-200 text-red-700',
-            },
-            {
-              name: '탄수화물',
-              icon: '🌾',
-              color: 'bg-yellow-100 border-yellow-200 text-yellow-700',
-            },
-            {
-              name: '식이섬유',
-              icon: '🥬',
-              color: 'bg-green-100 border-green-200 text-green-700',
-            },
-            {
-              name: '비타민',
-              icon: '🍊',
-              color: 'bg-orange-100 border-orange-200 text-orange-700',
-            },
-          ].map((category, index) => (
-            <button
-              key={index}
-              className={`p-4 rounded-lg transition-all hover:border-2 hover:shadow-md ${category.color}`}
-            >
-              <div className="text-2xl mb-2">{category.icon}</div>
-              <div className="font-medium">{category.name}</div>
-            </button>
-          ))}
-        </div>
-      </section>
 
       {/* 추천 제품 그리드 */}
       <section>
