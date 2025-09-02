@@ -3,7 +3,7 @@ import ErrorPage from "../pages/errorPage";
 import EnrollPage from "../pages/EnrollPage";
 import RootLayout from "../layout/RootLayout";
 import DetailPage from "../pages/DetailPage";
-import HomePage from "../pages/homePage";
+import HomePage from "../pages/home";
 import MyPage from "../pages/MyPage";
 import OnBoardingPage from "../pages/OnboardingPage";
 import LoginPage from "../pages/LoginPage";
