@@ -15,7 +15,7 @@ const CONFIG = {
 interface Product {
   id: number;
   name: string;
-  brand: string;
+  brand: string;  
   price: number;
   originalPrice: number | null;
   badge: string | null;

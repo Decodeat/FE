@@ -1,179 +1,95 @@
-import React, { useEffect, useState } from "react";
-import type { ChangeEvent, FormEvent } from "react";
-import { Link, useNavigate } from "react-router-dom";
-
-import authImgUrl from "../assets/img/authpage.jpg";
+import authImgUrl from "../assets/img/authpage1.png";
 import logoUrl from "../assets/logo/decodeat.svg";
+import React from "react";
+import { Home } from "lucide-react";
+import kakaoLogo from "../assets/logo/signInKakaoLogo.svg";
+import { useNavigate } from "react-router-dom";
 
-// 필요 시 실제 auth 모듈로 교체하세요.
-declare const authApi: {
-  login: (cred: { username: string; password: string }) => Promise<boolean>;
-};
-
-const LoginPage: React.FC = () => {
+const DecodEatLoginPage: React.FC = () => {
   const navigate = useNavigate();
+  const handleKakaoLogin = () => {
+    console.log("카카오 로그인 시작");
+  };
 
-  const [username, setUsername] = useState<string>("ryusangwan12@gmail.com");
-  const [password, setPassword] = useState<string>("1234");
-  const [passwordHidden, setPasswordHidden] = useState<boolean>(true);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string>("");
-
-  const disableSubmit = !(username && password);
-
-  useEffect(() => {
-    localStorage.clear();
-  }, []);
-
-  const onChange =
-    (setter: React.Dispatch<React.SetStateAction<string>>) =>
-    (e: ChangeEvent<HTMLInputElement>) => {
-      setter(e.target.value);
-    };
-
-  const togglePasswordVisibility = () => setPasswordHidden((v) => !v);
-
-  const login = async (e: FormEvent) => {
-    e.preventDefault();
-    setError("");
-
-    try {
-      setLoading(true);
-      const ok = await authApi.login({ username, password });
-      if (ok) {
-        await navigate("/");
-      } else {
-        setError("로그인에 실패하였습니다. 다시 시도해주세요.");
-      }
-    } catch (err: any) {
-      setError(err?.response?.data || "로그인 처리 중 오류가 발생했습니다.");
-    } finally {
-      setLoading(false);
-    }
+  const handleGoHome = () => {
+    console.log("홈으로 이동");
+    navigate("/");
   };
 
   return (
-    <div className='flex h-screen'>
-      {/* Left Section: Image/Branding */}
-      <div className='hidden md:flex flex-1 bg-white items-center justify-center text-black'>
-        <div className='text-center'>
-          <div className='flex items-center justify-center gap-2 mt-4 mb-6'>
-            <img src={logoUrl} alt='logo' className='h-16 md:h-20 w-auto' />
-            <span className='text-3xl md:text-4xl font-bold'>Decodeat</span>
-          </div>
-          <img
-            src={authImgUrl}
-            alt='Illustration'
-            className='w-[600px] max-w-[80vw] h-auto mx-auto'
-          />
+    <div className='flex flex-col lg:flex-row h-screen bg-gradient-to-r from-white from-30% to-[#CEE1CB]'>
+      {/* 홈 버튼 */}
+      <button
+        onClick={handleGoHome}
+        className='cursor-pointer fixed top-4 right-4 z-10 w-10 h-10 bg-white border border-gray-200 rounded-full flex items-center justify-center shadow-sm hover:shadow-md transition-shadow duration-200'
+        title='홈으로 돌아가기'
+      >
+        <Home className='w-4 h-4 text-gray-600' />
+      </button>
+
+      {/* 이미지/브랜딩 */}
+      <div className='w-full lg:w-1/2 flex flex-col items-center justify-center text-black py-8'>
+        <div className='flex items-center justify-center gap-2 mb-4'>
+          <img src={logoUrl} alt='logo' className='h-16 w-auto' />
+          <button
+            onClick={handleGoHome}
+            className='text-3xl font-bold text-[#2D5945] cursor-pointer'
+          >
+            DecodEat
+          </button>
         </div>
+        <img
+          src={authImgUrl}
+          alt='영양정보 분석 일러스트'
+          className='w-[500px] max-w-[80vw] h-auto mx-auto'
+        />
       </div>
 
-      {/* Right Section: Login Form */}
-      <div className='flex-1 bg-[#C3DCD4] flex items-center justify-center text-white'>
-        <div className='w-full max-w-[500px] p-10 rounded-lg'>
-          <h2 className='text-white text-4xl font-semibold mb-2'>환영합니다!</h2>
-          <p className='text-xl font-semibold mb-7'>
-            Decodeat 를 계속 이용하시려면 로그인을 해주세요
-          </p>
+      {/* 로그인 폼 */}
+      <div className='flex-1 lg:w-1/2 flex items-center justify-center px-4'>
+        <div className='w-full max-w-md'>
+          <div className='bg-white rounded-2xl shadow-lg p-8 text-center mt-4'>
+            <h1 className='text-2xl font-bold text-[#2D5945] mb-2'>로그인</h1>
+            <p className='text-gray-600 mb-8'>카카오 계정으로 간편하게 시작하세요</p>
 
-          <form onSubmit={login}>
-            {/* Username */}
-            <div className='mb-3 mt-3 text-left'>
-              <label htmlFor='username' className='block font-bold text-[18px] text-white mb-1'>
-                아이디
-              </label>
-              <input
-                id='username'
-                type='text'
-                placeholder='아이디를 입력하세요.'
-                className='w-full h-[50px] rounded-[13px] border border-white bg-transparent px-3 text-sm placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white'
-                value={username}
-                onChange={onChange(setUsername)}
-                autoComplete='username'
-                disabled={loading}
-              />
-            </div>
-
-            {/* Password */}
-            <div className='mb-3 text-left mt-8'>
-              <label htmlFor='password' className='block font-bold text-[18px] text-white mb-1'>
-                비밀번호
-              </label>
-              <div className='relative'>
-                <input
-                  id='password'
-                  type={passwordHidden ? "password" : "text"}
-                  placeholder='비밀번호를 입력하세요.'
-                  className='w-full h-[50px] rounded-[13px] border border-white bg-transparent px-3 pr-10 text-sm placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white'
-                  value={password}
-                  onChange={onChange(setPassword)}
-                  autoComplete='current-password'
-                  disabled={loading}
-                />
-                <button
-                  type='button'
-                  aria-label={passwordHidden ? "비밀번호 보기" : "비밀번호 숨기기"}
-                  onClick={togglePasswordVisibility}
-                  className='absolute inset-y-0 right-3 flex items-center'
-                  disabled={loading}
-                >
-                  {passwordHidden ? (
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      className='h-5 w-5 text-black/80'
-                      viewBox='0 0 24 24'
-                      fill='none'
-                      stroke='currentColor'
-                    >
-                      <path strokeWidth='2' d='M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z' />
-                      <circle cx='12' cy='12' r='3' strokeWidth='2' />
-                    </svg>
-                  ) : (
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      className='h-5 w-5 text-black/80'
-                      viewBox='0 0 24 24'
-                      fill='none'
-                      stroke='currentColor'
-                    >
-                      <path strokeWidth='2' d='M3 3l18 18' />
-                      <path strokeWidth='2' d='M10.58 10.58A3 3 0 0113.42 13.42' />
-                      <path
-                        strokeWidth='2'
-                        d='M2 12s3.5-7 10-7a9.74 9.74 0 016.37 2.37M22 12s-3.5 7-10 7a9.74 9.74 0 01-6.37-2.37'
-                      />
-                    </svg>
-                  )}
-                </button>
-              </div>
-            </div>
-
-            {/* Error */}
-            {error && <div className='text-red-500 mt-2 text-center'>{error}</div>}
-
-            {/* Submit */}
             <button
-              type='submit'
-              disabled={disableSubmit || loading}
-              className={`mt-4 inline-flex w-full h-[50px] items-center justify-center rounded-[13px] bg-[#44BB44] text-white font-semibold text-[17px] hover:bg-[#3aa33a] ${
-                disableSubmit || loading ? "opacity-50 pointer-events-none" : ""
-              }`}
+              onClick={handleKakaoLogin}
+              className='w-full bg-[#FEE500] hover:bg-[#FEE500]/90 text-black font-medium py-4 px-6 rounded-xl flex items-center justify-center space-x-3 transition-colors duration-200 shadow-sm hover:shadow-md'
+              style={{
+                backgroundColor: "#FEE500",
+                borderRadius: "12px",
+                fontSize: "16px",
+                fontWeight: "500",
+              }}
             >
-              {loading ? "로그인 중…" : "로그인"}
+              <img src={kakaoLogo} alt='kakao logo' className='w-5 h-5 mr-2' />
+              <span style={{ color: "rgba(0, 0, 0, 0.85)" }}>카카오 로그인</span>
             </button>
 
-            {/* Link to Join */}
-            <div className='text-center pt-6'>
-              <Link to='/auth' className='text-white text-[15px] hover:font-bold'>
-                회원이 아니신가요? 가입하기
-              </Link>
+            <div className='text-center pt-6 mt-6 border-t border-gray-100'>
+              <p className='text-xs text-gray-500'>
+                로그인하면 서비스 이용약관 및 개인정보처리방침에 동의하게 됩니다
+              </p>
             </div>
-          </form>
+          </div>
+
+          <footer className='text-center mt-6'>
+            <p className='text-sm text-gray-500'>
+              © All rights reserved. Made by{" "}
+              <a
+                href='https://createx.studio/'
+                target='_blank'
+                rel='noopener noreferrer'
+                className='text-[#2D5945] hover:text-[#2D5945]/80 transition-colors duration-200'
+              >
+                바나
+              </a>
+            </p>
+          </footer>
         </div>
       </div>
     </div>
   );
 };
 
-export default LoginPage;
+export default DecodEatLoginPage;
