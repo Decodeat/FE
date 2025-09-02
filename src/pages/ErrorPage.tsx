@@ -1,26 +1,26 @@
-import React from 'react';
-import { Link, isRouteErrorResponse, useRouteError } from 'react-router-dom';
-import { AlertTriangle, Home, ArrowLeft, LifeBuoy } from 'lucide-react';
+import React from "react";
+import { Link, isRouteErrorResponse, useRouteError } from "react-router-dom";
+import { AlertTriangle, Home, ArrowLeft, LifeBuoy } from "lucide-react";
 
 const getErrorMessage = (err: unknown): string => {
   if (isRouteErrorResponse(err)) {
     const data = (err as { data?: unknown }).data;
-    if (typeof data === 'string') return data;
-    if (data && typeof data === 'object') return JSON.stringify(data);
-    return err.statusText || '오류가 발생했습니다';
+    if (typeof data === "string") return data;
+    if (data && typeof data === "object") return JSON.stringify(data);
+    return err.statusText || "오류가 발생했습니다";
   }
   if (err instanceof Error) return err.message;
-  return '잠시 후 다시 시도해 주세요.';
+  return "잠시 후 다시 시도해 주세요.";
 };
 
 const ErrorPage: React.FC = () => {
   const error = useRouteError();
   const status: number = isRouteErrorResponse(error) ? error.status : 500;
   const title: string = isRouteErrorResponse(error)
-    ? error.statusText || '오류가 발생했습니다'
-    : '오류가 발생했습니다';
+    ? error.statusText || "오류가 발생했습니다"
+    : "오류가 발생했습니다";
   const message: string = getErrorMessage(error);
-  const isDev = import.meta.env.MODE !== 'production';
+  const isDev = import.meta.env.MODE !== "production";
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">

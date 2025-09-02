@@ -21,12 +21,12 @@ const RootLayout = () => {
   const isFullWidthPage = isEnrollPage || isOnboardingPage || isLoginPage || isSupportPage;
 
   return (
-    <div className='min-h-screen bg-gray-50 '>
+    <div className="min-h-screen bg-gray-50 ">
       {/* Top Navigation */}
       <TopGNB />
 
       {/* Main Layout Container */}
-      <div className='flex'>
+      <div className="flex">
         {/* Left Sidebar - 홈페이지에서만 표시 */}
         {isHomePage && <LeftGNB />}
 

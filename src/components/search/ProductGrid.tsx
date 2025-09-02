@@ -206,49 +206,49 @@ const ProductGrid = () => {
   }, [loadMore]);
 
   return (
-    <div className='w-full'>
+    <div className="w-full">
       {/* 검색 결과 헤더 */}
-      <div className='flex items-start justify-between mb-6'>
-        <div className='flex-1'>
-          <h2 className='text-xl font-bold text-[#2D5945] mb-2'>영양소 제품</h2>
+      <div className="flex items-start justify-between mb-6">
+        <div className="flex-1">
+          <h2 className="text-xl font-bold text-[#2D5945] mb-2">영양소 제품</h2>
         </div>
 
         {/* 정렬 옵션 */}
-        <div className='flex items-center space-x-2'>
-          <span className='text-gray-600 text-sm whitespace-nowrap'>정렬:</span>
-          <select className='border border-gray-300 rounded-lg px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500'>
-            <option value='popular'>인기순</option>
-            <option value='low-high'>낮은 가격순</option>
-            <option value='high-low'>높은 가격순</option>
-            <option value='rating'>평점순</option>
-            <option value='newest'>최신순</option>
+        <div className="flex items-center space-x-2">
+          <span className="text-gray-600 text-sm whitespace-nowrap">정렬:</span>
+          <select className="border border-gray-300 rounded-lg px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="popular">인기순</option>
+            <option value="low-high">낮은 가격순</option>
+            <option value="high-low">높은 가격순</option>
+            <option value="rating">평점순</option>
+            <option value="newest">최신순</option>
           </select>
         </div>
       </div>
 
       {/* 제품 그리드 */}
-      <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {products.map((product) => (
           <div
             key={product.id}
-            className='group relative bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow duration-200 cursor-pointer'
+            className="group relative bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow duration-200 cursor-pointer"
             onClick={() => handleProductClick()} //product.id 넣기
           >
             {/* 제품 이미지 */}
-            <div className='aspect-square bg-gray-100 overflow-hidden'>
+            <div className="aspect-square bg-gray-100 overflow-hidden">
               <img
                 src={product.image}
                 alt={product.name}
-                className='w-full h-full object-cover group-hover:scale-105 transition-transform duration-200'
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
               />
             </div>
             {/* 제품 정보 */}
-            <div className='p-4'>
-              <div className='mb-2'>
-                <h3 className='font-medium text-gray-900 text-sm mb-1 line-clamp-2'>
+            <div className="p-4">
+              <div className="mb-2">
+                <h3 className="font-medium text-gray-900 text-sm mb-1 line-clamp-2">
                   {product.name}
                 </h3>
-                <p className='text-xs text-gray-500'>{product.brand}</p>
+                <p className="text-xs text-gray-500">{product.brand}</p>
               </div>
             </div>
           </div>
@@ -257,27 +257,27 @@ const ProductGrid = () => {
 
       {/* 로딩 상태 */}
       {loading && (
-        <div className='flex justify-center items-center py-8'>
-          <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600'></div>
-          <span className='ml-2 text-gray-600'>로딩 중...</span>
+        <div className="flex justify-center items-center py-8">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+          <span className="ml-2 text-gray-600">로딩 중...</span>
         </div>
       )}
 
       {/* 더 이상 로드할 제품이 없을 때 */}
       {!hasMore && products.length > 0 && (
-        <div className='text-center py-8'>
-          <p className='text-gray-500'>모든 제품을 불러왔습니다.</p>
+        <div className="text-center py-8">
+          <p className="text-gray-500">모든 제품을 불러왔습니다.</p>
         </div>
       )}
 
       {/* 제품이 없을 때 */}
       {!loading && products.length === 0 && (
-        <div className='text-center py-12'>
-          <div className='text-gray-400 mb-4'>
-            <ShoppingCart className='w-16 h-16 mx-auto' />
+        <div className="text-center py-12">
+          <div className="text-gray-400 mb-4">
+            <ShoppingCart className="w-16 h-16 mx-auto" />
           </div>
-          <h3 className='text-lg font-medium text-gray-900 mb-2'>제품이 없습니다</h3>
-          <p className='text-gray-500'>다른 검색어나 필터를 시도해보세요.</p>
+          <h3 className="text-lg font-medium text-gray-900 mb-2">제품이 없습니다</h3>
+          <p className="text-gray-500">다른 검색어나 필터를 시도해보세요.</p>
         </div>
       )}
     </div>
