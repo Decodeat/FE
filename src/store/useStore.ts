@@ -1,4 +1,4 @@
-import { create } from 'zustand';
+import { create } from "zustand";
 
 interface FilterState {
   checkedItems: Record<string, boolean>;
@@ -14,21 +14,21 @@ interface FilterState {
 export const useFilterStore = create<FilterState>()((set, get) => ({
   // 선택된 영양소 필터 - 일관성을 위해 모든 기본값을 false로 설정
   checkedItems: {
-    'refined-carbohydrate': false,
-    'complex-carbohydrate': false,
-    'whey-protein-isolate': false,
-    'whey-protein-concentrate': false,
-    'plant-protein': false,
-    'animal-protein': false,
-    'soluble-dietary-fiber': false,
-    'insoluble-dietary-fiber': false,
+    "refined-carbohydrate": false,
+    "complex-carbohydrate": false,
+    "whey-protein-isolate": false,
+    "whey-protein-concentrate": false,
+    "plant-protein": false,
+    "animal-protein": false,
+    "soluble-dietary-fiber": false,
+    "insoluble-dietary-fiber": false,
   },
 
   // 검색어
-  searchQuery: '',
+  searchQuery: "",
 
   // 정렬 방식
-  sortBy: 'popular',
+  sortBy: "popular",
 
   // 액션들
   toggleFilter: (id: string) =>
@@ -57,7 +57,7 @@ export const useFilterStore = create<FilterState>()((set, get) => ({
           acc[key] = false;
           return acc;
         },
-        {} as Record<string, boolean>
+        {} as Record<string, boolean>,
       ),
     })),
 }));
