@@ -1,62 +1,92 @@
-import { useState, useEffect } from "react";
-import type { FC } from "react";
+import { useEffect, useState, type FC } from "react";
 import { useNavigate } from "react-router-dom";
 import UploadSlot from "../components/enroll/UploadSlot";
+import { useEnroll } from "../hooks/useEnroll";
+import type { EnrollFormData } from "../types/enroll";
 
 const EnrollPage: FC = () => {
   const navigate = useNavigate();
 
-  // 원재료/영양정보 표(2칸), 제품 사진(1칸)
-  const [ingNutri, setIngNutri] = useState<Array<string | null>>([null, null]);
-  const [productPhoto, setProductPhoto] = useState<string | null>(null);
+  // 미리보기 URL (원재료/영양정보 2칸, 제품 1칸)
+  const [ingNutriPreviews, setIngNutriPreviews] = useState<(string | null)[]>([null, null]);
+  const [productPhotoPreview, setProductPhotoPreview] = useState<string | null>(null);
+
+  // 실제 업로드용 File 상태
+  const [ingNutriFiles, setIngNutriFiles] = useState<(File | null)[]>([null, null]);
+  const [productPhotoFile, setProductPhotoFile] = useState<File | null>(null);
 
   // 텍스트 필드
   const [companyName, setCompanyName] = useState("");
   const [productName, setProductName] = useState("");
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  // react-query 훅
+  const { mutate: enrollProduct, isPending } = useEnroll();
 
-  // blob url 해제
+  // blob url 정리
   useEffect(() => {
     return () => {
-      ingNutri.forEach((url) => url && URL.revokeObjectURL(url));
-      if (productPhoto) URL.revokeObjectURL(productPhoto);
+      ingNutriPreviews.forEach((url) => url && URL.revokeObjectURL(url));
+      if (productPhotoPreview) URL.revokeObjectURL(productPhotoPreview);
     };
-  }, [ingNutri, productPhoto]);
+  }, [ingNutriPreviews, productPhotoPreview]);
 
-  const handleSlotChange = (
-    group: "ing" | "prod",
-    indexOrFile: number | File | null,
-    f?: File | null,
-  ) => {
-    if (group === "ing") {
-      const index = indexOrFile as number;
-      const file = f ?? null;
-      setIngNutri((prev) => {
-        if (prev[index]) URL.revokeObjectURL(prev[index]!);
-        return prev.map((v, i) => (i === index ? (file ? URL.createObjectURL(file) : null) : v));
-      });
-    } else {
-      const file = indexOrFile as File | null;
-      if (productPhoto) URL.revokeObjectURL(productPhoto);
-      setProductPhoto(file ? URL.createObjectURL(file) : null);
-    }
+  /** 원재료/영양정보 슬롯 변경 */
+  const handleIngSlotChange = (index: number, file: File | null) => {
+    // File 상태
+    setIngNutriFiles((prev) => prev.map((f, i) => (i === index ? file : f)));
+
+    // Preview 상태
+    setIngNutriPreviews((prev) => {
+      // 기존 URL 정리
+      if (prev[index]) URL.revokeObjectURL(prev[index]!);
+
+      const next = [...prev];
+      next[index] = file ? URL.createObjectURL(file) : null;
+      return next;
+    });
+  };
+
+  /** 제품 사진 슬롯 변경 */
+  const handleProdSlotChange = (file: File | null) => {
+    setProductPhotoFile(file);
+
+    setProductPhotoPreview((prev) => {
+      if (prev) URL.revokeObjectURL(prev);
+      return file ? URL.createObjectURL(file) : null;
+    });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
     // 검증: 원재료/영양정보 표는 최소 1장 이상
-    const ingCount = ingNutri.filter(Boolean).length;
+    const ingCount = ingNutriFiles.filter(Boolean).length;
     if (ingCount < 1) {
       alert("원재료명 및 영양정보 표 사진을 최소 1장 이상 업로드해 주세요.");
       return;
     }
-    setIsSubmitting(true);
+    if (!productName.trim() || !companyName.trim()) {
+      alert("제품명과 회사명을 입력해 주세요.");
+      return;
+    }
 
-    // 실제 업로드 로직 위치 (FormData 구성 등)
-    alert("제품 등록 요청이 정상적으로 완료되었습니다.");
-    navigate("/");
-    setIsSubmitting(false);
+    const formData: EnrollFormData = {
+      name: productName.trim(),
+      manufacturer: companyName.trim(),
+      productImage: productPhotoFile ?? null, // 선택
+      productInfoImages: ingNutriFiles.filter(Boolean) as File[], // 실제 파일만
+    };
+
+    enrollProduct(formData, {
+      onSuccess: () => {
+        alert("제품 등록 요청이 정상적으로 완료되었습니다.");
+        navigate("/");
+      },
+      onError: (err) => {
+        console.error(err);
+        alert("제품 등록 중 오류가 발생했습니다.");
+      },
+    });
   };
 
   return (
@@ -79,18 +109,18 @@ const EnrollPage: FC = () => {
 
             <div className="flex items-center gap-4">
               <UploadSlot
-                preview={ingNutri[0]}
-                onChange={(file) => handleSlotChange("ing", 0, file)}
-                onClear={() => handleSlotChange("ing", 0, null)}
+                preview={ingNutriPreviews[0]}
+                onChange={(file) => handleIngSlotChange(0, file)}
+                onClear={() => handleIngSlotChange(0, null)}
                 ariaLabel="원재료/영양정보 첫 번째 사진"
-                disabled={isSubmitting}
+                disabled={isPending}
               />
               <UploadSlot
-                preview={ingNutri[1]}
-                onChange={(file) => handleSlotChange("ing", 1, file)}
-                onClear={() => handleSlotChange("ing", 1, null)}
+                preview={ingNutriPreviews[1]}
+                onChange={(file) => handleIngSlotChange(1, file)}
+                onClear={() => handleIngSlotChange(1, null)}
                 ariaLabel="원재료/영양정보 두 번째 사진"
-                disabled={isSubmitting}
+                disabled={isPending}
               />
             </div>
 
@@ -103,11 +133,11 @@ const EnrollPage: FC = () => {
           <div className="flex flex-col gap-3">
             <label className="text-sm font-medium text-gray-800">제품 사진 등록 (선택)</label>
             <UploadSlot
-              preview={productPhoto}
-              onChange={(file) => handleSlotChange("prod", file)}
-              onClear={() => handleSlotChange("prod", null)}
+              preview={productPhotoPreview}
+              onChange={handleProdSlotChange}
+              onClear={() => handleProdSlotChange(null)}
               ariaLabel="제품 사진"
-              disabled={isSubmitting}
+              disabled={isPending}
             />
           </div>
         </div>
@@ -122,7 +152,7 @@ const EnrollPage: FC = () => {
               type="text"
               value={productName}
               onChange={(e) => setProductName(e.target.value)}
-              disabled={isSubmitting}
+              disabled={isPending}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#79CCB1] focus:border-[#79CCB1] outline-none"
               placeholder="제품명을 입력하세요"
             />
@@ -136,7 +166,7 @@ const EnrollPage: FC = () => {
               type="text"
               value={companyName}
               onChange={(e) => setCompanyName(e.target.value)}
-              disabled={isSubmitting}
+              disabled={isPending}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#79CCB1] focus:border-[#79CCB1] outline-none"
               placeholder="회사명을 입력하세요"
             />
@@ -145,10 +175,10 @@ const EnrollPage: FC = () => {
 
         <button
           type="submit"
-          disabled={isSubmitting}
+          disabled={isPending}
           className="mt-16 w-full bg-[#D2EDE4] text-[#2D5945] py-4 rounded-lg font-medium hover:bg-[#79CCB1] transition-colors disabled:opacity-50"
         >
-          {isSubmitting ? "등록 중…" : "제품 분석 요청하기"}
+          {isPending ? "등록 중…" : "제품 분석 요청하기"}
         </button>
       </section>
     </form>
