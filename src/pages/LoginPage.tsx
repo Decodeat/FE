@@ -9,7 +9,7 @@ const DecodEatLoginPage: React.FC = () => {
   const navigate = useNavigate();
   const handleKakaoLogin = () => {
     console.log("카카오 로그인 시작");
-    window.location.href = "http://localhost:8080/oauth2/authorization/kakao";
+    window.location.href = "http://decodeat.store/oauth2/authorization/kakao";
   };
 
   const handleGoHome = () => {
