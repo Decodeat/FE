@@ -3,7 +3,9 @@
 export interface ChartDataItem {
   name: string;
   value: number;
+  displayValue?: number; // 표시용 값 (원래 단위)
   color: string;
+  unit?: string;
 }
 
 /**
@@ -20,7 +22,7 @@ export const createDonutChartPath = (
   cumulativePercentage: number,
   centerX: number = 50,
   centerY: number = 50,
-  radius: number = 40
+  radius: number = 40,
 ): string => {
   const startAngle = cumulativePercentage * 360;
   const endAngle = (cumulativePercentage + percentage) * 360;
@@ -50,10 +52,10 @@ export const calculateTotal = (data: ChartDataItem[]): number => {
 export const CHART_CONFIG = {
   DEFAULT_WIDTH: 300,
   DEFAULT_HEIGHT: 300,
-  DEFAULT_VIEWBOX: '0 0 100 100',
+  DEFAULT_VIEWBOX: "0 0 100 100",
   DEFAULT_CENTER_X: 50,
   DEFAULT_CENTER_Y: 50,
   DEFAULT_RADIUS: 40,
   DEFAULT_INNER_RADIUS: 20,
-  STROKE_WIDTH: '0.5',
+  STROKE_WIDTH: "0.5",
 } as const;

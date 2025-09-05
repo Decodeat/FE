@@ -32,9 +32,8 @@ const ProductGrid = () => {
 
   // 제품 클릭 핸들러
   const handleProductClick = () => {
-    //productId: number 넣기
-    // navigate(`/detail/${productId}`);
-    navigate(`/detail/`);
+    // 테스트용: 모든 상품을 ID 1로 고정
+    navigate(`/detail/1`);
   };
 
   // 샘플 제품 데이터

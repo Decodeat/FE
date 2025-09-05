@@ -17,7 +17,7 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       {
-        index: true, // 홈페이지를 기본 경로로 설정
+        index: true,
         element: <HomePage />,
       },
       {
@@ -25,7 +25,7 @@ const router = createBrowserRouter([
         element: <EnrollPage />,
       },
       {
-        path: "detail",
+        path: "detail/:id",
         element: <DetailPage />,
       },
       {
