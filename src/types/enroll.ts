@@ -1,15 +1,20 @@
+// 제품 등록 요청 타입
 export interface EnrollFormData {
-  name: string; // 제품명
-  manufacturer: string; // 회사명
-  productImage?: File | null; // 제품 사진 (선택)
-  productInfoImages: (File | null)[]; // 원재료/영양정보 사진 (최소 1장)
-}
-
-export interface EnrollResponse {
-  id: number;
   name: string;
   manufacturer: string;
-  productImageUrl?: string;
-  productInfoImageUrls: string[];
-  createdAt: string;
+  productImage: File | null; // 선택적으로 변경
+  productInfoImages: File[];
+}
+
+// 제품 등록 응답 타입
+export interface EnrollResponse {
+  isSuccess: boolean;
+  code: string;
+  message: string;
+  result: {
+    name: string;
+    manufacturer: string;
+    productImage: string;
+    productInfoImages: string[];
+  };
 }

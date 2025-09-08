@@ -19,7 +19,6 @@ const EnrollPage: FC = () => {
   const [companyName, setCompanyName] = useState("");
   const [productName, setProductName] = useState("");
 
-  // react-query 훅
   const { mutate: enrollProduct, isPending } = useEnroll();
 
   // blob url 정리
@@ -30,7 +29,7 @@ const EnrollPage: FC = () => {
     };
   }, [ingNutriPreviews, productPhotoPreview]);
 
-  /** 원재료/영양정보 슬롯 변경 */
+  // 원재료/영양정보 슬롯 변경
   const handleIngSlotChange = (index: number, file: File | null) => {
     // File 상태
     setIngNutriFiles((prev) => prev.map((f, i) => (i === index ? file : f)));
@@ -59,22 +58,29 @@ const EnrollPage: FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // 검증: 원재료/영양정보 표는 최소 1장 이상
-    const ingCount = ingNutriFiles.filter(Boolean).length;
-    if (ingCount < 1) {
-      alert("원재료명 및 영양정보 표 사진을 최소 1장 이상 업로드해 주세요.");
+    // 필수 필드 검증
+    if (!productName.trim()) {
+      alert("제품명을 입력해 주세요.");
       return;
     }
-    if (!productName.trim() || !companyName.trim()) {
-      alert("제품명과 회사명을 입력해 주세요.");
+
+    if (!companyName.trim()) {
+      alert("회사명을 입력해 주세요.");
+      return;
+    }
+
+    // 검증: 원재료/영양정보 표는 최소 1장 이상
+    const validIngNutriFiles = ingNutriFiles.filter(Boolean) as File[];
+    if (validIngNutriFiles.length < 1) {
+      alert("원재료명 및 영양정보 표 사진을 최소 1장 이상 업로드해 주세요.");
       return;
     }
 
     const formData: EnrollFormData = {
       name: productName.trim(),
       manufacturer: companyName.trim(),
-      productImage: productPhotoFile ?? null, // 선택
-      productInfoImages: ingNutriFiles.filter(Boolean) as File[], // 실제 파일만
+      productImage: productPhotoFile,
+      productInfoImages: validIngNutriFiles,
     };
 
     enrollProduct(formData, {
@@ -101,7 +107,7 @@ const EnrollPage: FC = () => {
 
       <section className="max-w-6xl mx-auto px-4 pb-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-          {/* ===== ① 원재료/영양정보 표 (필수, 2칸) ===== */}
+          {/* 원재료/영양정보 표*/}
           <div className="flex flex-col gap-3">
             <label className="text-sm font-medium text-gray-800">
               원재료명 및 영양정보 표 사진 등록 <span className="text-red-500">*</span>
@@ -129,7 +135,7 @@ const EnrollPage: FC = () => {
             </p>
           </div>
 
-          {/* ===== ② 제품 사진 (선택, 1칸) ===== */}
+          {/* 제품 사진 */}
           <div className="flex flex-col gap-3">
             <label className="text-sm font-medium text-gray-800">제품 사진 등록 (선택)</label>
             <UploadSlot
@@ -142,7 +148,7 @@ const EnrollPage: FC = () => {
           </div>
         </div>
 
-        {/* ===== 텍스트 필드들 ===== */}
+        {/* 텍스트 필드들 */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-10">
           <div className="space-y-2">
             <label className="text-sm font-medium text-gray-700">
