@@ -1,4 +1,4 @@
-import type { ProductDetail } from "../../types/product";
+import type { ProductDetail } from "../../types/productDetail";
 import { createNutrientCategories } from "../../utils/nutritionUtils";
 
 interface DetailedNutrientsProps {

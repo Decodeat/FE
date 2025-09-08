@@ -1,4 +1,4 @@
-import type { ProductDetail } from "../types/product";
+import type { ProductDetail } from "../types/productDetail";
 
 // 영양성분 매핑 설정
 export const NUTRITION_MAPPING = [
