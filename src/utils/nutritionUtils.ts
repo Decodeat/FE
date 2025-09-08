@@ -1,5 +1,5 @@
 import type { NutritionValue, NutrientCategory } from "../types/nutrition";
-import type { ProductDetail } from "../types/product";
+import type { ProductDetail } from "../types/productDetail";
 import { NUTRITION_LABELS } from "../constants/product";
 import { NUTRITION_MAPPING, UNIT_CONVERSION, NUTRIENT_CATEGORIES } from "../constants/nutrition";
 

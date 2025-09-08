@@ -1,10 +1,4 @@
-// API 응답 타입
-export interface ProductDetailResponse {
-  isSuccess: boolean;
-  code: string;
-  message: string;
-  result: ProductDetail;
-}
+import type { ApiResponse } from "./common";
 
 // 제품 상세 정보 타입
 export interface ProductDetail {
@@ -36,17 +30,5 @@ export interface ProductDetail {
   others: string[];
 }
 
-// 영양성분 정보 타입
-export interface NutritionInfo {
-  label: string;
-  value: number;
-  unit: string;
-  color?: string;
-}
-
-// 세부영양성분 그룹 타입
-export interface NutrientGroup {
-  title: string;
-  items: string[];
-  color: string;
-}
+// 제품 상세 정보 응답 타입
+export type ProductDetailResponse = ApiResponse<ProductDetail>;

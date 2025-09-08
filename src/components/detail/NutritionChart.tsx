@@ -1,4 +1,4 @@
-import type { ProductDetail } from "../../types/product";
+import type { ProductDetail } from "../../types/productDetail";
 import { NUTRITION_LABELS } from "../../constants/product";
 import { createNutritionValues } from "../../utils/nutritionUtils";
 import { CHART_CONFIG } from "../../constants/nutrition";
