@@ -1,4 +1,4 @@
-import type { ProductDetailResponse } from "../types/product";
+import type { ProductDetailResponse } from "../types/productDetail";
 import { API } from "./axios";
 
 // 제품 상세 정보 조회
