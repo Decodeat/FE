@@ -4,7 +4,7 @@ import type { UserResponse } from "../types/auth";
 export const authAPI = {
   // 사용자 정보 조회
   getUser: async (): Promise<UserResponse> => {
-    const response = await API.get<UserResponse>("/api/user");
+    const response = await API.get<UserResponse>("/user");
     return response.data;
   },
 
