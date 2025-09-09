@@ -1,15 +1,39 @@
+import { useState } from "react";
 import type { ProductDetail } from "../../types/productDetail";
 import { NUTRITION_LABELS } from "../../constants/product";
 import { createNutritionValues } from "../../utils/nutritionUtils";
-import { CHART_CONFIG } from "../../constants/nutrition";
-import { calculateTotal, type ChartDataItem } from "../../utils/chartUtils";
+import type { ChartDataItem } from "../../utils/chartUtils";
+import warnIcon from "../../assets/icon/warn.svg";
+import SuccessModal from "../ui/SuccessModal";
+import PieChart from "./PieChart";
+import NutritionEditForm from "./NutritionEditForm";
 
 interface NutritionChartProps {
   product: ProductDetail;
 }
 
 const NutritionChart = ({ product }: NutritionChartProps) => {
-  // 원형차트용 영양성분 데이터(내림차순)
+  const [showEditForm, setShowEditForm] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+
+  const handleReportClick = () => {
+    setShowEditForm(!showEditForm);
+  };
+
+  const handleReportSuccess = () => {
+    setShowEditForm(false);
+    setIsSuccessModalOpen(true);
+  };
+
+  const handleReportCancel = () => {
+    setShowEditForm(false);
+  };
+
+  const handleSuccessModalClose = () => {
+    setIsSuccessModalOpen(false);
+  };
+
+  // 원형차트용 영양성분 데이터
   const getNutritionChartData = (): ChartDataItem[] => {
     if (!product) return [];
 
@@ -20,84 +44,17 @@ const NutritionChart = ({ product }: NutritionChartProps) => {
         const label = NUTRITION_LABELS[key as keyof typeof NUTRITION_LABELS];
         return {
           name: label?.label || key,
-          value: value || 0, // g로 계산할 값
-          displayValue: displayValue || value || 0, // 원래 단위
+          value: value || 0,
+          displayValue: displayValue || value || 0,
           color: label?.color || "#808080",
           unit: label?.unit || originalUnit,
         };
       })
-      .filter((item) => item.value > 0) // 0보다 큰 값만 표시
-      .sort((a, b) => b.value - a.value); // 내림차순
+      .filter((item) => item.value > 0)
+      .sort((a, b) => b.value - a.value);
   };
 
   const nutritionData = getNutritionChartData();
-
-  // 원형(파이) 차트 컴포넌트
-  const PieChart = ({ data }: { data: ChartDataItem[] }) => {
-    if (!data || data.length === 0) {
-      return <div className="text-center text-gray-500">영양 성분 데이터가 없습니다.</div>;
-    }
-
-    const total = calculateTotal(data);
-    const { center, radius, strokeWidth, svgSize } = CHART_CONFIG;
-
-    let currentAngle = 0;
-
-    return (
-      <div className="flex items-center gap-8">
-        {/* 원형 차트 */}
-        <svg width={svgSize} height={svgSize}>
-          {data.map((item, index) => {
-            const percentage = item.value / total;
-            const angle = percentage * 2 * Math.PI;
-
-            const x1 = center + Math.cos(currentAngle) * radius;
-            const y1 = center + Math.sin(currentAngle) * radius;
-            const x2 = center + Math.cos(currentAngle + angle) * radius;
-            const y2 = center + Math.sin(currentAngle + angle) * radius;
-
-            const largeArcFlag = angle > Math.PI ? 1 : 0;
-
-            const pathData = [
-              `M ${center} ${center}`,
-              `L ${x1} ${y1}`,
-              `A ${radius} ${radius} 0 ${largeArcFlag} 1 ${x2} ${y2}`,
-              "Z",
-            ].join(" ");
-
-            const slice = (
-              <path
-                key={index}
-                d={pathData}
-                fill={item.color}
-                stroke="white"
-                strokeWidth={strokeWidth}
-              />
-            );
-
-            currentAngle += angle;
-            return slice;
-          })}
-        </svg>
-
-        {/* 영양성분 범례 */}
-        <div className="space-y-3">
-          {data.map((item, index) => (
-            <div key={index} className="flex items-center space-x-3">
-              <div className="w-4 h-4 rounded-full" style={{ backgroundColor: item.color }}></div>
-              <div className="flex-1">
-                <span className="text-lg text-gray-700 font-medium">{item.name}</span>
-                <span className="text-lg text-gray-900 font-bold ml-2">
-                  {item.displayValue || item.value}
-                  {item.unit}
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  };
 
   if (nutritionData.length === 0) {
     return null;
@@ -105,8 +62,38 @@ const NutritionChart = ({ product }: NutritionChartProps) => {
 
   return (
     <div className="mb-8">
-      <h3 className="text-2xl font-semibold mb-6 text-gray-900">영양 성분 비율</h3>
-      <PieChart data={nutritionData} />
+      <div className="flex justify-between items-center mb-4">
+        <h3 className="text-2xl font-semibold text-gray-900">영양 성분 비율</h3>
+        <button className="flex items-center space-x-1 cursor-pointer" onClick={handleReportClick}>
+          <img src={warnIcon} alt="경고" className="w-4 h-4" />
+          <p className="text-sm text-gray-500">{showEditForm ? "수정 취소" : "잘못된 정보 신고"}</p>
+        </button>
+      </div>
+
+      <div className="flex gap-8">
+        {/* 왼쪽: 원형 차트 */}
+        <PieChart data={nutritionData} />
+
+        {/* 오른쪽: 수정 폼 (조건부 렌더링) */}
+        {showEditForm && (
+          <div className="flex-1 max-w-md">
+            <NutritionEditForm
+              product={product}
+              nutritionData={nutritionData}
+              onSuccess={handleReportSuccess}
+              onCancel={handleReportCancel}
+            />
+          </div>
+        )}
+      </div>
+
+      {/* 성공 모달 */}
+      <SuccessModal
+        isOpen={isSuccessModalOpen}
+        onClose={handleSuccessModalClose}
+        title="신고 완료"
+        message="영양성분 수정 신고가 성공적으로 전송되었습니다."
+      />
     </div>
   );
 };
