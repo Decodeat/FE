@@ -19,6 +19,9 @@ const TopGNB = () => {
   const { isLoading } = useUser();
   const logoutMutation = useLogout();
 
+  // 디버깅용 로그
+  console.log("TopGNB 상태:", { user, isAuthenticated, isLoading });
+
   // 로그아웃 핸들러
   const handleLogout = async () => {
     try {
