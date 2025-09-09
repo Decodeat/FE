@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
+import { AxiosError } from "axios";
 import { authAPI } from "../apis/auth";
 import { useAuthStore } from "../store/useAuthStore";
 
@@ -10,7 +11,14 @@ export const useUser = () => {
     queryKey: ["user"],
     queryFn: authAPI.getUser,
     staleTime: 1000 * 60 * 5, // 5분간 캐시 유지
-    retry: 1,
+    retry: (failureCount, error: Error) => {
+      // 401 Unauthorized 에러면 재시도하지 않음
+      if ((error as AxiosError)?.response?.status === 401) {
+        return false;
+      }
+      // 그 외 에러는 1번만 재시도
+      return failureCount < 1;
+    },
   });
 
   useEffect(() => {
