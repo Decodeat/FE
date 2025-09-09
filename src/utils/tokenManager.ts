@@ -1,23 +1,29 @@
-// 임시 하드코딩된 토큰 (테스트용)
-const HARDCODED_TOKEN =
-  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJkZWNvZEVhdEBnbWFpbC5jb20iLCJpYXQiOjE3NTc0MDM5MDcsImV4cCI6MTc1NzQwNzUwNywic3ViIjoicnl1c2FuZ3dhbjEyQG5hdmVyLmNvbSIsImlkIjozLCJyb2xlIjoiUk9MRV9VU0VSIn0.8X62PoXifUzk8WXAHIjKpYnRHiWSqDrPS_akxZLWehgl5gj7e7pmn8iuVLqzKnPV";
+// 쿠키에서 토큰을 가져오는 유틸리티 함수
+const getCookie = (name: string): string | null => {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop()?.split(";").shift() || null;
+  return null;
+};
 
 // 토큰 관리 유틸리티
 export const tokenManager = {
   getToken: (): string | null => {
-    return HARDCODED_TOKEN; // 임시로 하드코딩된 토큰 반환
+    return getCookie("accessToken");
   },
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  setToken: (_token: string): void => {
-    // 임시로 아무것도 하지 않음 (테스트용)
+  getRefreshToken: (): string | null => {
+    return getCookie("refreshToken");
   },
 
+  // 쿠키는 서버에서 설정하므로 클라이언트에서는 삭제만 가능
   removeToken: (): void => {
-    // 임시로 아무것도 하지 않음
+    document.cookie = "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = "refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
   },
 
   hasToken: (): boolean => {
-    return true; // 항상 로그인 상태로 간주
+    const accessToken = getCookie("accessToken");
+    return accessToken !== null && accessToken !== "";
   },
 };
