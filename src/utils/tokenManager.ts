@@ -1,6 +1,6 @@
 // 임시 하드코딩된 토큰 (테스트용)
 const HARDCODED_TOKEN =
-  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJkZWNvZEVhdEBnbWFpbC5jb20iLCJpYXQiOjE3NTczMTUxNjksImV4cCI6MTc1NzMxODc2OSwic3ViIjoicnl1c2FuZ3dhbjEyQG5hdmVyLmNvbSIsImlkIjozLCJyb2xlIjoiUk9MRV9VU0VSIn0.t_vF7L0med-o7P16bOh4pSJ0hPplqOvTK_LQV1-ooxE8aU8JsvArVn-4c2kEUS5L";
+  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJkZWNvZEVhdEBnbWFpbC5jb20iLCJpYXQiOjE3NTc0MDM5MDcsImV4cCI6MTc1NzQwNzUwNywic3ViIjoicnl1c2FuZ3dhbjEyQG5hdmVyLmNvbSIsImlkIjozLCJyb2xlIjoiUk9MRV9VU0VSIn0.8X62PoXifUzk8WXAHIjKpYnRHiWSqDrPS_akxZLWehgl5gj7e7pmn8iuVLqzKnPV";
 
 // 토큰 관리 유틸리티
 export const tokenManager = {
