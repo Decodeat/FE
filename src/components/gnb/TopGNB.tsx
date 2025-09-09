@@ -261,10 +261,10 @@ const TopGNB = () => {
             ) : (
               // 로그아웃 상태: 로그인 버튼
               <button
-                onClick={() => navigate("/login")}
+                onClick={() => navigate("/logout")}
                 className="hidden sm:flex items-center bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded-lg text-lg font-medium transition-colors"
               >
-                <span>로그인</span>
+                <span>로그아웃</span>
               </button>
             )}
 
