@@ -113,14 +113,14 @@ const NutritionEditForm = ({
             type="button"
             onClick={onCancel}
             disabled={reportMutation.isPending}
-            className="px-3 py-1 text-sm text-gray-700 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+            className="px-3 py-1 text-sm text-gray-700 bg-gray-200 font-bold rounded hover:bg-gray-300 disabled:opacity-50"
           >
             취소
           </button>
           <button
             type="submit"
             disabled={reportMutation.isPending}
-            className="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 flex items-center space-x-1"
+            className="px-3 py-1 text-sm bg-[#D2EDE4] rounded text-[#2D5945] font-bold hover:bg-[#A9DBC9] disabled:opacity-50 flex items-center space-x-1"
           >
             {reportMutation.isPending && (
               <div className="w-3 h-3 border border-white border-t-transparent rounded-full animate-spin" />
