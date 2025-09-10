@@ -38,6 +38,11 @@ API.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
+    // 로그인 페이지에서는 토큰 갱신 시도하지 않음
+    if (window.location.pathname === "/login") {
+      return Promise.reject(error);
+    }
+
     // 401 에러이고 아직 재시도하지 않은 경우
     if (error.response?.status === 401 && !originalRequest._retry) {
       if (isRefreshing) {
@@ -61,8 +66,10 @@ API.interceptors.response.use(
         const refreshToken = Cookies.get("refreshToken");
 
         if (!refreshToken) {
-          // 리프레시 토큰이 없으면 로그인 페이지로 리다이렉트
-          window.location.href = "/login";
+          // 리프레시 토큰이 없으면 로그인 페이지로 리다이렉트 (한 번만)
+          if (window.location.pathname !== "/login") {
+            window.location.href = "/login";
+          }
           return Promise.reject(error);
         }
 
@@ -85,8 +92,10 @@ API.interceptors.response.use(
         }
       } catch (refreshError) {
         processQueue(refreshError, null);
-        // 토큰 갱신 실패 시 로그인 페이지로 리다이렉트
-        window.location.href = "/login";
+        // 토큰 갱신 실패 시 로그인 페이지로 리다이렉트 (한 번만)
+        if (window.location.pathname !== "/login") {
+          window.location.href = "/login";
+        }
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;
