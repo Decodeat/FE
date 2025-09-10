@@ -33,16 +33,28 @@ const processQueue = (error: unknown, token: string | null = null) => {
 // 요청 인터셉터 - Authorization 헤더에 토큰 자동 추가
 API.interceptors.request.use(
   (config) => {
-    // 쿠키에서 accessToken 가져와서 Authorization 헤더에 추가
-    const accessToken = Cookies.get("accessToken");
+    console.log("🔍 요청 인터셉터 실행:", config.url);
+
+    // 쿠키에서 access_token 가져와서 Authorization 헤더에 추가 (스네이크 케이스)
+    const accessToken = Cookies.get("access_token");
+
+    console.log(
+      "🍪 access_token 쿠키:",
+      accessToken ? `${accessToken.substring(0, 20)}...` : "없음",
+    );
+
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
+      console.log("✅ Authorization 헤더 추가됨");
+    } else {
+      console.log("❌ access_token 쿠키를 찾을 수 없음");
     }
+
     return config;
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
 
 // 응답 인터셉터 (토큰 갱신 및 에러 처리)
@@ -77,10 +89,11 @@ API.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        // 쿠키에서 리프레시 토큰 가져오기
-        const refreshToken = Cookies.get("refreshToken");
+        // 쿠키에서 리프레시 토큰 가져오기 (스네이크 케이스)
+        const refreshToken = Cookies.get("refresh_token");
 
         if (!refreshToken) {
+          console.log("❌ refresh_token 쿠키를 찾을 수 없음");
           // 리프레시 토큰이 없으면 로그인 페이지로 리다이렉트 (한 번만)
           if (window.location.pathname !== "/login") {
             window.location.href = "/login";
@@ -100,10 +113,10 @@ API.interceptors.response.use(
         if (response.data.isSuccess) {
           const newAccessToken = response.data.result.accessToken;
           processQueue(null, newAccessToken);
-          
+
           // 새로운 토큰으로 원래 요청의 Authorization 헤더 업데이트
           originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-          
+
           // 원래 요청 재시도
           return API(originalRequest);
         } else {
