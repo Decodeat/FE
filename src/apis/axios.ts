@@ -1,4 +1,5 @@
 import axios from "axios";
+import { tokenManager } from "../utils/tokenManager";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -7,19 +8,16 @@ export const API = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
-  withCredentials: true, // 쿠키 자동 포함
+  withCredentials: true,
 });
 
-// 요청 인터셉터 (디버깅용)
+// 요청 인터셉터
 API.interceptors.request.use(
   (config) => {
-    console.log("API 요청:", {
-      url: config.url,
-      method: config.method,
-      headers: config.headers,
-      withCredentials: config.withCredentials,
-    });
-    console.log("현재 쿠키:", document.cookie);
+    const token = tokenManager.getToken();
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
     return config;
   },
   (error) => {
@@ -27,21 +25,13 @@ API.interceptors.request.use(
   },
 );
 
-// 응답 인터셉터 (에러 처리용)
+// 응답 인터셉터
 API.interceptors.response.use(
   (response) => {
-    console.log("API 응답 성공:", response.status, response.data);
     return response;
   },
   (error) => {
-    console.error("API 에러:", {
-      status: error.response?.status,
-      data: error.response?.data,
-      config: {
-        url: error.config?.url,
-        method: error.config?.method,
-      },
-    });
+    // 에러 로깅 제거 - useQuery/useMutation에서 처리
     return Promise.reject(error);
   },
 );

@@ -4,13 +4,12 @@ import { AxiosError } from "axios";
 import { authAPI } from "../apis/auth";
 import { useAuthStore } from "../store/useAuthStore";
 
-export const useUser = (enabled = true) => {
+export const useUser = () => {
   const { setUser, setLoading } = useAuthStore();
 
   const query = useQuery({
     queryKey: ["user"],
     queryFn: authAPI.getUser,
-    enabled: enabled, // 외부에서 제어 가능
     staleTime: 1000 * 60 * 5, // 5분간 캐시 유지
     retry: (failureCount, error: Error) => {
       // 401 Unauthorized 에러면 재시도하지 않음
@@ -35,15 +34,6 @@ export const useUser = (enabled = true) => {
   }, [query.isSuccess, query.isError, query.isLoading, query.data, setUser, setLoading]);
 
   return query;
-};
-
-// 사용자 정보 새로고침 훅
-export const useRefreshUser = () => {
-  const queryClient = useQueryClient();
-  
-  return () => {
-    queryClient.invalidateQueries({ queryKey: ["user"] });
-  };
 };
 
 export const useLogout = () => {
