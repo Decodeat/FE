@@ -9,11 +9,7 @@ interface PaginationProps {
   onPageChange: (page: number) => void;
 }
 
-const Pagination = ({
-  currentPage,
-  totalPages,
-  onPageChange,
-}: PaginationProps) => {
+const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) => {
   // 페이지 이동 시 1 ~ totalPages 범위로 클램프
   const goTo = (p: number) => {
     const clamped = Math.min(Math.max(1, p), Math.max(1, totalPages || 1));
