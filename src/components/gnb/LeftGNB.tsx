@@ -1,19 +1,20 @@
 import { useState } from "react";
 import { useFilterStore } from "../../store/useStore";
+import type { ProductCategory } from "../../types/product";
 
 const LeftGNB = () => {
   const [isLivingRoomOpen, setIsLivingRoomOpen] = useState(true);
   const { checkedItems, toggleFilter } = useFilterStore();
 
-  const categories = [
-    { id: "refined-carbohydrate", label: "정제 탄수화물", count: 697 },
-    { id: "complex-carbohydrate", label: "복합 탄수화물", count: 234 },
-    { id: "whey-protein-isolate", label: "분리유청 단백질", count: 182 },
-    { id: "whey-protein-concentrate", label: "농축유청 단백질", count: 133 },
-    { id: "plant-protein", label: "식물성 단백질", count: 24 },
-    { id: "animal-protein", label: "동물성 단백질", count: 49 },
-    { id: "soluble-dietary-fiber", label: "수용성 식이섬유", count: 75 },
-    { id: "insoluble-dietary-fiber", label: "불용성 식이섬유", count: 75 },
+  // API와 매핑되는 카테고리 정의
+  const categories: Array<{ id: string; label: string; apiCategory: ProductCategory }> = [
+    { id: "refined-carbohydrate", label: "정제 탄수화물", apiCategory: "REFINED_CARBOHYDRATE" },
+    { id: "complex-carbohydrate", label: "복합 탄수화물", apiCategory: "COMPLEX_CARBOHYDRATE" },
+    { id: "plant-protein", label: "식물성 단백질", apiCategory: "PLANT_PROTEIN" },
+    { id: "animal-protein", label: "동물성 단백질", apiCategory: "ANIMAL_PROTEIN" },
+    { id: "allergens", label: "알레르기 유발요소", apiCategory: "ALLERGENS" },
+    { id: "additives", label: "첨가물", apiCategory: "ADDITIVES" },
+    { id: "others", label: "기타", apiCategory: "OTHERS" },
   ];
 
   return (
@@ -65,7 +66,6 @@ const LeftGNB = () => {
                     htmlFor={category.id}
                   >
                     <span className="text-gray-700 font-medium text-sm">{category.label}</span>
-                    <span className="text-xs text-gray-500 ml-auto">{category.count}</span>
                   </label>
                 </div>
               ))}
