@@ -80,9 +80,9 @@ API.interceptors.response.use(
 
         if (!refreshToken) {
           // 리프레시 토큰이 없으면 로그인 페이지로 리다이렉트
-          if (window.location.pathname !== "/login") {
-            window.location.href = "/login";
-          }
+          // if (window.location.pathname !== "/login") {
+          //   window.location.href = "/login";
+          // }
           return Promise.reject(error);
         }
 
@@ -108,9 +108,9 @@ API.interceptors.response.use(
       } catch (refreshError) {
         processQueue(refreshError, null);
         // 토큰 갱신 실패 시 로그인 페이지로 리다이렉트
-        if (window.location.pathname !== "/login") {
-          window.location.href = "/login";
-        }
+        // if (window.location.pathname !== "/login") {
+        //   window.location.href = "/login";
+        // }
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;
