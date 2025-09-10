@@ -28,14 +28,22 @@ export const useUser = () => {
       setUser(null);
     }
 
-    if (!query.isLoading) {
-      setLoading(false);
-    }
+    // 로딩 상태를 쿼리 상태와 동기화
+    setLoading(query.isLoading);
   }, [query.isSuccess, query.isError, query.isLoading, query.data, setUser, setLoading]);
 
-  return query;
+  // 수동으로 사용자 정보 새로고침하는 함수 추가
+  const refreshUser = () => {
+    query.refetch();
+  };
+
+  return {
+    ...query,
+    refreshUser, // 외부에서 호출할 수 있도록 노출
+  };
 };
 
+// 로그아웃 훅
 export const useLogout = () => {
   const queryClient = useQueryClient();
   const { logout } = useAuthStore();
