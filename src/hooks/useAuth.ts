@@ -27,10 +27,11 @@ export const useUser = () => {
     } else if (query.isError) {
       setUser(null);
     }
+  }, [query.isSuccess, query.isError, query.data, setUser]);
 
-    // 로딩 상태를 쿼리 상태와 동기화
+  useEffect(() => {
     setLoading(query.isLoading);
-  }, [query.isSuccess, query.isError, query.isLoading, query.data, setUser, setLoading]);
+  }, [query.isLoading, setLoading]);
 
   // 수동으로 사용자 정보 새로고침하는 함수 추가
   const refreshUser = () => {
