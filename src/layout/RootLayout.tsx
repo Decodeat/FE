@@ -12,7 +12,7 @@ const LAYOUT_CONSTANTS = {
 const RootLayout = () => {
   const location = useLocation();
   const isHomePage = location.pathname === "/";
-  const isEnrollPage = location.pathname === "/enroll"; // 제품 등록 페이지 또는 다른 전체너비 페이지들
+  const isEnrollPage = location.pathname === "/enroll";
   const isOnboardingPage = location.pathname === "/onboarding";
   const isLoginPage = location.pathname === "/login";
   const isSupportPage = location.pathname === "/support";
@@ -22,22 +22,20 @@ const RootLayout = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 ">
-      {/* Top Navigation */}
       <TopGNB />
 
-      {/* Main Layout Container */}
+      {/* 메인 레이아웃 컨테이너 */}
       <div className="flex">
-        {/* Left Sidebar - 홈페이지에서만 표시 */}
         {isHomePage && <LeftGNB />}
 
-        {/* Main Content Area */}
+        {/* 메인 컨텐츠 영역 */}
         <main
           className={`flex-1 ${
             isHomePage ? LAYOUT_CONSTANTS.SIDEBAR_MARGIN : ""
           } ${LAYOUT_CONSTANTS.TOP_NAV_HEIGHT}`}
         >
           {/* 전체 너비 페이지는 container 제한 없이, 일반 페이지는 container 적용 */}
-          <div className={isFullWidthPage ? "py-6" : "container mx-auto px-4 py-6"}>
+          <div className={isFullWidthPage ? "py-6" : "container mx-auto py-6 px-4"}>
             <Outlet />
           </div>
         </main>
