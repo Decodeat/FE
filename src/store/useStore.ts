@@ -20,9 +20,9 @@ export const useFilterStore = create<FilterState>()((set, get) => ({
     "complex-carbohydrate": false,
     "plant-protein": false,
     "animal-protein": false,
-    "allergens": false,
-    "additives": false,
-    "others": false,
+    allergens: false,
+    additives: false,
+    others: false,
   },
 
   // 검색어
@@ -58,9 +58,9 @@ export const useFilterStore = create<FilterState>()((set, get) => ({
       "complex-carbohydrate": "COMPLEX_CARBOHYDRATE",
       "plant-protein": "PLANT_PROTEIN",
       "animal-protein": "ANIMAL_PROTEIN",
-      "allergens": "ALLERGENS",
-      "additives": "ADDITIVES",
-      "others": "OTHERS",
+      allergens: "ALLERGENS",
+      additives: "ADDITIVES",
+      others: "OTHERS",
     };
 
     return Object.keys(checkedItems)

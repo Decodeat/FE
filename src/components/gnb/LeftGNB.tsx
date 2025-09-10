@@ -18,9 +18,8 @@ const LeftGNB = () => {
   ];
 
   return (
-    <aside className="fixed top-20 w-64 h-[calc(100vh-5rem)] overflow-y-auto z-30 bg-white">
+    <aside className="fixed left-0 top-20 w-64 h-[calc(100vh-5rem)] overflow-y-auto z-30 bg-white border-r border-gray-200">
       <div className="pr-4 pl-4">
-        {/* <h3 className="text-lg font-medium mb-4">세부 영양소</h3> */}
         <div className="mb-0">
           <h4>
             <button
