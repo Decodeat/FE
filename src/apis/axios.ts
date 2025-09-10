@@ -1,5 +1,4 @@
 import axios from "axios";
-import { tokenManager } from "../utils/tokenManager";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -8,30 +7,15 @@ export const API = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
-  withCredentials: true,
+  withCredentials: true, // 쿠키 자동 포함
 });
 
-// 요청 인터셉터
-API.interceptors.request.use(
-  (config) => {
-    const token = tokenManager.getToken();
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  },
-);
-
-// 응답 인터셉터
+// 응답 인터셉터 (에러 처리용)
 API.interceptors.response.use(
   (response) => {
     return response;
   },
   (error) => {
-    // 에러 로깅 제거 - useQuery/useMutation에서 처리
     return Promise.reject(error);
   },
 );
