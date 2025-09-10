@@ -57,3 +57,24 @@ export const useLogout = () => {
     },
   });
 };
+
+// 토큰 갱신 훅
+export const useRefreshToken = () => {
+  const { setUser } = useAuthStore();
+
+  return useMutation({
+    mutationFn: authAPI.refreshToken,
+    onSuccess: (data) => {
+      if (data.isSuccess) {
+        console.log("토큰 갱신 성공:", data.result?.accessToken);
+      } else {
+        throw new Error(data.message || "토큰 갱신에 실패했습니다.");
+      }
+    },
+    onError: (error) => {
+      console.error("토큰 갱신 실패:", error);
+      // 갱신 실패 시 사용자 정보 초기화
+      setUser(null);
+    },
+  });
+};
