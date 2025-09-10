@@ -8,7 +8,7 @@ export const API = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
-  withCredentials: true, // 쿠키 자동 포함
+  withCredentials: false, // Bearer 헤더 방식 사용 시 false로 변경
 });
 
 // 토큰 갱신 중복 방지를 위한 플래그
@@ -29,6 +29,21 @@ const processQueue = (error: unknown, token: string | null = null) => {
 
   failedQueue = [];
 };
+
+// 요청 인터셉터 - Authorization 헤더에 토큰 자동 추가
+API.interceptors.request.use(
+  (config) => {
+    // 쿠키에서 accessToken 가져와서 Authorization 헤더에 추가
+    const accessToken = Cookies.get("accessToken");
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 // 응답 인터셉터 (토큰 갱신 및 에러 처리)
 API.interceptors.response.use(
@@ -75,16 +90,20 @@ API.interceptors.response.use(
 
         // 토큰 갱신 API 호출 (순환 참조 방지를 위해 직접 axios 사용)
         const response = await axios.post(
-          `${BASE_URL}/api/token`,
+          `${BASE_URL}/token`,
           { refreshToken },
           {
             headers: { "Content-Type": "application/json" },
-            withCredentials: true,
           },
         );
 
         if (response.data.isSuccess) {
-          processQueue(null, response.data.result.accessToken);
+          const newAccessToken = response.data.result.accessToken;
+          processQueue(null, newAccessToken);
+          
+          // 새로운 토큰으로 원래 요청의 Authorization 헤더 업데이트
+          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+          
           // 원래 요청 재시도
           return API(originalRequest);
         } else {
