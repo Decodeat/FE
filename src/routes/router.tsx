@@ -8,6 +8,7 @@ import MyPage from "../pages/MyPage";
 import OnBoardingPage from "../pages/OnboardingPage";
 import LoginPage from "../pages/LoginPage";
 import SupportPage from "../pages/SupportPage";
+import SearchPage from "../pages/SearchPage";
 import AuthLayout from "../layout/AuthLayout";
 
 const router = createBrowserRouter([
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
       {
         path: "detail/:id",
         element: <DetailPage />,
+      },
+      {
+        path: "search",
+        element: <SearchPage />,
       },
       {
         path: "myPage",
