@@ -1,5 +1,10 @@
 import { API } from "./axios";
-import type { NutritionReportRequest, NutritionReportResponse } from "../types/report";
+import type {
+  NutritionReportRequest,
+  NutritionReportResponse,
+  ImageReportRequest,
+  ImageReportResponse,
+} from "../types/report";
 
 // 영양성분 수정 신고
 export const reportNutritionInfo = async (
@@ -16,4 +21,18 @@ export const reportNutritionInfo = async (
   }
 
   return response.data;
+};
+
+export const reportImage = async (
+  productId: number,
+  imageUrl: string,
+): Promise<ImageReportRequest> => {
+  const response = await API.post<ImageReportResponse>(
+    `/reports/image?productId=${productId}&imageUrl=${encodeURIComponent(imageUrl)}`,
+  );
+
+  if (!response.data.isSuccess) {
+    throw new Error(response.data.message || "신고 전송에 실패했습니다.");
+  }
+  return response.data.result;
 };

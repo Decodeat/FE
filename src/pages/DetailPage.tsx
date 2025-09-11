@@ -5,10 +5,15 @@ import { getProductDetail } from "../apis/productDetail";
 import { createCalorieInfo } from "../utils/nutritionUtils";
 import NutritionChart from "../components/detail/NutritionChart";
 import DetailedNutrients from "../components/detail/DetailedNutrients";
+import { useImageReport } from "../hooks/useReport";
+import warnIcon from "../assets/icon/warn.svg";
 
 const ProductDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  // 이미지 신고 훅
+  const imageReportMutation = useImageReport();
 
   const {
     data: response,
@@ -49,6 +54,23 @@ const ProductDetailPage = () => {
     }
   };
 
+  // 이미지 신고 핸들러
+  const handleImageReport = async () => {
+    if (!product || !allImages[currentImageIndex]) return;
+
+    try {
+      await imageReportMutation.mutateAsync({
+        productId: product.productId,
+        imageUrl: allImages[currentImageIndex],
+      });
+
+      alert("이미지 신고가 접수되었습니다.");
+    } catch (error) {
+      console.error("이미지 신고 실패:", error);
+      alert("신고 접수에 실패했습니다. 다시 시도해주세요.");
+    }
+  };
+
   // 칼로리 정보
   const calorieInfo = createCalorieInfo(product!);
 
@@ -76,14 +98,27 @@ const ProductDetailPage = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
           {/* 사진 영역 */}
           <div className="space-y-4 mx-7 my-7">
+            {/* 신고 버튼 - 이미지 위쪽 */}
+            <div className="flex justify-end mb-2">
+              <button
+                className="flex items-center space-x-1 cursor-pointer"
+                onClick={handleImageReport}
+                disabled={imageReportMutation.isPending}
+              >
+                <img src={warnIcon} alt="경고" className="w-4 h-4" />
+                <p className="text-sm text-gray-500 m-0">
+                  {imageReportMutation.isPending ? "신고 중..." : "잘못된 이미지 신고"}
+                </p>
+              </button>
+            </div>
+
             {/* 초기 이미지 */}
             <div className="relative bg-gray-100 rounded-lg aspect-square flex items-center justify-center">
               <img
                 src={allImages[currentImageIndex] || "/placeholder-image.jpg"}
                 alt={`상품 이미지 ${currentImageIndex + 1}`}
                 className="w-full h-full object-contain rounded"
-              />
-
+              />{" "}
               {/* 이미지 이동 버튼 */}
               {allImages.length > 1 && (
                 <>
