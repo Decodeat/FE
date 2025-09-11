@@ -4,6 +4,7 @@ import { useAnalysisHistory } from "../../hooks/useAnalysis";
 import type { AnalysisRecord } from "../../types/analysis";
 import { getStatusText, getStatusColor } from "../../types/analysis";
 import Pagination from "../ui/Pagination";
+import { useNavigate } from "react-router-dom";
 
 interface AnalysisResultItemProps {
   record: AnalysisRecord;
@@ -13,6 +14,7 @@ const AnalysisResultItem: FC<AnalysisResultItemProps> = ({ record }) => {
   const statusText = getStatusText(record.decodeStatus);
   const statusColor = getStatusColor(record.decodeStatus);
   const registerDate = new Date(record.registerDate).toLocaleDateString("ko-KR");
+  const navigate = useNavigate();
 
   return (
     <div className="border border-gray-200 rounded-lg p-4 hover:shadow-sm transition-shadow">
@@ -37,7 +39,12 @@ const AnalysisResultItem: FC<AnalysisResultItemProps> = ({ record }) => {
 
           {/* 상태별 추가 정보 */}
           {record.decodeStatus === "COMPLETED" && (
-            <button className="text-sm text-emerald-600 hover:text-emerald-700 font-medium">
+            <button
+              className="text-sm text-emerald-600 hover:text-emerald-700 font-medium"
+              onClick={() => {
+                navigate(`/detail/${record.productId}`);
+              }}
+            >
               분석 결과 보기 →
             </button>
           )}
