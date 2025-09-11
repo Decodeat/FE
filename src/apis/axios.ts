@@ -1,5 +1,6 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import Cookies from "js-cookie";
+import { useAuthStore } from "../store/useAuthStore";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -79,10 +80,7 @@ API.interceptors.response.use(
         const refreshToken = Cookies.get("refresh_token");
 
         if (!refreshToken) {
-          // 리프레시 토큰이 없으면 로그인 페이지로 리다이렉트
-          // if (window.location.pathname !== "/login") {
-          //   window.location.href = "/login";
-          // }
+          // 리프레시 토큰이 없으면 그냥 401 에러 반환 (토큰이 필요없는 API일 수도 있음)
           return Promise.reject(error);
         }
 
@@ -107,10 +105,15 @@ API.interceptors.response.use(
         }
       } catch (refreshError) {
         processQueue(refreshError, null);
-        // 토큰 갱신 실패 시 로그인 페이지로 리다이렉트
-        // if (window.location.pathname !== "/login") {
-        //   window.location.href = "/login";
-        // }
+
+        // 토큰 갱신 API에서 401이 온 경우에만 모달 표시
+        if (refreshError instanceof AxiosError && refreshError.response?.status === 401) {
+          // 이건 진짜 인증 실패 - 로그인 모달 표시
+          console.log("🚨 토큰 갱신 실패 - 로그인 모달 표시");
+          // Zustand store에 직접 접근해서 모달 표시
+          useAuthStore.getState().setShowLoginModal(true);
+        }
+
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;
