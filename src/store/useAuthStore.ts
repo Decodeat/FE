@@ -7,10 +7,12 @@ interface AuthState {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
+  showLoginModal: boolean;
 
   // 액션들
   setUser: (user: User | null) => void;
   setLoading: (loading: boolean) => void;
+  setShowLoginModal: (show: boolean) => void;
   logout: () => void;
 }
 
@@ -21,6 +23,7 @@ export const useAuthStore = create<AuthState>()(
       user: null,
       isAuthenticated: false,
       isLoading: false,
+      showLoginModal: false,
 
       // 사용자 설정 (로그인 성공 시)
       setUser: (user) =>
@@ -32,11 +35,15 @@ export const useAuthStore = create<AuthState>()(
       // 로딩 상태 설정
       setLoading: (loading) => set({ isLoading: loading }),
 
+      // 로그인 모달 표시 상태 설정
+      setShowLoginModal: (show) => set({ showLoginModal: show }),
+
       // 로그아웃 (상태 초기화)
       logout: () =>
         set({
           user: null,
           isAuthenticated: false,
+          showLoginModal: false,
         }),
     }),
     {
