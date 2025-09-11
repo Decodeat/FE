@@ -1,5 +1,4 @@
 import axios, { AxiosError } from "axios";
-import Cookies from "js-cookie";
 import { useAuthStore } from "../store/useAuthStore";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -19,23 +18,42 @@ let failedQueue: Array<{
   reject: (reason?: unknown) => void;
 }> = [];
 
-const processQueue = (error: unknown, token: string | null = null) => {
+const processQueue = (error: unknown) => {
   failedQueue.forEach(({ resolve, reject }) => {
     if (error) {
       reject(error);
     } else {
-      resolve(token);
+      resolve();
     }
   });
 
   failedQueue = [];
 };
 
+// URL에서 access_token 가져와서 저장하는 함수
+export const extractAndStoreAccessToken = () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const accessToken = urlParams.get("access_token");
+
+  if (accessToken) {
+    localStorage.setItem("access_token", accessToken);
+
+    // URL에서 토큰 파라미터 제거 (보안상)
+    urlParams.delete("access_token");
+    const newUrl =
+      window.location.pathname + (urlParams.toString() ? "?" + urlParams.toString() : "");
+    window.history.replaceState({}, "", newUrl);
+
+    return accessToken;
+  }
+
+  return localStorage.getItem("access_token");
+};
+
 // 요청 인터셉터 - Authorization 헤더에 토큰 자동 추가
 API.interceptors.request.use(
   (config) => {
-    // 쿠키에서 access_token 가져와서 Authorization 헤더에 추가
-    const accessToken = Cookies.get("access_token");
+    const accessToken = extractAndStoreAccessToken();
 
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
@@ -76,41 +94,30 @@ API.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        // 쿠키에서 리프레시 토큰 가져오기
-        const refreshToken = Cookies.get("refresh_token");
-
-        if (!refreshToken) {
-          // 리프레시 토큰이 없으면 그냥 401 에러 반환 (토큰이 필요없는 API일 수도 있음)
-          return Promise.reject(error);
-        }
-
-        // 토큰 갱신 API 호출
         const response = await axios.post(
-          `${BASE_URL}/api/token`,
-          { refreshToken },
-          { headers: { "Content-Type": "application/json" } },
+          `${BASE_URL}/token`,
+          {},
+          {
+            headers: { "Content-Type": "application/json" },
+            withCredentials: true,
+          },
         );
 
         if (response.data.isSuccess) {
-          const newAccessToken = response.data.result.accessToken;
-          processQueue(null, newAccessToken);
+          const newAccessToken = response.data.result;
+          localStorage.setItem("access_token", newAccessToken);
 
-          // 새로운 토큰으로 원래 요청의 Authorization 헤더 업데이트
+          processQueue(null);
+
           originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-
-          // 원래 요청 재시도
           return API(originalRequest);
         } else {
           throw new Error("토큰 갱신 실패");
         }
       } catch (refreshError) {
-        processQueue(refreshError, null);
+        processQueue(refreshError);
 
-        // 토큰 갱신 API에서 401이 온 경우에만 모달 표시
         if (refreshError instanceof AxiosError && refreshError.response?.status === 401) {
-          // 이건 진짜 인증 실패 - 로그인 모달 표시
-          console.log("🚨 토큰 갱신 실패 - 로그인 모달 표시");
-          // Zustand store에 직접 접근해서 모달 표시
           useAuthStore.getState().setShowLoginModal(true);
         }
 
