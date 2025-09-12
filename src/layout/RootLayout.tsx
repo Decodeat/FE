@@ -1,8 +1,9 @@
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import LeftGNB from "../components/gnb/LeftGNB";
 import TopGNB from "../components/gnb/TopGNB";
-import LoginModal from "../components/ui/LoginModal";
+import MessageModal from "../components/ui/MessageModal";
 import { useAuthStore } from "../store/useAuthStore";
+import { AlertCircle } from "lucide-react";
 
 // Layout constants
 const LAYOUT_CONSTANTS = {
@@ -55,10 +56,25 @@ const RootLayout = () => {
       </div>
 
       {/* 로그인 모달 */}
-      <LoginModal
+      <MessageModal
         isOpen={showLoginModal}
         onClose={handleLoginModalClose}
-        onLogin={handleGoToLogin}
+        title="로그인이 필요합니다"
+        message="로그인이 필요한 서비스입니다. 로그인 페이지로 이동하시겠습니까?"
+        type="warning"
+        icon={<AlertCircle className="w-12 h-12 text-yellow-500" />}
+        buttons={[
+          {
+            label: "취소",
+            onClick: handleLoginModalClose,
+            variant: "secondary",
+          },
+          {
+            label: "로그인하기",
+            onClick: handleGoToLogin,
+            variant: "primary",
+          },
+        ]}
       />
     </div>
   );

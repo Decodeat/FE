@@ -2,10 +2,15 @@ import { useEffect, useState, type FC } from "react";
 import { useNavigate } from "react-router-dom";
 import UploadSlot from "../components/enroll/UploadSlot";
 import { useEnroll } from "../hooks/useEnroll";
+import { useMessageModal } from "../hooks/useMessageModal";
+import MessageModal from "../components/ui/MessageModal";
 import type { EnrollFormData } from "../types/enroll";
 
 const EnrollPage: FC = () => {
   const navigate = useNavigate();
+
+  // 메시지 모달 훅
+  const { modalState, showSuccess, showError, hideModal } = useMessageModal();
 
   // 미리보기 URL (원재료/영양정보 2칸, 제품 1칸)
   const [ingNutriPreviews, setIngNutriPreviews] = useState<(string | null)[]>([null, null]);
@@ -60,19 +65,19 @@ const EnrollPage: FC = () => {
 
     // 필수 필드 검증
     if (!productName.trim()) {
-      alert("제품명을 입력해 주세요.");
+      showError("제품명을 입력해 주세요.");
       return;
     }
 
     if (!companyName.trim()) {
-      alert("회사명을 입력해 주세요.");
+      showError("회사명을 입력해 주세요.");
       return;
     }
 
     // 검증: 원재료/영양정보 표는 최소 1장 이상
     const validIngNutriFiles = ingNutriFiles.filter(Boolean) as File[];
     if (validIngNutriFiles.length < 1) {
-      alert("원재료명 및 영양정보 표 사진을 최소 1장 이상 업로드해 주세요.");
+      showError("원재료명 및 영양정보 표 사진을 최소 1장 이상 업로드해 주세요.");
       return;
     }
 
@@ -85,12 +90,30 @@ const EnrollPage: FC = () => {
 
     enrollProduct(formData, {
       onSuccess: () => {
-        alert("제품 등록 요청이 정상적으로 완료되었습니다.");
-        navigate("/");
+        showSuccess("제품 등록 요청이 정상적으로 완료되었습니다.", "등록 완료", [
+          {
+            label: "홈으로 이동",
+            onClick: () => {
+              hideModal();
+              navigate("/");
+            },
+            variant: "primary",
+          },
+        ]);
       },
-      onError: (err) => {
+      onError: (err: unknown) => {
         console.error(err);
-        alert("제품 등록 중 오류가 발생했습니다.");
+
+        // 에러 응답에서 메시지 추출
+        let errorMessage = "제품 등록 중 오류가 발생했습니다.";
+        if (err && typeof err === "object" && "response" in err) {
+          const response = (err as { response?: { data?: { message?: string } } }).response;
+          if (response?.data?.message) {
+            errorMessage = response.data.message;
+          }
+        }
+
+        showError(errorMessage, "등록 실패");
       },
     });
   };
@@ -187,6 +210,17 @@ const EnrollPage: FC = () => {
           {isPending ? "등록 중…" : "제품 분석 요청하기"}
         </button>
       </section>
+
+      {/* 메시지 모달 */}
+      <MessageModal
+        isOpen={modalState.isOpen}
+        onClose={hideModal}
+        title={modalState.title}
+        message={modalState.message}
+        type={modalState.type}
+        buttons={modalState.buttons}
+        icon={modalState.icon}
+      />
     </form>
   );
 };
