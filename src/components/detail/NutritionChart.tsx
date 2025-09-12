@@ -4,7 +4,8 @@ import { NUTRITION_LABELS } from "../../constants/product";
 import { createNutritionValues } from "../../utils/nutritionUtils";
 import type { ChartDataItem } from "../../utils/chartUtils";
 import warnIcon from "../../assets/icon/warn.svg";
-import SuccessModal from "../ui/SuccessModal";
+import { useMessageModal } from "../../hooks/useMessageModal";
+import MessageModal from "../ui/MessageModal";
 import PieChart from "./PieChart";
 import NutritionEditForm from "./NutritionEditForm";
 
@@ -14,7 +15,9 @@ interface NutritionChartProps {
 
 const NutritionChart = ({ product }: NutritionChartProps) => {
   const [showEditForm, setShowEditForm] = useState(false);
-  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+
+  // MessageModal 훅 사용
+  const { modalState, showSuccess, hideModal } = useMessageModal();
 
   const handleReportClick = () => {
     setShowEditForm(!showEditForm);
@@ -22,15 +25,11 @@ const NutritionChart = ({ product }: NutritionChartProps) => {
 
   const handleReportSuccess = () => {
     setShowEditForm(false);
-    setIsSuccessModalOpen(true);
+    showSuccess("영양성분 정보 신고가 접수되었습니다.", "신고 완료");
   };
 
   const handleReportCancel = () => {
     setShowEditForm(false);
-  };
-
-  const handleSuccessModalClose = () => {
-    setIsSuccessModalOpen(false);
   };
 
   // 원형차트용 영양성분 데이터
@@ -87,12 +86,15 @@ const NutritionChart = ({ product }: NutritionChartProps) => {
         )}
       </div>
 
-      {/* 성공 모달 */}
-      <SuccessModal
-        isOpen={isSuccessModalOpen}
-        onClose={handleSuccessModalClose}
-        title="신고 완료"
-        message="영양성분 수정 신고가 성공적으로 전송되었습니다."
+      {/* 메시지 모달 */}
+      <MessageModal
+        isOpen={modalState.isOpen}
+        onClose={hideModal}
+        title={modalState.title}
+        message={modalState.message}
+        type={modalState.type}
+        buttons={modalState.buttons}
+        icon={modalState.icon}
       />
     </div>
   );

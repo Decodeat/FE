@@ -6,6 +6,8 @@ import { createCalorieInfo } from "../utils/nutritionUtils";
 import NutritionChart from "../components/detail/NutritionChart";
 import DetailedNutrients from "../components/detail/DetailedNutrients";
 import { useImageReport } from "../hooks/useReport";
+import { useMessageModal } from "../hooks/useMessageModal";
+import MessageModal from "../components/ui/MessageModal";
 import warnIcon from "../assets/icon/warn.svg";
 
 const ProductDetailPage = () => {
@@ -15,6 +17,8 @@ const ProductDetailPage = () => {
   // 이미지 신고 훅
   const imageReportMutation = useImageReport();
 
+  // 메시지 모달 훅
+  const { modalState, showSuccess, showError, showConfirm, hideModal } = useMessageModal();
   const {
     data: response,
     isLoading,
@@ -55,20 +59,37 @@ const ProductDetailPage = () => {
   };
 
   // 이미지 신고 핸들러
-  const handleImageReport = async () => {
+  const handleImageReport = () => {
     if (!product || !allImages[currentImageIndex]) return;
 
-    try {
-      await imageReportMutation.mutateAsync({
-        productId: product.productId,
-        imageUrl: allImages[currentImageIndex],
-      });
+    showConfirm(
+      "정말 신고하시겠습니까?",
+      async () => {
+        try {
+          await imageReportMutation.mutateAsync({
+            productId: product.productId,
+            imageUrl: allImages[currentImageIndex],
+          });
 
-      alert("이미지 신고가 접수되었습니다.");
-    } catch (error) {
-      console.error("이미지 신고 실패:", error);
-      alert("신고 접수에 실패했습니다. 다시 시도해주세요.");
-    }
+          showSuccess("이미지 신고가 접수되었습니다.", "신고 완료");
+        } catch (error: unknown) {
+          console.error("이미지 신고 실패:", error);
+
+          // 에러 응답에서 메시지 추출
+          let errorMessage = "신고 접수에 실패했습니다. 다시 시도해주세요.";
+          if (error && typeof error === "object" && "response" in error) {
+            const response = (error as { response?: { data?: { message?: string } } }).response;
+            if (response?.data?.message) {
+              errorMessage = response.data.message;
+            }
+          }
+          showError(errorMessage, "신고 실패");
+        }
+      },
+      "잘못된 이미지 신고",
+      "취소",
+      "신고하기",
+    );
   };
 
   // 칼로리 정보
@@ -184,6 +205,17 @@ const ProductDetailPage = () => {
         {/* 세부 영양소 섹션 */}
         <DetailedNutrients product={product} />
       </div>
+
+      {/* 메시지 모달 */}
+      <MessageModal
+        isOpen={modalState.isOpen}
+        onClose={hideModal}
+        title={modalState.title}
+        message={modalState.message}
+        type={modalState.type}
+        buttons={modalState.buttons}
+        icon={modalState.icon}
+      />
     </div>
   );
 };

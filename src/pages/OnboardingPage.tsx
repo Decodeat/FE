@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useMessageModal } from "../hooks/useMessageModal";
+import MessageModal from "../components/ui/MessageModal";
 
 type Option = {
   id: string;
@@ -77,6 +79,7 @@ const questions: Question[] = [
 const OnboardingPage = () => {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string[]>>({});
+  const { modalState, showSuccess, hideModal } = useMessageModal();
 
   const currentQuestion = questions[step];
 
@@ -99,8 +102,16 @@ const OnboardingPage = () => {
       setStep((prev) => prev + 1);
     } else {
       console.log("제출 데이터:", answers);
-      alert("설문이 제출되었습니다! 콘솔을 확인하세요.");
-      navigate("/"); // 홈으로 이동
+      showSuccess("설문이 제출되었습니다!", "완료", [
+        {
+          label: "홈으로 이동",
+          onClick: () => {
+            hideModal();
+            navigate("/");
+          },
+          variant: "primary",
+        },
+      ]);
     }
   };
 
@@ -173,6 +184,16 @@ const OnboardingPage = () => {
           </button>
         </div>
       </div>
+
+      <MessageModal
+        isOpen={modalState.isOpen}
+        onClose={hideModal}
+        title={modalState.title}
+        message={modalState.message}
+        type={modalState.type}
+        icon={modalState.icon}
+        buttons={modalState.buttons}
+      />
     </div>
   );
 };
