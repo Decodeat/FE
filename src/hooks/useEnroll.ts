@@ -15,6 +15,7 @@ const postEnroll = async (enrollFormData: EnrollFormData): Promise<EnrollRespons
   if (enrollFormData.productImage) {
     data.append("productImage", enrollFormData.productImage);
   }
+  data.append("productImage", enrollFormData.productImage!);
 
   // 표 이미지 (배열, 최소 1개)
   enrollFormData.productInfoImages.forEach((file) => {
