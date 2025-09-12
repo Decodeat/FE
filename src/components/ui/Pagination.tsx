@@ -42,7 +42,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
       <button
         onClick={() => goTo(currentPage - 1)}
         disabled={isFirst}
-        className="w-11 h-11 flex items-center justify-center rounded-full border-[2px] border-[#D9DADD] cursor-pointer disabled:cursor-not-allowed"
+        className="w-11 h-11 flex items-center justify-center rounded-full bg-[#D2EDE4] cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
         aria-label="이전 페이지"
       >
         <img src={isFirst ? leftIconDisabled : leftIcon} alt="이전" />
@@ -53,10 +53,10 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
         <button
           key={p}
           onClick={() => goTo(p)}
-          className={`w-11 h-11 flex items-center justify-center rounded-full border-[2px] text-2xl font-medium cursor-pointer ${
+          className={`w-11 h-11 flex items-center justify-center rounded-full text-xl font-semibold cursor-pointer transition-colors ${
             p === currentPage
-              ? "border-[#3A3ADB] bg-[#3A3ADB] text-white"
-              : "border-[#93959D] text-[#93959D]"
+              ? "bg-[#2D5945] text-white"
+              : "bg-[#D2EDE4] text-[#2D5945] hover:bg-[#79CCB1]"
           }`}
           aria-current={p === currentPage ? "page" : undefined}
         >
@@ -68,7 +68,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
       <button
         onClick={() => goTo(currentPage + 1)}
         disabled={isLast}
-        className="w-11 h-11 flex items-center justify-center rounded-full border-[2px] border-[#D9DADD] cursor-pointer disabled:cursor-not-allowed"
+        className="w-11 h-11 flex items-center justify-center rounded-full bg-[#D2EDE4] cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
         aria-label="다음 페이지"
       >
         <img src={isLast ? rightIconDisabled : rightIcon} alt="다음" />
