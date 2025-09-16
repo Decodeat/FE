@@ -8,7 +8,7 @@ interface UploadSlotProps {
   onClear: () => void;
   disabled?: boolean;
   ariaLabel?: string;
-  isDragging?: boolean;
+  isDragging?: boolean; // ✅ 추가
 }
 
 const UploadSlot: React.FC<UploadSlotProps> = ({

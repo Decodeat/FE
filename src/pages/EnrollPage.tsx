@@ -8,15 +8,13 @@ import type { EnrollFormData } from "../types/enroll";
 
 const EnrollPage: FC = () => {
   const navigate = useNavigate();
-
-  // 메시지 모달 훅
   const { modalState, showSuccess, showError, hideModal } = useMessageModal();
 
-  // 미리보기 URL (원재료/영양정보 2칸, 제품 1칸)
+  // 미리보기 URL
   const [ingNutriPreviews, setIngNutriPreviews] = useState<(string | null)[]>([null, null]);
   const [productPhotoPreview, setProductPhotoPreview] = useState<string | null>(null);
 
-  // 실제 업로드용 File 상태
+  // 업로드 파일 상태
   const [ingNutriFiles, setIngNutriFiles] = useState<(File | null)[]>([null, null]);
   const [productPhotoFile, setProductPhotoFile] = useState<File | null>(null);
 
@@ -26,6 +24,33 @@ const EnrollPage: FC = () => {
 
   const { mutate: enrollProduct, isPending } = useEnroll();
 
+  // ✅ 전역 드래그 상태
+  const [isDragging, setIsDragging] = useState(false);
+
+  useEffect(() => {
+    const handleDragEnter = (e: DragEvent) => {
+      if (e.dataTransfer?.types.includes("Files")) {
+        setIsDragging(true);
+      }
+    };
+    const handleDragLeave = (e: DragEvent) => {
+      if (e.clientX === 0 && e.clientY === 0) {
+        setIsDragging(false);
+      }
+    };
+    const handleDrop = () => setIsDragging(false);
+
+    window.addEventListener("dragenter", handleDragEnter);
+    window.addEventListener("dragleave", handleDragLeave);
+    window.addEventListener("drop", handleDrop);
+
+    return () => {
+      window.removeEventListener("dragenter", handleDragEnter);
+      window.removeEventListener("dragleave", handleDragLeave);
+      window.removeEventListener("drop", handleDrop);
+    };
+  }, []);
+
   // blob url 정리
   useEffect(() => {
     return () => {
@@ -34,26 +59,18 @@ const EnrollPage: FC = () => {
     };
   }, [ingNutriPreviews, productPhotoPreview]);
 
-  // 원재료/영양정보 슬롯 변경
   const handleIngSlotChange = (index: number, file: File | null) => {
-    // File 상태
     setIngNutriFiles((prev) => prev.map((f, i) => (i === index ? file : f)));
-
-    // Preview 상태
     setIngNutriPreviews((prev) => {
-      // 기존 URL 정리
       if (prev[index]) URL.revokeObjectURL(prev[index]!);
-
       const next = [...prev];
       next[index] = file ? URL.createObjectURL(file) : null;
       return next;
     });
   };
 
-  /** 제품 사진 슬롯 변경 */
   const handleProdSlotChange = (file: File | null) => {
     setProductPhotoFile(file);
-
     setProductPhotoPreview((prev) => {
       if (prev) URL.revokeObjectURL(prev);
       return file ? URL.createObjectURL(file) : null;
@@ -62,19 +79,14 @@ const EnrollPage: FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
-    // 필수 필드 검증
     if (!productName.trim()) {
       showError("제품명을 입력해 주세요.");
       return;
     }
-
     if (!companyName.trim()) {
       showError("회사명을 입력해 주세요.");
       return;
     }
-
-    // 검증: 원재료/영양정보 표는 최소 1장 이상
     const validIngNutriFiles = ingNutriFiles.filter(Boolean) as File[];
     if (validIngNutriFiles.length < 1) {
       showError("원재료명 및 영양정보 표 사진을 최소 1장 이상 업로드해 주세요.");
@@ -103,8 +115,6 @@ const EnrollPage: FC = () => {
       },
       onError: (err: unknown) => {
         console.error(err);
-
-        // 에러 응답에서 메시지 추출
         let errorMessage = "제품 등록 중 오류가 발생했습니다.";
         if (err && typeof err === "object" && "response" in err) {
           const response = (err as { response?: { data?: { message?: string } } }).response;
@@ -112,7 +122,6 @@ const EnrollPage: FC = () => {
             errorMessage = response.data.message;
           }
         }
-
         showError(errorMessage, "등록 실패");
       },
     });
@@ -130,12 +139,11 @@ const EnrollPage: FC = () => {
 
       <section className="max-w-6xl mx-auto px-4 pb-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-          {/* 원재료/영양정보 표*/}
+          {/* 원재료/영양정보 표 */}
           <div className="flex flex-col gap-3">
             <label className="text-sm font-medium text-gray-800">
               원재료명 및 영양정보 표 사진 등록 <span className="text-red-500">*</span>
             </label>
-
             <div className="flex items-center gap-4">
               <UploadSlot
                 preview={ingNutriPreviews[0]}
@@ -143,6 +151,7 @@ const EnrollPage: FC = () => {
                 onClear={() => handleIngSlotChange(0, null)}
                 ariaLabel="원재료/영양정보 첫 번째 사진"
                 disabled={isPending}
+                isDragging={isDragging} // ✅ 전달
               />
               <UploadSlot
                 preview={ingNutriPreviews[1]}
@@ -150,9 +159,9 @@ const EnrollPage: FC = () => {
                 onClear={() => handleIngSlotChange(1, null)}
                 ariaLabel="원재료/영양정보 두 번째 사진"
                 disabled={isPending}
+                isDragging={isDragging} // ✅ 전달
               />
             </div>
-
             <p className="text-xs text-gray-500">
               원재료와 영양정보 표가 한 장에 다 보이지 않을 때만 사진을 두 장 등록해 주세요.
             </p>
@@ -167,6 +176,7 @@ const EnrollPage: FC = () => {
               onClear={() => handleProdSlotChange(null)}
               ariaLabel="제품 사진"
               disabled={isPending}
+              isDragging={isDragging} // ✅ 전달
             />
           </div>
         </div>
@@ -211,7 +221,6 @@ const EnrollPage: FC = () => {
         </button>
       </section>
 
-      {/* 메시지 모달 */}
       <MessageModal
         isOpen={modalState.isOpen}
         onClose={hideModal}
