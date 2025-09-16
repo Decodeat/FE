@@ -8,6 +8,7 @@ interface UploadSlotProps {
   onClear: () => void;
   disabled?: boolean;
   ariaLabel?: string;
+  isDragging?: boolean; // ✅ 추가
 }
 
 const UploadSlot: React.FC<UploadSlotProps> = ({
@@ -16,12 +17,28 @@ const UploadSlot: React.FC<UploadSlotProps> = ({
   onClear,
   disabled = false,
   ariaLabel = "사진 업로드",
+  isDragging = false,
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleFile = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] ?? null;
     onChange(file);
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    if (disabled) return;
+
+    const file = e.dataTransfer.files?.[0] ?? null;
+    if (file) {
+      onChange(file);
+      if (inputRef.current) {
+        const dt = new DataTransfer();
+        dt.items.add(file);
+        inputRef.current.files = dt.files;
+      }
+    }
   };
 
   const hasPreview = Boolean(preview);
@@ -33,10 +50,13 @@ const UploadSlot: React.FC<UploadSlotProps> = ({
         relative
         w-28 sm:w-32 md:w-[150px] lg:w-[180px]
         aspect-square
-        border-2 border-dashed border-gray-300 rounded-lg bg-white
+        border-2 border-dashed rounded-lg bg-white
         flex items-center justify-center transition-colors
+        ${isDragging ? "border-[#2D5945] " : "border-gray-300"}
         ${clickable ? "cursor-pointer hover:border-gray-400" : "cursor-default"}
       `}
+      onDragOver={(e) => e.preventDefault()}
+      onDrop={handleDrop}
     >
       {hasPreview ? (
         <>
@@ -62,7 +82,11 @@ const UploadSlot: React.FC<UploadSlotProps> = ({
       ) : (
         <div className="space-y-2 text-center text-gray-500 pointer-events-none">
           <Camera className="mx-auto w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 text-gray-400" />
-          <p className="text-[12px] sm:text-xs md:text-sm">사진 업로드</p>
+          <p className="text-[12px] sm:text-xs md:text-sm">
+            사진 업로드
+            <br />
+            (드래그 가능)
+          </p>
         </div>
       )}
 
