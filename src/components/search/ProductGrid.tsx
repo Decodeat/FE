@@ -68,55 +68,60 @@ const ProductGrid = () => {
 
       {/* 제품 그리드 */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {products.map((product) => (
-          <div
-            key={`product-${product.productId}`}
-            className="group relative bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow duration-200 cursor-pointer"
-            onClick={() => handleProductClick(product.productId)}
-          >
-            {/* 제품 이미지 */}
-            <div className="aspect-square bg-gray-100 overflow-hidden">
-              <img
-                src={product.productImage}
-                alt={product.productName}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  target.src = "/decodeatLogo.ico"; // 기본 이미지로 대체
-                }}
-              />
-            </div>
+        {products.map((product) => {
+          // 표시할 이미지 결정 (제품 사진 우선, 없으면 기본 이미지)
+          const displayImage = product.productImage || "/decodeatLogo.ico";
 
-            {/* 제품 정보 */}
-            <div className="p-4">
-              <div className="mb-2">
-                <h3 className="font-medium text-gray-900 text-sm mb-1 line-clamp-2">
-                  {product.productName}
-                </h3>
-                <p className="text-xs text-gray-500">{product.manufacturer}</p>
+          return (
+            <div
+              key={`product-${product.productId}`}
+              className="group relative bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow duration-200 cursor-pointer"
+              onClick={() => handleProductClick(product.productId)}
+            >
+              {/* 제품 이미지 */}
+              <div className="aspect-square bg-gray-100 overflow-hidden">
+                <img
+                  src={displayImage}
+                  alt={product.productName}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = "/decodeatLogo.ico"; // 기본 이미지로 대체
+                  }}
+                />
               </div>
 
-              {/* 디코딩 상태 표시 */}
-              <div className="flex items-center justify-between">
-                <span
-                  className={`text-xs px-2 py-1 rounded-full ${
-                    product.decodeStatus === "COMPLETED"
-                      ? "bg-green-100 text-green-600"
+              {/* 제품 정보 */}
+              <div className="p-4">
+                <div className="mb-2">
+                  <h3 className="font-medium text-gray-900 text-sm mb-1 line-clamp-2">
+                    {product.productName}
+                  </h3>
+                  <p className="text-xs text-gray-500">{product.manufacturer}</p>
+                </div>
+
+                {/* 디코딩 상태 표시 */}
+                <div className="flex items-center justify-between">
+                  <span
+                    className={`text-xs px-2 py-1 rounded-full ${
+                      product.decodeStatus === "COMPLETED"
+                        ? "bg-green-100 text-green-600"
+                        : product.decodeStatus === "PENDING"
+                          ? "bg-yellow-100 text-yellow-600"
+                          : "bg-red-100 text-red-600"
+                    }`}
+                  >
+                    {product.decodeStatus === "COMPLETED"
+                      ? "분석완료"
                       : product.decodeStatus === "PENDING"
-                        ? "bg-yellow-100 text-yellow-600"
-                        : "bg-red-100 text-red-600"
-                  }`}
-                >
-                  {product.decodeStatus === "COMPLETED"
-                    ? "분석완료"
-                    : product.decodeStatus === "PENDING"
-                      ? "분석중"
-                      : "분석실패"}
-                </span>
+                        ? "분석중"
+                        : "분석실패"}
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* 추가 로딩 시 스켈레톤 */}
