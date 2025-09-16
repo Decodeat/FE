@@ -21,9 +21,13 @@ const AnalysisResultItem: FC<AnalysisResultItemProps> = ({ record }) => {
       <div className="flex items-start gap-4">
         {/* 상품 이미지 */}
         <img
-          src={record.productImage}
+          src={record.productImage || "/decodeatLogo.ico"}
           alt={`Product ${record.productId}`}
           className="w-16 h-16 object-cover rounded-lg flex-shrink-0"
+          onError={(e) => {
+            const target = e.target as HTMLImageElement;
+            target.src = "/decodeatLogo.ico";
+          }}
         />
 
         {/* 상품 정보 */}
