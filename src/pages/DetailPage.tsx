@@ -60,7 +60,13 @@ const ProductDetailPage = () => {
 
   // 이미지 신고 핸들러
   const handleImageReport = () => {
-    if (!product || !allImages[currentImageIndex]) return;
+    if (!product) return;
+
+    // 제품 사진이 없는 경우 오류 메시지
+    if (!product.productImage) {
+      showError("제품 사진이 없습니다.", "신고 실패");
+      return;
+    }
 
     showConfirm(
       "정말 신고하시겠습니까?",
@@ -68,7 +74,7 @@ const ProductDetailPage = () => {
         try {
           await imageReportMutation.mutateAsync({
             productId: product.productId,
-            imageUrl: allImages[currentImageIndex],
+            imageUrl: product.productImage, // 항상 제품 사진을 신고
           });
 
           showSuccess("이미지 신고가 접수되었습니다.", "신고 완료");
@@ -87,8 +93,8 @@ const ProductDetailPage = () => {
         }
       },
       "잘못된 이미지 신고",
-      "취소",
       "신고하기",
+      "취소",
     );
   };
 
