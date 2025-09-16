@@ -151,7 +151,7 @@ const EnrollPage: FC = () => {
                 onClear={() => handleIngSlotChange(0, null)}
                 ariaLabel="원재료/영양정보 첫 번째 사진"
                 disabled={isPending}
-                isDragging={isDragging} // ✅ 전달
+                isDragging={isDragging}
               />
               <UploadSlot
                 preview={ingNutriPreviews[1]}
@@ -159,7 +159,7 @@ const EnrollPage: FC = () => {
                 onClear={() => handleIngSlotChange(1, null)}
                 ariaLabel="원재료/영양정보 두 번째 사진"
                 disabled={isPending}
-                isDragging={isDragging} // ✅ 전달
+                isDragging={isDragging}
               />
             </div>
             <p className="text-xs text-gray-500">

@@ -52,7 +52,7 @@ const UploadSlot: React.FC<UploadSlotProps> = ({
         aspect-square
         border-2 border-dashed rounded-lg bg-white
         flex items-center justify-center transition-colors
-        ${isDragging ? "border-blue-500 bg-blue-50" : "border-gray-300"}
+        ${isDragging ? "border-[#2D5945] " : "border-gray-300"}
         ${clickable ? "cursor-pointer hover:border-gray-400" : "cursor-default"}
       `}
       onDragOver={(e) => e.preventDefault()}
