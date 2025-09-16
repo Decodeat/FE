@@ -3,24 +3,18 @@ import { useState } from "react";
 import { PersonalInfo } from "../components/myPage/PersonalInfo";
 import { Settings } from "../components/myPage/Settings";
 import { AnalysisResults } from "../components/myPage/AnalysisResults";
+import { useAuthStore } from "../store/useAuthStore";
 
-interface MyPageProps {
-  photo?: string;
-  name?: string;
-  email?: string;
-}
-
-const MyPage: FC<MyPageProps> = ({
-  photo = "/default-avatar.jpg",
-  name = "홍길동", 
-  email = "hong@example.com"
-}) => {
-  const [activeTab, setActiveTab] = useState<"overview" | "settings" | "analysis" | "signout">("overview");
+const MyPage: FC = () => {
+  const { user } = useAuthStore();
+  const [activeTab, setActiveTab] = useState<"overview" | "settings" | "analysis" | "signout">(
+    "analysis",
+  );
 
   const renderContent = () => {
     switch (activeTab) {
       case "overview":
-        return <PersonalInfo name={name} email={email} photo={photo} />;
+        return <PersonalInfo name={user?.nickname || "사용자"} email={user?.email || ""} />;
       case "settings":
         return <Settings />;
       case "analysis":
@@ -46,10 +40,14 @@ const MyPage: FC<MyPageProps> = ({
       <div className="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-4 gap-6">
         {/* 사이드바 */}
         <aside className="col-span-1 space-y-6 sticky top-16 self-start">
-          <div className="text-center">
-            <img src={photo} alt={name} className="mx-auto w-20 h-20 rounded-full" />
-            <h3 className="mt-2 text-lg font-semibold">{name}</h3>
-            <p className="text-sm text-gray-500">{email}</p>
+          <div className="text-center bg-white rounded-xl p-6 shadow-sm">
+            <div className="w-16 h-16 mx-auto bg-[#D2EDE4] rounded-full flex items-center justify-center mb-3">
+              <span className="text-2xl font-bold text-[#2D5945]">
+                {user?.nickname ? user.nickname.charAt(0).toUpperCase() : "U"}
+              </span>
+            </div>
+            <h3 className="text-lg font-semibold">{user?.nickname || "사용자"}</h3>
+            <p className="text-sm text-gray-500">{user?.email || ""}</p>
           </div>
           <nav className="space-y-1">
             <button
