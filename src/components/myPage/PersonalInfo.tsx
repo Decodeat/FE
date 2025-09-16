@@ -3,22 +3,24 @@ import type { FC } from "react";
 interface PersonalInfoProps {
   name?: string;
   email?: string;
-  photo?: string;
 }
 
 export const PersonalInfo: FC<PersonalInfoProps> = ({
   name = "홍길동",
   email = "hong@example.com",
-  photo = "/default-avatar.jpg",
 }) => {
   return (
     <div className="bg-white rounded-xl p-6 shadow-sm">
       <h2 className="text-xl font-bold mb-6">개인 정보</h2>
 
       <div className="space-y-6">
-        {/* 프로필 사진 */}
+        {/* 프로필 정보 */}
         <div className="flex items-center space-x-4">
-          <img src={photo} alt={name} className="w-16 h-16 rounded-full object-cover" />
+          <div className="w-16 h-16 bg-[#D2EDE4] rounded-full flex items-center justify-center">
+            <span className="text-2xl font-bold text-[#2D5945]">
+              {name ? name.charAt(0).toUpperCase() : "U"}
+            </span>
+          </div>
           <div>
             <h3 className="font-semibold text-lg">{name}</h3>
             <p className="text-gray-600">{email}</p>
