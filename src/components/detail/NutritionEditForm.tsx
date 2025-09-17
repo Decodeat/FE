@@ -3,6 +3,8 @@ import type { ProductDetail } from "../../types/productDetail";
 import type { NutritionReportRequest } from "../../types/report";
 import type { ChartDataItem } from "../../utils/chartUtils";
 import { useNutritionReport } from "../../hooks/useReport";
+import { useMessageModal } from "../../hooks/useMessageModal";
+import MessageModal from "../ui/MessageModal";
 
 interface NutritionEditFormProps {
   product: ProductDetail;
@@ -17,33 +19,54 @@ const NutritionEditForm = ({
   onSuccess,
   onCancel,
 }: NutritionEditFormProps) => {
-  const [formData, setFormData] = useState<NutritionReportRequest>({
-    calcium: product.calcium || 0,
-    carbohydrate: product.carbohydrate || 0,
-    cholesterol: product.cholesterol || 0,
-    dietaryFiber: product.dietaryFiber || 0,
-    energy: product.energy || 0,
-    fat: product.fat || 0,
-    protein: product.protein || 0,
-    satFat: product.satFat || 0,
-    sodium: product.sodium || 0,
-    sugar: product.sugar || 0,
-    transFat: product.transFat || 0,
+  // 초기값 설정 - null인 경우 "0"으로, 아닌 경우 문자열로 변환
+  const [formData, setFormData] = useState<Record<keyof NutritionReportRequest, string>>({
+    calcium: product.calcium !== null ? product.calcium.toString() : "0",
+    carbohydrate: product.carbohydrate !== null ? product.carbohydrate.toString() : "0",
+    cholesterol: product.cholesterol !== null ? product.cholesterol.toString() : "0",
+    dietaryFiber: product.dietaryFiber !== null ? product.dietaryFiber.toString() : "0",
+    energy: product.energy !== null ? product.energy.toString() : "0",
+    fat: product.fat !== null ? product.fat.toString() : "0",
+    protein: product.protein !== null ? product.protein.toString() : "0",
+    satFat: product.satFat !== null ? product.satFat.toString() : "0",
+    sodium: product.sodium !== null ? product.sodium.toString() : "0",
+    sugar: product.sugar !== null ? product.sugar.toString() : "0",
+    transFat: product.transFat !== null ? product.transFat.toString() : "0",
   });
 
   const reportMutation = useNutritionReport();
+  const { modalState, showError, hideModal } = useMessageModal();
 
   const handleInputChange = (key: keyof NutritionReportRequest, value: string) => {
-    const numValue = value === "" ? 0 : Number(value);
-    setFormData((prev) => ({ ...prev, [key]: numValue }));
+    setFormData((prev) => ({ ...prev, [key]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // 빈 칸 검증 - 실제로 빈 문자열이거나 공백만 있는 경우
+    const emptyFields = Object.entries(formData).filter(
+      ([, value]) => value.trim() === "" || value === "",
+    );
+
+    if (emptyFields.length > 0) {
+      showError(`빈 칸으로 둘 수 없습니다.\n없으면 0을 입력해주세요.`, "입력 오류");
+      return;
+    }
+
+    // 문자열을 숫자로 변환
+    const numericData: NutritionReportRequest = Object.entries(formData).reduce(
+      (acc, [key, value]) => {
+        acc[key as keyof NutritionReportRequest] = Number(value) || 0;
+        return acc;
+      },
+      {} as NutritionReportRequest,
+    );
+
     try {
       await reportMutation.mutateAsync({
         productId: product.productId,
-        data: formData,
+        data: numericData,
       });
       onSuccess();
     } catch (error) {
@@ -129,6 +152,17 @@ const NutritionEditForm = ({
           </button>
         </div>
       </form>
+
+      {/* 메시지 모달 */}
+      <MessageModal
+        isOpen={modalState.isOpen}
+        onClose={hideModal}
+        title={modalState.title}
+        message={modalState.message}
+        type={modalState.type}
+        buttons={modalState.buttons}
+        icon={modalState.icon}
+      />
     </div>
   );
 };
