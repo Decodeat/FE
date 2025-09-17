@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { API } from "../apis/axios";
 import type { EnrollFormData, EnrollResponse } from "../types/enroll";
+import { convertToPng } from "../utils/image";
 
 const postEnroll = async (enrollFormData: EnrollFormData): Promise<EnrollResponse> => {
   const data = new FormData();
@@ -13,15 +14,15 @@ const postEnroll = async (enrollFormData: EnrollFormData): Promise<EnrollRespons
 
   // 상품 이미지 (선택적)
   if (enrollFormData.productImage) {
-    data.append("productImage", enrollFormData.productImage);
+    const pngImage = await convertToPng(enrollFormData.productImage);
+    data.append("productImage", pngImage);
   }
-  data.append("productImage", enrollFormData.productImage!);
 
   // 표 이미지 (배열, 최소 1개)
-  enrollFormData.productInfoImages.forEach((file) => {
-    data.append("productInfoImages", file);
-  });
-
+  for (const file of enrollFormData.productInfoImages) {
+    const pngImage = await convertToPng(file);
+    data.append("productInfoImages", pngImage);
+  }
   const res = await API.post<EnrollResponse>(`/products?${params.toString()}`, data, {
     headers: { "Content-Type": "multipart/form-data" },
   });
