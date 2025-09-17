@@ -49,6 +49,27 @@ export const NUTRIENT_CATEGORIES = [
     textColor: "text-blue-800",
     bgColor: "bg-blue-50",
   },
+  {
+    key: "additives" as keyof ProductDetail,
+    title: "첨가물",
+    color: "bg-red-500",
+    textColor: "text-red-700",
+    bgColor: "bg-red-50",
+  },
+  {
+    key: "allergens" as keyof ProductDetail,
+    title: "알레르기 유발 물질",
+    color: "bg-orange-500",
+    textColor: "text-orange-700",
+    bgColor: "bg-orange-50",
+  },
+  {
+    key: "others" as keyof ProductDetail,
+    title: "기타",
+    color: "bg-gray-500",
+    textColor: "text-gray-700",
+    bgColor: "bg-gray-50",
+  },
 ] as const;
 
 // 차트 설정

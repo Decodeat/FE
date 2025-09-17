@@ -41,7 +41,7 @@ export const createNutritionValues = (product: ProductDetail): NutritionValue[] 
 export const createNutrientCategories = (product: ProductDetail): NutrientCategory[] => {
   return NUTRIENT_CATEGORIES.map(({ key, title, color, textColor, bgColor }) => ({
     title,
-    items: (product[key] as string[]) || [],
+    items: (product[key] as string[] | null) || [],
     color,
     textColor,
     bgColor,
