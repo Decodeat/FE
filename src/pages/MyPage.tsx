@@ -6,16 +6,26 @@ import { Settings } from "../components/myPage/Settings";
 import { AnalysisResults } from "../components/myPage/AnalysisResults";
 import AdminReports from "../components/admin/AdminReports";
 import { useAuthStore } from "../store/useAuthStore";
-import { useLogout } from "../hooks/useAuth";
+import { useLogout, useUser } from "../hooks/useAuth";
+import MessageModal from "../components/ui/MessageModal";
 
 const MyPage: FC = () => {
-  const { user } = useAuthStore();
+  const { user, isAuthenticated } = useAuthStore();
   const navigate = useNavigate();
   const logoutMutation = useLogout();
+  useUser(); // 사용자 정보 쿼리 관리
   const [searchParams, setSearchParams] = useSearchParams();
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const [activeTab, setActiveTab] = useState<
     "overview" | "settings" | "analysis" | "admin" | "signout"
   >("analysis");
+
+  // 로그인 상태 확인
+  useEffect(() => {
+    if (!isAuthenticated && !user) {
+      setShowLoginModal(true);
+    }
+  }, [isAuthenticated, user]);
 
   // URL 파라미터에서 탭 상태 읽기
   useEffect(() => {
@@ -143,6 +153,36 @@ const MyPage: FC = () => {
           © 2025 Around. All rights reserved.
         </div>
       </footer>
+
+      {/* 로그인 모달 */}
+      <MessageModal
+        isOpen={showLoginModal}
+        type="warning"
+        title="로그인이 필요합니다"
+        message="마이페이지를 이용하시려면 로그인해 주세요."
+        buttons={[
+          {
+            label: "홈으로 가기",
+            variant: "secondary",
+            onClick: () => {
+              setShowLoginModal(false);
+              navigate("/");
+            },
+          },
+          {
+            label: "로그인하기",
+            variant: "primary",
+            onClick: () => {
+              setShowLoginModal(false);
+              navigate("/login");
+            },
+          },
+        ]}
+        onClose={() => {
+          setShowLoginModal(false);
+          navigate("/");
+        }}
+      />
     </div>
   );
 };
