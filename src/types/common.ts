@@ -14,3 +14,11 @@ export interface CursorPagination<T> {
   hasNext: boolean;
   nextCursorId: number | null;
 }
+
+// 페이지 기반 페이지네이션 타입
+export interface PaginationInfo {
+  totalPage: number;
+  totalElements: number;
+  isLast: boolean;
+  isFirst: boolean;
+}
