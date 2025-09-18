@@ -1,15 +1,47 @@
 import type { FC } from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { PersonalInfo } from "../components/myPage/PersonalInfo";
 import { Settings } from "../components/myPage/Settings";
 import { AnalysisResults } from "../components/myPage/AnalysisResults";
+import AdminReports from "../components/admin/AdminReports";
 import { useAuthStore } from "../store/useAuthStore";
+import { useLogout } from "../hooks/useAuth";
 
 const MyPage: FC = () => {
   const { user } = useAuthStore();
-  const [activeTab, setActiveTab] = useState<"overview" | "settings" | "analysis" | "signout">(
-    "analysis",
-  );
+  const navigate = useNavigate();
+  const logoutMutation = useLogout();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [activeTab, setActiveTab] = useState<
+    "overview" | "settings" | "analysis" | "admin" | "signout"
+  >("analysis");
+
+  // URL 파라미터에서 탭 상태 읽기
+  useEffect(() => {
+    const tab = searchParams.get("tab");
+    if (tab && ["overview", "settings", "analysis", "admin", "signout"].includes(tab)) {
+      setActiveTab(tab as "overview" | "settings" | "analysis" | "admin" | "signout");
+    }
+  }, [searchParams]);
+
+  // 탭 변경 시 URL 파라미터 업데이트
+  const handleTabChange = (tab: "overview" | "settings" | "analysis" | "admin" | "signout") => {
+    setActiveTab(tab);
+    setSearchParams({ tab });
+  };
+
+  // 로그아웃 핸들러
+  const handleLogout = async () => {
+    try {
+      await logoutMutation.mutateAsync();
+      navigate("/");
+    } catch (error) {
+      console.error("로그아웃 실패:", error);
+      // 실패해도 클라이언트 상태는 초기화
+      navigate("/");
+    }
+  };
 
   const renderContent = () => {
     switch (activeTab) {
@@ -19,14 +51,22 @@ const MyPage: FC = () => {
         return <Settings />;
       case "analysis":
         return <AnalysisResults />;
+      case "admin":
+        return <AdminReports />;
       case "signout":
         return (
           <div className="bg-white rounded-xl p-6 shadow-sm">
             <h2 className="text-xl font-bold mb-4">로그아웃</h2>
-            <p className="text-gray-600">로그아웃 하시겠습니까?</p>
-            <button className="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
-              로그아웃
-            </button>
+            <p className="text-gray-600 mb-6">로그아웃 하시겠습니까?</p>
+            <div className="flex space-x-4">
+              <button
+                onClick={handleLogout}
+                disabled={logoutMutation.isPending}
+                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 disabled:opacity-50"
+              >
+                {logoutMutation.isPending ? "로그아웃 중..." : "로그아웃"}
+              </button>
+            </div>
           </div>
         );
       default:
@@ -51,7 +91,7 @@ const MyPage: FC = () => {
           </div>
           <nav className="space-y-1">
             <button
-              onClick={() => setActiveTab("overview")}
+              onClick={() => handleTabChange("overview")}
               className={`w-full text-left flex items-center px-3 py-2 rounded hover:bg-gray-100 ${
                 activeTab === "overview" ? "bg-emerald-100 text-emerald-700 font-medium" : ""
               }`}
@@ -59,7 +99,7 @@ const MyPage: FC = () => {
               개인 정보
             </button>
             <button
-              onClick={() => setActiveTab("settings")}
+              onClick={() => handleTabChange("settings")}
               className={`w-full text-left flex items-center px-3 py-2 rounded hover:bg-gray-100 ${
                 activeTab === "settings" ? "bg-emerald-100 text-emerald-700 font-medium" : ""
               }`}
@@ -67,7 +107,7 @@ const MyPage: FC = () => {
               설정
             </button>
             <button
-              onClick={() => setActiveTab("analysis")}
+              onClick={() => handleTabChange("analysis")}
               className={`w-full text-left flex items-center px-3 py-2 rounded hover:bg-gray-100 ${
                 activeTab === "analysis" ? "bg-emerald-100 text-emerald-700 font-medium" : ""
               }`}
@@ -75,7 +115,15 @@ const MyPage: FC = () => {
               내 제품 분석 결과
             </button>
             <button
-              onClick={() => setActiveTab("signout")}
+              onClick={() => handleTabChange("admin")}
+              className={`w-full text-left flex items-center px-3 py-2 rounded hover:bg-gray-100 ${
+                activeTab === "admin" ? "bg-emerald-100 text-emerald-700 font-medium" : ""
+              }`}
+            >
+              신고 요청 관리
+            </button>
+            <button
+              onClick={() => handleTabChange("signout")}
               className={`w-full text-left flex items-center px-3 py-2 rounded hover:bg-gray-100 ${
                 activeTab === "signout" ? "bg-emerald-100 text-emerald-700 font-medium" : ""
               }`}

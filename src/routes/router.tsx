@@ -10,6 +10,7 @@ import LoginPage from "../pages/LoginPage";
 import SupportPage from "../pages/SupportPage";
 import SearchPage from "../pages/SearchPage";
 import AuthLayout from "../layout/AuthLayout";
+import AdminReportDetail from "../components/admin/AdminReportDetail";
 
 const router = createBrowserRouter([
   {
@@ -44,6 +45,10 @@ const router = createBrowserRouter([
       {
         path: "support",
         element: <SupportPage />,
+      },
+      {
+        path: "admin/reports/:reportId",
+        element: <AdminReportDetail />,
       },
     ],
   },
