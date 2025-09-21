@@ -16,7 +16,9 @@ export const useLikeMutation = (productId: number) => {
 
         // 무한 스크롤 페이지네이션 형태인 경우
         if (typeof oldData === "object" && oldData !== null && "pages" in oldData) {
-          const paginatedData = oldData as { pages: Array<{ result: { productList: LatestProduct[] } }> };
+          const paginatedData = oldData as {
+            pages: Array<{ result: { productList: LatestProduct[] } }>;
+          };
           return {
             ...paginatedData,
             pages: paginatedData.pages.map((page) => ({
@@ -24,9 +26,7 @@ export const useLikeMutation = (productId: number) => {
               result: {
                 ...page.result,
                 productList: page.result.productList.map((product: LatestProduct) =>
-                  product.productId === productId
-                    ? { ...product, liked: !product.liked }
-                    : product
+                  product.productId === productId ? { ...product, liked: !product.liked } : product,
                 ),
               },
             })),
