@@ -8,14 +8,14 @@ import { useLikeMutation } from "../../hooks/useLike";
 import type { LatestProduct } from "../../types/productList";
 
 // 개별 제품 카드 컴포넌트
-const ProductCard = ({ 
-  product, 
-  displayImage, 
-  onProductClick 
-}: { 
-  product: LatestProduct; 
-  displayImage: string; 
-  onProductClick: (productId: number) => void; 
+const ProductCard = ({
+  product,
+  displayImage,
+  onProductClick,
+}: {
+  product: LatestProduct;
+  displayImage: string;
+  onProductClick: (productId: number) => void;
 }) => {
   const likeMutation = useLikeMutation(product.productId);
 
@@ -68,7 +68,7 @@ const ProductCard = ({
                 ? "분석중"
                 : "분석실패"}
           </span>
-          
+
           {/* 좋아요 버튼 - 분석완료인 경우에만 표시 */}
           {product.decodeStatus === "COMPLETED" && (
             <button
@@ -78,9 +78,7 @@ const ProductCard = ({
             >
               <Heart
                 className={`w-4 h-4 transition-colors ${
-                  product.liked
-                    ? "fill-red-500 text-red-500"
-                    : "text-gray-400 hover:text-red-500"
+                  product.liked ? "fill-red-500 text-red-500" : "text-gray-400 hover:text-red-500"
                 }`}
               />
             </button>

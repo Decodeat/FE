@@ -217,14 +217,14 @@ const ProductDetailPage = () => {
               >
                 <Heart
                   className={`w-5 h-5 transition-colors ${
-                    product.liked
-                      ? "fill-red-500 text-red-500"
-                      : "text-gray-400"
+                    product.liked ? "fill-red-500 text-red-500" : "text-gray-400"
                   }`}
                 />
-                <span className={`text-sm font-medium ${
-                  product.liked ? "text-red-500" : "text-gray-600"
-                }`}>
+                <span
+                  className={`text-sm font-medium ${
+                    product.liked ? "text-red-500" : "text-gray-600"
+                  }`}
+                >
                   {product.liked ? "좋아요 취소" : "좋아요"}
                 </span>
               </button>
