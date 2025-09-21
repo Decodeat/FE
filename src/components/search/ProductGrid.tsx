@@ -1,9 +1,95 @@
 import { useNavigate } from "react-router-dom";
-import { ShoppingCart } from "lucide-react";
+import { ShoppingCart, Heart } from "lucide-react";
 import { useLatestProductsList } from "../../hooks/useProductList";
 import { useEffect, useCallback } from "react";
 import ProductGridSkeleton from "./ProductGridSkeleton";
 import Skeleton from "../ui/Skeleton";
+import { useLikeMutation } from "../../hooks/useLike";
+import type { LatestProduct } from "../../types/productList";
+
+// 개별 제품 카드 컴포넌트
+const ProductCard = ({ 
+  product, 
+  displayImage, 
+  onProductClick 
+}: { 
+  product: LatestProduct; 
+  displayImage: string; 
+  onProductClick: (productId: number) => void; 
+}) => {
+  const likeMutation = useLikeMutation(product.productId);
+
+  const handleLikeClick = (e: React.MouseEvent) => {
+    e.stopPropagation(); // 카드 클릭 이벤트 방지
+    likeMutation.mutate();
+  };
+
+  return (
+    <div
+      className="group relative bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow duration-200 cursor-pointer"
+      onClick={() => onProductClick(product.productId)}
+    >
+      {/* 제품 이미지 */}
+      <div className="aspect-square bg-gray-100 overflow-hidden">
+        <img
+          src={displayImage}
+          alt={product.productName}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+          onError={(e) => {
+            const target = e.target as HTMLImageElement;
+            target.src = "/decodeatLogo.ico"; // 기본 이미지로 대체
+          }}
+        />
+      </div>
+
+      {/* 제품 정보 */}
+      <div className="p-4">
+        <div className="mb-2">
+          <h3 className="font-medium text-gray-900 text-sm mb-1 line-clamp-2">
+            {product.productName}
+          </h3>
+          <p className="text-xs text-gray-500">{product.manufacturer}</p>
+        </div>
+
+        {/* 디코딩 상태 표시 및 좋아요 버튼 */}
+        <div className="flex items-center justify-between">
+          <span
+            className={`text-xs px-2 py-1 rounded-full ${
+              product.decodeStatus === "COMPLETED"
+                ? "bg-green-100 text-green-600"
+                : product.decodeStatus === "PENDING"
+                  ? "bg-yellow-100 text-yellow-600"
+                  : "bg-red-100 text-red-600"
+            }`}
+          >
+            {product.decodeStatus === "COMPLETED"
+              ? "분석완료"
+              : product.decodeStatus === "PENDING"
+                ? "분석중"
+                : "분석실패"}
+          </span>
+          
+          {/* 좋아요 버튼 - 분석완료인 경우에만 표시 */}
+          {product.decodeStatus === "COMPLETED" && (
+            <button
+              onClick={handleLikeClick}
+              className="p-1 rounded-full hover:bg-gray-100 transition-colors"
+              disabled={likeMutation.isPending}
+            >
+              <Heart
+                className={`w-4 h-4 transition-colors ${
+                  product.liked
+                    ? "fill-red-500 text-red-500"
+                    : "text-gray-400 hover:text-red-500"
+                }`}
+              />
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const ProductGrid = () => {
   const navigate = useNavigate();
@@ -73,53 +159,12 @@ const ProductGrid = () => {
           const displayImage = product.productImage || "/decodeatLogo.ico";
 
           return (
-            <div
+            <ProductCard
               key={`product-${product.productId}`}
-              className="group relative bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow duration-200 cursor-pointer"
-              onClick={() => handleProductClick(product.productId)}
-            >
-              {/* 제품 이미지 */}
-              <div className="aspect-square bg-gray-100 overflow-hidden">
-                <img
-                  src={displayImage}
-                  alt={product.productName}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.src = "/decodeatLogo.ico"; // 기본 이미지로 대체
-                  }}
-                />
-              </div>
-
-              {/* 제품 정보 */}
-              <div className="p-4">
-                <div className="mb-2">
-                  <h3 className="font-medium text-gray-900 text-sm mb-1 line-clamp-2">
-                    {product.productName}
-                  </h3>
-                  <p className="text-xs text-gray-500">{product.manufacturer}</p>
-                </div>
-
-                {/* 디코딩 상태 표시 */}
-                <div className="flex items-center justify-between">
-                  <span
-                    className={`text-xs px-2 py-1 rounded-full ${
-                      product.decodeStatus === "COMPLETED"
-                        ? "bg-green-100 text-green-600"
-                        : product.decodeStatus === "PENDING"
-                          ? "bg-yellow-100 text-yellow-600"
-                          : "bg-red-100 text-red-600"
-                    }`}
-                  >
-                    {product.decodeStatus === "COMPLETED"
-                      ? "분석완료"
-                      : product.decodeStatus === "PENDING"
-                        ? "분석중"
-                        : "분석실패"}
-                  </span>
-                </div>
-              </div>
-            </div>
+              product={product}
+              displayImage={displayImage}
+              onProductClick={handleProductClick}
+            />
           );
         })}
       </div>
