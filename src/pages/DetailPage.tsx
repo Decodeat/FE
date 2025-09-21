@@ -213,20 +213,14 @@ const ProductDetailPage = () => {
               <button
                 onClick={() => likeMutation.mutate()}
                 disabled={likeMutation.isPending}
-                className="flex items-center space-x-2 px-4 py-2 rounded-lg border border-gray-300 hover:border-red-300 hover:bg-red-50 transition-colors disabled:opacity-50"
+                className="flex items-center space-x-2 transition-colors disabled:opacity-50"
               >
                 <Heart
                   className={`w-5 h-5 transition-colors ${
                     product.liked ? "fill-red-500 text-red-500" : "text-gray-400"
                   }`}
                 />
-                <span
-                  className={`text-sm font-medium ${
-                    product.liked ? "text-red-500" : "text-gray-600"
-                  }`}
-                >
-                  {product.liked ? "좋아요 취소" : "좋아요"}
-                </span>
+                <span className={`text-sm font-medium text-red-500`}>좋아요</span>
               </button>
             </div>
 
