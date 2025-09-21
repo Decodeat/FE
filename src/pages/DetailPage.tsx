@@ -220,7 +220,7 @@ const ProductDetailPage = () => {
                     product.liked ? "fill-red-500 text-red-500" : "text-gray-400"
                   }`}
                 />
-                <span className={`text-sm font-medium text-red-500`}>좋아요</span>
+                <span className={`text-sm font-medium`}>좋아요</span>
               </button>
             </div>
 
