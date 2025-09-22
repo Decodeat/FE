@@ -82,11 +82,7 @@ const UploadSlot: React.FC<UploadSlotProps> = ({
       ) : (
         <div className="space-y-2 text-center text-gray-500 pointer-events-none">
           <Camera className="mx-auto w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 text-gray-400" />
-          <p className="text-[12px] sm:text-xs md:text-sm">
-            사진 업로드
-            <br />
-            (드래그 가능)
-          </p>
+          <p className="text-[12px] sm:text-xs md:text-sm">사진 업로드</p>
         </div>
       )}
 
