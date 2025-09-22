@@ -54,7 +54,15 @@ export const useLogout = () => {
     onSuccess: () => {
       // 서버가 쿠키를 삭제했으므로 클라이언트 상태도 초기화
       logout();
-      queryClient.clear(); // 모든 쿼리 캐시 삭제
+      // 사용자 정보 쿼리를 무효화하여 즉시 업데이트
+      queryClient.invalidateQueries({ queryKey: ["user"] });
+      // 모든 쿼리 캐시 삭제
+      queryClient.clear();
+    },
+    onError: () => {
+      // 에러가 발생해도 클라이언트 상태 초기화
+      logout();
+      queryClient.invalidateQueries({ queryKey: ["user"] });
     },
   });
 };

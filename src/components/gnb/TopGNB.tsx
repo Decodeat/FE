@@ -3,7 +3,7 @@ import { ChevronDown, Menu, ShoppingCart, User, LogOut } from "lucide-react";
 import { pagesMenu, accountMenu, accountPages } from "../../config/menuConfig";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../store/useAuthStore";
-import { useLogout } from "../../hooks/useAuth";
+import { useLogout, useUser } from "../../hooks/useAuth";
 
 import Logo from "../../assets/logo/decodeat.svg";
 
@@ -16,7 +16,7 @@ const TopGNB = () => {
 
   // 인증 상태 가져오기
   const { user, isAuthenticated, isLoading } = useAuthStore();
-  // const userQuery = useUser(); // 사용자 정보 자동 로드
+  useUser(); // 사용자 정보 자동 로드 및 쿼리 관리
   const logoutMutation = useLogout();
 
   // 디버깅용 로그

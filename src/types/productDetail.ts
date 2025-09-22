@@ -28,6 +28,8 @@ export interface ProductDetail {
   additives: string[];
   allergens: string[];
   others: string[];
+  //좋아요
+  liked: boolean;
 }
 
 // 제품 상세 정보 응답 타입

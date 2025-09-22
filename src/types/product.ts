@@ -6,6 +6,7 @@ export interface Product {
   manufacturer: string;
   productName: string;
   productImage: string;
+  liked: boolean;
 }
 
 // 자동완성용 상품 정보
@@ -55,6 +56,13 @@ export interface AutocompleteParams {
   productName: string;
 }
 
+// 좋아요 결과 타입
+export interface LikeResult {
+  productId: number;
+  liked: boolean;
+}
+
 // API 응답 타입들
 export type ProductSearchResponse = ApiResponse<ProductSearchResult>;
 export type AutocompleteResponse = ApiResponse<AutocompleteProduct[]>;
+export type LikeResponse = ApiResponse<LikeResult>;

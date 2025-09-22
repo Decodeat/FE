@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import { Heart } from "lucide-react";
 import { getProductDetail } from "../apis/productDetail";
 import { createCalorieInfo } from "../utils/nutritionUtils";
 import NutritionChart from "../components/detail/NutritionChart";
@@ -8,6 +9,7 @@ import DetailedNutrients from "../components/detail/DetailedNutrients";
 import { useImageReport } from "../hooks/useReport";
 import { useMessageModal } from "../hooks/useMessageModal";
 import { useAuthStore } from "../store/useAuthStore";
+import { useLikeMutation } from "../hooks/useLike";
 import MessageModal from "../components/ui/MessageModal";
 import warnIcon from "../assets/icon/warn.svg";
 
@@ -22,6 +24,9 @@ const ProductDetailPage = () => {
 
   // 이미지 신고 훅
   const imageReportMutation = useImageReport();
+
+  // 좋아요 훅
+  const likeMutation = useLikeMutation(Number(id!));
 
   // 메시지 모달 훅
   const { modalState, showSuccess, showError, showConfirm, hideModal } = useMessageModal();
@@ -214,6 +219,22 @@ const ProductDetailPage = () => {
 
             {/* 구분선 */}
             <div className="w-full h-2 rounded mb-6" style={{ backgroundColor: "#dfe9df" }} />
+
+            {/* 좋아요 버튼 */}
+            <div className="flex justify-start mb-4">
+              <button
+                onClick={() => likeMutation.mutate()}
+                disabled={likeMutation.isPending}
+                className="flex items-center space-x-2 transition-colors disabled:opacity-50"
+              >
+                <Heart
+                  className={`w-5 h-5 transition-colors ${
+                    product.liked ? "fill-red-500 text-red-500" : "text-gray-400"
+                  }`}
+                />
+                <span className={`text-sm font-medium`}>좋아요</span>
+              </button>
+            </div>
 
             {/* 영양정보 차트 */}
             <NutritionChart
