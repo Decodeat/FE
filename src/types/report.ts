@@ -49,6 +49,7 @@ export type ReportType = "NUTRITION_UPDATE" | "INAPPROPRIATE_IMAGE";
 export interface ReportItem {
   reportId: number;
   reporterId: number;
+  nickname: string;
   productInfo: ProductInfo;
   reportType: ReportType;
   reportStatus: ReportStatus;

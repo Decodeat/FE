@@ -11,15 +11,27 @@ import NutritionEditForm from "./NutritionEditForm";
 
 interface NutritionChartProps {
   product: ProductDetail;
+  isAuthenticated?: boolean;
+  onLoginRequired?: () => void;
 }
 
-const NutritionChart = ({ product }: NutritionChartProps) => {
+const NutritionChart = ({
+  product,
+  isAuthenticated = true,
+  onLoginRequired,
+}: NutritionChartProps) => {
   const [showEditForm, setShowEditForm] = useState(false);
 
   // MessageModal 훅 사용
   const { modalState, showSuccess, hideModal } = useMessageModal();
 
   const handleReportClick = () => {
+    // 로그인 확인
+    if (!isAuthenticated && onLoginRequired) {
+      onLoginRequired();
+      return;
+    }
+
     setShowEditForm(!showEditForm);
   };
 

@@ -1,21 +1,32 @@
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import { Heart } from "lucide-react";
 import { getProductDetail } from "../apis/productDetail";
 import { createCalorieInfo } from "../utils/nutritionUtils";
 import NutritionChart from "../components/detail/NutritionChart";
 import DetailedNutrients from "../components/detail/DetailedNutrients";
 import { useImageReport } from "../hooks/useReport";
 import { useMessageModal } from "../hooks/useMessageModal";
+import { useAuthStore } from "../store/useAuthStore";
+import { useLikeMutation } from "../hooks/useLike";
 import MessageModal from "../components/ui/MessageModal";
 import warnIcon from "../assets/icon/warn.svg";
 
 const ProductDetailPage = () => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+
+  // 인증 상태 확인
+  const { isAuthenticated } = useAuthStore();
 
   // 이미지 신고 훅
   const imageReportMutation = useImageReport();
+
+  // 좋아요 훅
+  const likeMutation = useLikeMutation(Number(id!));
 
   // 메시지 모달 훅
   const { modalState, showSuccess, showError, showConfirm, hideModal } = useMessageModal();
@@ -61,6 +72,12 @@ const ProductDetailPage = () => {
   // 이미지 신고 핸들러
   const handleImageReport = () => {
     if (!product) return;
+
+    // 로그인 확인
+    if (!isAuthenticated) {
+      setShowLoginModal(true);
+      return;
+    }
 
     // 제품 사진이 없는 경우 오류 메시지
     if (!product.productImage) {
@@ -203,8 +220,28 @@ const ProductDetailPage = () => {
             {/* 구분선 */}
             <div className="w-full h-2 rounded mb-6" style={{ backgroundColor: "#dfe9df" }} />
 
+            {/* 좋아요 버튼 */}
+            <div className="flex justify-start mb-4">
+              <button
+                onClick={() => likeMutation.mutate()}
+                disabled={likeMutation.isPending}
+                className="flex items-center space-x-2 transition-colors disabled:opacity-50"
+              >
+                <Heart
+                  className={`w-5 h-5 transition-colors ${
+                    product.liked ? "fill-red-500 text-red-500" : "text-gray-400"
+                  }`}
+                />
+                <span className={`text-sm font-medium`}>좋아요</span>
+              </button>
+            </div>
+
             {/* 영양정보 차트 */}
-            <NutritionChart product={product} />
+            <NutritionChart
+              product={product}
+              isAuthenticated={isAuthenticated}
+              onLoginRequired={() => setShowLoginModal(true)}
+            />
           </div>
         </div>
 
@@ -221,6 +258,30 @@ const ProductDetailPage = () => {
         type={modalState.type}
         buttons={modalState.buttons}
         icon={modalState.icon}
+      />
+
+      {/* 로그인 모달 */}
+      <MessageModal
+        isOpen={showLoginModal}
+        type="warning"
+        title="로그인이 필요합니다"
+        message="신고 기능을 이용하시려면 로그인해 주세요."
+        buttons={[
+          {
+            label: "취소",
+            variant: "secondary",
+            onClick: () => setShowLoginModal(false),
+          },
+          {
+            label: "로그인하기",
+            variant: "primary",
+            onClick: () => {
+              setShowLoginModal(false);
+              navigate("/login");
+            },
+          },
+        ]}
+        onClose={() => setShowLoginModal(false)}
       />
     </div>
   );

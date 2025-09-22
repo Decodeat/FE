@@ -7,6 +7,7 @@ export interface LatestProduct {
   productName: string;
   productImage: string;
   decodeStatus: "COMPLETED" | "PENDING" | "FAILED";
+  liked: boolean;
 }
 
 // 최신순 제품 조회 파라미터

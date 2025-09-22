@@ -100,7 +100,7 @@ const AdminReports: React.FC = () => {
                     신고 타입
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    신고 ID
+                    신고자
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     상태
@@ -149,7 +149,7 @@ const AdminReports: React.FC = () => {
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      #{report.reportId}
+                      {report.nickname || "알 수 없음"}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span
