@@ -114,13 +114,13 @@ const EnrollPage: FC = () => {
     // 파일 상태 리셋
     setIngNutriFiles([null, null]);
     setProductPhotoFile(null);
-    
+
     // 미리보기 URL 정리 및 리셋
     ingNutriPreviews.forEach((url) => url && URL.revokeObjectURL(url));
     if (productPhotoPreview) URL.revokeObjectURL(productPhotoPreview);
     setIngNutriPreviews([null, null]);
     setProductPhotoPreview(null);
-    
+
     // 텍스트 필드 리셋
     setCompanyName("");
     setProductName("");
@@ -158,7 +158,7 @@ const EnrollPage: FC = () => {
               hideModal();
               resetForm();
               // 페이지 최상단으로 스크롤
-              window.scrollTo({ top: 0, behavior: 'smooth' });
+              window.scrollTo({ top: 0, behavior: "smooth" });
             },
             variant: "secondary",
           },
