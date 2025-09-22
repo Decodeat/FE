@@ -116,7 +116,7 @@ const NutritionEditForm = ({
                       <input
                         type="number"
                         min="0"
-                        step="0.1"
+                        step="0.01"
                         value={formData[field.key]}
                         onChange={(e) => handleInputChange(field.key, e.target.value)}
                         className="w-full px-3 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
