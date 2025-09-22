@@ -217,7 +217,7 @@ const AdminReportDetail: React.FC = () => {
           <div>
             <h1 className="text-2xl font-bold text-gray-900">신고 상세 조회</h1>
             <p className="text-gray-600">
-              신고 ID: #{report.reportId} | {getReportTypeText(report.reportType)} |{" "}
+              신고자 : {report.nickname} | {getReportTypeText(report.reportType)} |{" "}
               {formatDate(report.createdAt)}
             </p>
           </div>
