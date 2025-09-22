@@ -109,6 +109,23 @@ const EnrollPage: FC = () => {
     });
   };
 
+  // 폼 리셋 함수
+  const resetForm = () => {
+    // 파일 상태 리셋
+    setIngNutriFiles([null, null]);
+    setProductPhotoFile(null);
+    
+    // 미리보기 URL 정리 및 리셋
+    ingNutriPreviews.forEach((url) => url && URL.revokeObjectURL(url));
+    if (productPhotoPreview) URL.revokeObjectURL(productPhotoPreview);
+    setIngNutriPreviews([null, null]);
+    setProductPhotoPreview(null);
+    
+    // 텍스트 필드 리셋
+    setCompanyName("");
+    setProductName("");
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!productName.trim()) {
@@ -135,6 +152,16 @@ const EnrollPage: FC = () => {
     enrollProduct(formData, {
       onSuccess: () => {
         showSuccess("제품 등록 요청이 정상적으로 완료되었습니다.", "등록 완료", [
+          {
+            label: "추가 등록",
+            onClick: () => {
+              hideModal();
+              resetForm();
+              // 페이지 최상단으로 스크롤
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            },
+            variant: "secondary",
+          },
           {
             label: "홈으로 이동",
             onClick: () => {
