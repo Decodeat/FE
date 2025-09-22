@@ -18,6 +18,7 @@ const ProductDetailPage = () => {
   const navigate = useNavigate();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showLikeLoginModal, setShowLikeLoginModal] = useState(false);
 
   // 인증 상태 확인
   const { isAuthenticated } = useAuthStore();
@@ -223,7 +224,13 @@ const ProductDetailPage = () => {
             {/* 좋아요 버튼 */}
             <div className="flex justify-start mb-4">
               <button
-                onClick={() => likeMutation.mutate()}
+                onClick={() => {
+                  if (!isAuthenticated) {
+                    setShowLikeLoginModal(true);
+                    return;
+                  }
+                  likeMutation.mutate();
+                }}
                 disabled={likeMutation.isPending}
                 className="flex items-center space-x-2 transition-colors disabled:opacity-50"
               >
@@ -282,6 +289,30 @@ const ProductDetailPage = () => {
           },
         ]}
         onClose={() => setShowLoginModal(false)}
+      />
+
+      {/* 좋아요 로그인 모달 */}
+      <MessageModal
+        isOpen={showLikeLoginModal}
+        type="warning"
+        title="로그인이 필요합니다"
+        message="좋아요 기능을 이용하시려면 로그인해 주세요."
+        buttons={[
+          {
+            label: "취소",
+            variant: "secondary",
+            onClick: () => setShowLikeLoginModal(false),
+          },
+          {
+            label: "로그인하기",
+            variant: "primary",
+            onClick: () => {
+              setShowLikeLoginModal(false);
+              navigate("/login");
+            },
+          },
+        ]}
+        onClose={() => setShowLikeLoginModal(false)}
       />
     </div>
   );
