@@ -40,16 +40,48 @@ const EnrollPage: FC = () => {
     };
     const handleDrop = () => setIsDragging(false);
 
+    // ✅ 클립보드 붙여넣기 이벤트 처리
+    const handlePaste = (e: ClipboardEvent) => {
+      const items = e.clipboardData?.items;
+      if (!items) return;
+
+      for (let i = 0; i < items.length; i++) {
+        const item = items[i];
+        if (item.type.startsWith("image/")) {
+          e.preventDefault();
+          const file = item.getAsFile();
+          if (file) {
+            // 첫 번째 빈 슬롯에 이미지 추가
+            if (!ingNutriFiles[0]) {
+              handleIngSlotChange(0, file);
+            } else if (!ingNutriFiles[1]) {
+              handleIngSlotChange(1, file);
+            } else if (!productPhotoFile) {
+              handleProdSlotChange(file);
+            } else {
+              // 모든 슬롯이 차있다면 첫 번째 영양정보 슬롯을 교체
+              handleIngSlotChange(0, file);
+            }
+
+            showSuccess("클립보드에서 이미지가 추가되었습니다!");
+          }
+          break;
+        }
+      }
+    };
+
     window.addEventListener("dragenter", handleDragEnter);
     window.addEventListener("dragleave", handleDragLeave);
     window.addEventListener("drop", handleDrop);
+    window.addEventListener("paste", handlePaste);
 
     return () => {
       window.removeEventListener("dragenter", handleDragEnter);
       window.removeEventListener("dragleave", handleDragLeave);
       window.removeEventListener("drop", handleDrop);
+      window.removeEventListener("paste", handlePaste);
     };
-  }, []);
+  }, [ingNutriFiles, productPhotoFile, showSuccess]);
 
   // blob url 정리
   useEffect(() => {
@@ -133,7 +165,10 @@ const EnrollPage: FC = () => {
       <section className="w-full bg-[#D2EDE4] py-16 text-center relative overflow-hidden">
         <div className="relative z-10 text-center max-w-2xl mx-auto px-4">
           <h1 className="text-2xl md:text-3xl font-bold text-[#2D5945] mb-2">제품 등록하기</h1>
-          <p className="text-gray-700">Tip. 영양정보 라벨이 잘 보이게 찍어주세요!</p>
+          <p className="text-gray-700 mb-2">Tip. 영양정보 라벨이 잘 보이게 찍어주세요!</p>
+          <p className="text-sm text-gray-600">
+            📋 클립보드에 복사한 이미지를 Ctrl+V로 붙여넣을 수 있어요!
+          </p>
         </div>
       </section>
 
