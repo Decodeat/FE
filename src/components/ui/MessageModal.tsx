@@ -80,13 +80,15 @@ const MessageModal = ({
         </div>
 
         {/* 버튼들 */}
-        <div className={`flex gap-3 ${modalButtons.length === 1 ? "" : "justify-between"}`}>
+        <div
+          className={`flex gap-3 ${modalButtons.length === 1 ? "justify-center" : "justify-center"}`}
+        >
           {modalButtons.map((button, index) => (
             <button
               key={index}
               onClick={button.onClick}
-              className={`px-6 py-3 rounded-lg font-medium transition-colors cursor-pointer${
-                modalButtons.length === 1 ? "w-full" : "flex-1"
+              className={`px-6 py-3 rounded-lg font-medium transition-colors cursor-pointer ${
+                modalButtons.length === 1 ? "w-full" : "flex-1 max-w-[120px]"
               } ${buttonVariants[button.variant || "primary"]}`}
             >
               {button.label}
