@@ -33,7 +33,7 @@ const AnalysisResultItem: FC<AnalysisResultItemProps> = ({ record }) => {
         {/* 상품 정보 */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between mb-2">
-            <h3 className="font-semibold text-gray-900">제품명: {record.productName}</h3>
+            <h3 className="font-semibold text-gray-900">제품명: {record.name}</h3>
             <span className={`px-2 py-1 rounded-full text-xs font-medium ${statusColor}`}>
               {statusText}
             </span>

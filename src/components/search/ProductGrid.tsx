@@ -45,44 +45,26 @@ const ProductCard = ({
       {/* 제품 정보 */}
       <div className="p-4">
         <div className="mb-2">
-          <h3 className="font-medium text-gray-900 text-sm mb-1 line-clamp-2">
-            {product.productName}
-          </h3>
+          <div className="flex items-center justify-between mb-1">
+            <h3 className="font-medium text-gray-900 text-sm line-clamp-2 flex-1 pr-2">
+              {product.productName}
+            </h3>
+            {/* 좋아요 버튼 - 분석완료인 경우에만 표시 */}
+            {product.decodeStatus === "COMPLETED" && (
+              <button
+                onClick={handleLikeClick}
+                className="p-1 rounded-full hover:bg-gray-100 transition-colors cursor-pointer flex-shrink-0"
+                disabled={likeMutation.isPending}
+              >
+                <Heart
+                  className={`w-4 h-4 transition-colors ${
+                    product.liked ? "fill-red-500 text-red-500" : "text-gray-400 hover:text-red-500"
+                  }`}
+                />
+              </button>
+            )}
+          </div>
           <p className="text-xs text-gray-500">{product.manufacturer}</p>
-        </div>
-
-        {/* 디코딩 상태 표시 및 좋아요 버튼 */}
-        <div className="flex items-center justify-between">
-          <span
-            className={`text-xs px-2 py-1 rounded-full ${
-              product.decodeStatus === "COMPLETED"
-                ? "bg-green-100 text-green-600"
-                : product.decodeStatus === "PENDING"
-                  ? "bg-yellow-100 text-yellow-600"
-                  : "bg-red-100 text-red-600"
-            }`}
-          >
-            {product.decodeStatus === "COMPLETED"
-              ? "분석완료"
-              : product.decodeStatus === "PENDING"
-                ? "분석중"
-                : "분석실패"}
-          </span>
-
-          {/* 좋아요 버튼 - 분석완료인 경우에만 표시 */}
-          {product.decodeStatus === "COMPLETED" && (
-            <button
-              onClick={handleLikeClick}
-              className="p-1 rounded-full hover:bg-gray-100 transition-colors cursor-pointer"
-              disabled={likeMutation.isPending}
-            >
-              <Heart
-                className={`w-4 h-4 transition-colors ${
-                  product.liked ? "fill-red-500 text-red-500" : "text-gray-400 hover:text-red-500"
-                }`}
-              />
-            </button>
-          )}
         </div>
       </div>
     </div>

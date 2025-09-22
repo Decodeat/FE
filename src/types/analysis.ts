@@ -2,7 +2,7 @@ export type DecodeStatus = "CANCELLED" | "COMPLETED" | "FAILED" | "PROCESSING";
 
 export interface AnalysisRecord {
   productId: number;
-  productName: string;
+  name: string;
   registerDate: string;
   productImage: string;
   decodeStatus: DecodeStatus;
