@@ -73,7 +73,7 @@ const ProductCard = ({
           {product.decodeStatus === "COMPLETED" && (
             <button
               onClick={handleLikeClick}
-              className="p-1 rounded-full hover:bg-gray-100 transition-colors"
+              className="p-1 rounded-full hover:bg-gray-100 transition-colors cursor-pointer"
               disabled={likeMutation.isPending}
             >
               <Heart

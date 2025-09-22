@@ -85,7 +85,7 @@ const MessageModal = ({
             <button
               key={index}
               onClick={button.onClick}
-              className={`px-6 py-3 rounded-lg font-medium transition-colors ${
+              className={`px-6 py-3 rounded-lg font-medium transition-colors cursor-pointer${
                 modalButtons.length === 1 ? "w-full" : "flex-1"
               } ${buttonVariants[button.variant || "primary"]}`}
             >

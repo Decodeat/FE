@@ -173,7 +173,7 @@ const ProductDetailPage = () => {
                              bg-white/70 border border-gray-300 
                              rounded-full w-8 h-8 
                              flex items-center justify-center 
-                             hover:bg-white transition"
+                             hover:bg-white transition cursor-pointer"
                   >
                     {"<"}
                   </button>
@@ -184,7 +184,7 @@ const ProductDetailPage = () => {
                              bg-white/70 border border-gray-300 
                              rounded-full w-8 h-8 
                              flex items-center justify-center 
-                             hover:bg-white transition"
+                             hover:bg-white transition cursor-pointer"
                   >
                     {">"}
                   </button>
@@ -232,7 +232,7 @@ const ProductDetailPage = () => {
                   likeMutation.mutate();
                 }}
                 disabled={likeMutation.isPending}
-                className="flex items-center space-x-2 transition-colors disabled:opacity-50"
+                className="flex items-center space-x-2 transition-colors disabled:opacity-50 cursor-pointer"
               >
                 <Heart
                   className={`w-5 h-5 transition-colors ${

@@ -72,7 +72,7 @@ const UploadSlot: React.FC<UploadSlotProps> = ({
               onClear();
               if (inputRef.current) inputRef.current.value = "";
             }}
-            className="absolute top-2 right-2 p-1 bg-white/90 rounded-full hover:bg-white shadow"
+            className="absolute top-2 right-2 p-1 bg-white/90 rounded-full hover:bg-white shadow cursor-pointer"
             aria-label="사진 지우기"
             disabled={disabled}
           >

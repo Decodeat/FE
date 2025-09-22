@@ -44,7 +44,7 @@ const AnalysisResultItem: FC<AnalysisResultItemProps> = ({ record }) => {
           {/* 상태별 추가 정보 */}
           {record.decodeStatus === "COMPLETED" && (
             <button
-              className="text-sm text-emerald-600 hover:text-emerald-700 font-medium"
+              className="text-sm text-emerald-600 hover:text-emerald-700 font-medium cursor-pointer"
               onClick={() => {
                 navigate(`/detail/${record.productId}`);
               }}
@@ -54,7 +54,7 @@ const AnalysisResultItem: FC<AnalysisResultItemProps> = ({ record }) => {
           )}
 
           {(record.decodeStatus === "CANCELLED" || record.decodeStatus === "FAILED") && (
-            <button className="text-sm text-blue-600 hover:text-blue-700 font-medium">
+            <button className="text-sm text-blue-600 hover:text-blue-700 font-medium cursor-pointer">
               다시 분석하기 →
             </button>
           )}
@@ -102,7 +102,7 @@ export const AnalysisResults: FC = () => {
           <p className="text-red-600 mb-4">데이터를 불러오는데 실패했습니다.</p>
           <button
             onClick={() => window.location.reload()}
-            className="text-blue-600 hover:text-blue-700"
+            className="text-blue-600 hover:text-blue-700 cursor-pointer"
           >
             다시 시도
           </button>
@@ -148,7 +148,7 @@ export const AnalysisResults: FC = () => {
           <p className="text-gray-500 mb-4">첫 번째 제품을 분석해보세요!</p>
           <button
             onClick={() => (window.location.href = "/enroll")}
-            className="bg-emerald-600 text-white px-4 py-2 rounded-md hover:bg-emerald-700 transition-colors"
+            className="bg-emerald-600 text-white px-4 py-2 rounded-md hover:bg-emerald-700 transition-colors cursor-pointer"
           >
             제품 분석하기
           </button>

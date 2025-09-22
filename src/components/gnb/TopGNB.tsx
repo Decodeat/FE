@@ -96,7 +96,7 @@ const TopGNB = () => {
                   e.stopPropagation();
                   toggleDropdown("pages");
                 }}
-                className={`flex items-center space-x-1 px-4 py-2 font-medium transition-colors text-gray-700 hover:text-emerald-600 ${
+                className={`flex items-center space-x-1 px-4 py-2 font-medium transition-colors text-gray-700 hover:text-emerald-600 cursor-pointer ${
                   isNutritionActive
                     ? "text-[1.125rem] border-b-2 border-emerald-500 font-semibold"
                     : "text-[1rem]"
@@ -137,7 +137,7 @@ const TopGNB = () => {
                   e.stopPropagation();
                   toggleDropdown("account");
                 }}
-                className={`flex items-center space-x-1 px-4 py-2 font-medium transition-colors text-gray-700 hover:text-emerald-600 ${
+                className={`flex items-center space-x-1 px-4 py-2 font-medium transition-colors text-gray-700 hover:text-emerald-600 cursor-pointer ${
                   isAccountActive
                     ? "text-[1.125rem] border-b-2 border-emerald-500 font-semibold"
                     : "text-[1rem]"
@@ -226,7 +226,7 @@ const TopGNB = () => {
                     e.stopPropagation();
                     setIsUserDropdownOpen(!isUserDropdownOpen);
                   }}
-                  className="hidden sm:flex items-center space-x-2 bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded-lg text-lg font-medium transition-colors"
+                  className="hidden sm:flex items-center space-x-2 bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded-lg text-lg font-medium transition-colors cursor-pointer"
                 >
                   <User className="w-5 h-5" />
                   <span>{user.nickname}님</span>
@@ -241,7 +241,7 @@ const TopGNB = () => {
                         navigate("/myPage");
                         setIsUserDropdownOpen(false);
                       }}
-                      className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center space-x-2"
+                      className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center space-x-2 cursor-pointer"
                     >
                       <User className="w-4 h-4" />
                       <span>마이페이지</span>
@@ -249,7 +249,7 @@ const TopGNB = () => {
                     <div className="border-t border-gray-200 my-1"></div>
                     <button
                       onClick={handleLogout}
-                      className="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 flex items-center space-x-2"
+                      className="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 flex items-center space-x-2 cursor-pointer"
                     >
                       <LogOut className="w-4 h-4" />
                       <span>로그아웃</span>
@@ -261,7 +261,7 @@ const TopGNB = () => {
               // 로그아웃 상태: 로그인 버튼
               <button
                 onClick={() => navigate("/login")}
-                className="hidden sm:flex items-center bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded-lg text-lg font-medium transition-colors"
+                className="hidden sm:flex items-center bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded-lg text-lg font-medium transition-colors cursor-pointer"
               >
                 <span>로그인</span>
               </button>
@@ -270,7 +270,7 @@ const TopGNB = () => {
             {/* 모바일 햄버거 버튼 */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="lg:hidden p-2 rounded-lg transition-colors text-gray-600 hover:text-gray-900 hover:bg-gray-100 ml-4"
+              className="lg:hidden p-2 rounded-lg transition-colors text-gray-600 hover:text-gray-900 hover:bg-gray-100 ml-4 cursor-pointer"
               aria-label="Toggle menu"
             >
               <Menu className="w-6 h-6" />

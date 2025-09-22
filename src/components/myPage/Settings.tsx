@@ -54,10 +54,10 @@ export const Settings: FC = () => {
         <div>
           <h3 className="font-semibold text-lg mb-3">계정 관리</h3>
           <div className="space-y-2">
-            <button className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded">
+            <button className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded cursor-pointer">
               비밀번호 변경
             </button>
-            <button className="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded">
+            <button className="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded cursor-pointer">
               계정 삭제
             </button>
           </div>
@@ -65,7 +65,7 @@ export const Settings: FC = () => {
 
         <button
           type="submit"
-          className="w-full bg-emerald-600 text-white py-2 px-4 rounded-md hover:bg-emerald-700 transition-colors"
+          className="w-full bg-emerald-600 text-white py-2 px-4 rounded-md hover:bg-emerald-700 transition-colors cursor-pointer"
         >
           설정 저장
         </button>

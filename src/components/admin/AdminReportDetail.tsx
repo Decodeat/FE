@@ -159,7 +159,7 @@ const AdminReportDetail: React.FC = () => {
         <p className="text-gray-500 mb-4">잠시 후 다시 시도해 주세요.</p>
         <button
           onClick={() => navigate(-1)}
-          className="bg-[#79CCB1] text-white px-4 py-2 rounded-lg hover:bg-[#2D5945]"
+          className="bg-[#79CCB1] text-white px-4 py-2 rounded-lg hover:bg-[#2D5945] cursor-pointer"
         >
           돌아가기
         </button>

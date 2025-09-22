@@ -23,7 +23,7 @@ const LeftGNB = () => {
         <div className="mb-0">
           <h4>
             <button
-              className="flex items-center justify-between w-full text-xl font-medium py-2 text-left hover:bg-gray-50 rounded-lg px-2"
+              className="flex items-center justify-between w-full text-xl font-medium py-2 text-left hover:bg-gray-50 rounded-lg px-2 cursor-pointer"
               type="button"
               onClick={() => setIsLivingRoomOpen(!isLivingRoomOpen)}
               aria-expanded={isLivingRoomOpen}

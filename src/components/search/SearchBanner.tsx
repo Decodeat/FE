@@ -48,7 +48,7 @@ const SearchBanner = ({ onSearchComplete }: SearchBannerProps) => {
                     <button
                       key={item.productId}
                       onClick={() => handleAutocompleteSelect(item.productName)}
-                      className="w-full text-left px-4 py-2 hover:bg-gray-50 first:rounded-t-lg last:rounded-b-lg text-gray-900"
+                      className="w-full text-left px-4 py-2 hover:bg-gray-50 first:rounded-t-lg last:rounded-b-lg text-gray-900 cursor-pointer"
                     >
                       {item.productName}
                     </button>
@@ -58,7 +58,7 @@ const SearchBanner = ({ onSearchComplete }: SearchBannerProps) => {
             </div>
             <button
               onClick={handleSearch}
-              className="bg-white text-[#2D5945] px-6 py-3 rounded-lg font-medium hover:bg-gray-100 transition-colors cursor-pointer"
+              className="bg-white text-[#2D5945] px-6 py-3 rounded-lg font-medium hover:bg-gray-100 transition-colors cursor-pointer "
             >
               검색
             </button>

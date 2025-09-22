@@ -164,7 +164,7 @@ const AdminReports: React.FC = () => {
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                       <button
                         onClick={() => navigate(`/admin/reports/${report.reportId}`)}
-                        className="text-[#79CCB1] hover:text-[#2D5945] transition-colors duration-200"
+                        className="text-[#79CCB1] hover:text-[#2D5945] transition-colors duration-200 cursor-pointer"
                       >
                         자세히 보기
                       </button>
