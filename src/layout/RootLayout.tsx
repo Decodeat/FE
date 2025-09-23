@@ -55,9 +55,9 @@ const RootLayout = () => {
         </main>
       </div>
 
-      {/* 로그인 모달 */}
+      {/* 로그인 모달 - 등록 페이지에서는 표시하지 않음 */}
       <MessageModal
-        isOpen={showLoginModal}
+        isOpen={showLoginModal && !isEnrollPage}
         onClose={handleLoginModalClose}
         title="로그인이 필요합니다"
         message="로그인이 필요한 서비스입니다. 로그인 페이지로 이동하시겠습니까?"

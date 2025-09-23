@@ -1,14 +1,52 @@
-import { useEffect, useState, type FC } from "react";
+import { useEffect, useState, useCallback, type FC } from "react";
 import { useNavigate } from "react-router-dom";
 import UploadSlot from "../components/enroll/UploadSlot";
 import { useEnroll } from "../hooks/useEnroll";
 import { useMessageModal } from "../hooks/useMessageModal";
 import MessageModal from "../components/ui/MessageModal";
+import { useAuthStore } from "../store/useAuthStore";
 import type { EnrollFormData } from "../types/enroll";
 
 const EnrollPage: FC = () => {
   const navigate = useNavigate();
-  const { modalState, showSuccess, showError, hideModal } = useMessageModal();
+  const {
+    modalState,
+    showSuccess,
+    showError,
+    showWarning,
+    hideModal: originalHideModal,
+  } = useMessageModal();
+  const { showLoginModal, setShowLoginModal } = useAuthStore();
+
+  // 커스텀 hideModal - 전역 로그인 모달 상태도 함께 초기화
+  const hideModal = useCallback(() => {
+    setShowLoginModal(false);
+    originalHideModal();
+  }, [setShowLoginModal, originalHideModal]);
+
+  // 전역 로그인 모달 상태 감지
+  useEffect(() => {
+    if (showLoginModal) {
+      setShowLoginModal(false); // 전역 상태 즉시 초기화
+      showWarning("등록하시려면 로그인해주세요", "로그인이 필요합니다", [
+        {
+          label: "취소",
+          variant: "secondary",
+          onClick: () => {
+            hideModal();
+          },
+        },
+        {
+          label: "로그인하기",
+          variant: "primary",
+          onClick: () => {
+            hideModal();
+            navigate("/login");
+          },
+        },
+      ]);
+    }
+  }, [showLoginModal, showWarning, setShowLoginModal, hideModal, navigate]);
 
   // 미리보기 URL
   const [ingNutriPreviews, setIngNutriPreviews] = useState<(string | null)[]>([null, null]);
@@ -174,14 +212,41 @@ const EnrollPage: FC = () => {
       },
       onError: (err: unknown) => {
         console.error(err);
-        let errorMessage = "제품 등록 중 오류가 발생했습니다.";
+
+        // 401 에러 (인증 실패) 체크
         if (err && typeof err === "object" && "response" in err) {
-          const response = (err as { response?: { data?: { message?: string } } }).response;
+          const response = (err as { response?: { status?: number; data?: { message?: string } } })
+            .response;
+
+          if (response?.status === 401) {
+            showWarning("등록하시려면 로그인해주세요", "로그인이 필요합니다", [
+              {
+                label: "홈으로 가기",
+                variant: "secondary",
+                onClick: () => {
+                  hideModal();
+                  navigate("/");
+                },
+              },
+              {
+                label: "로그인하기",
+                variant: "primary",
+                onClick: () => {
+                  hideModal();
+                  navigate("/login");
+                },
+              },
+            ]);
+            return;
+          }
+
           if (response?.data?.message) {
-            errorMessage = response.data.message;
+            showError(response.data.message, "등록 실패");
+            return;
           }
         }
-        showError(errorMessage, "등록 실패");
+
+        showError("제품 등록 중 오류가 발생했습니다.", "등록 실패");
       },
     });
   };

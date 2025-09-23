@@ -79,6 +79,12 @@ API.interceptors.response.use(
       return Promise.reject(error);
     }
 
+    // 등록 페이지에서는 바로 로그인 모달 띄우기 (토큰 갱신 시도 안함)
+    if (window.location.pathname === "/enroll" && error.response?.status === 401) {
+      useAuthStore.getState().setShowLoginModal(true);
+      return Promise.reject(error);
+    }
+
     // 401 에러이고 아직 재시도하지 않은 경우
     if (error.response?.status === 401 && !originalRequest._retry) {
       if (isRefreshing) {
