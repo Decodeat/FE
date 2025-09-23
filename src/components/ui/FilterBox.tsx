@@ -29,9 +29,9 @@ const FilterBox = ({ className = "" }: FilterBoxProps) => {
         {selectedCount > 0 && (
           <div className="flex items-center gap-2">
             <span className="text-xs text-[#2D5945]/80">{selectedCount}개 선택됨</span>
-            <button 
+            <button
               onClick={() => {
-                categories.forEach(category => {
+                categories.forEach((category) => {
                   if (checkedItems[category.id]) {
                     toggleFilter(category.id);
                   }
@@ -44,7 +44,7 @@ const FilterBox = ({ className = "" }: FilterBoxProps) => {
           </div>
         )}
       </div>
-      
+
       {/* 필터 옵션들을 2행으로 배치 */}
       <div className="bg-white/90 backdrop-blur-sm rounded-lg p-3 sm:p-4 border border-white/30 shadow-sm">
         <div className="grid grid-cols-4 lg:grid-cols-4 gap-2 sm:gap-3">
