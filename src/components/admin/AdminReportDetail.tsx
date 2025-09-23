@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, Upload } from "lucide-react";
 import { useAdminReportDetail } from "../../hooks/useAdminReportDetail";
 import { useMessageModal } from "../../hooks/useMessageModal";
 import MessageModal from "../ui/MessageModal";
 import { acceptNutritionReport, acceptImageReport, rejectReport } from "../../apis/adminReports";
-import type { NutritionInfo } from "../../types/report";
+import type { NutritionInfo, ReportItem, ReportListResult, ReportStatus } from "../../types/report";
 
 const AdminReportDetail: React.FC = () => {
   const { reportId } = useParams<{ reportId: string }>();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [newImage, setNewImage] = useState<File | null>(null);
   const [newImagePreview, setNewImagePreview] = useState<string | null>(null);
@@ -102,16 +104,49 @@ const AdminReportDetail: React.FC = () => {
   const handleAcceptReport = async () => {
     if (!report) return;
 
+    // 낙관적 업데이트: 즉시 UI 상태 변경
+    const updateReportStatus = (newStatus: ReportStatus) => {
+      // 신고 리스트 캐시 업데이트
+      queryClient.setQueriesData(
+        { queryKey: ["adminReports"] },
+        (oldData: ReportListResult | undefined) => {
+          if (!oldData || !oldData.reportList) return oldData;
+
+          return {
+            ...oldData,
+            reportList: oldData.reportList.map((item: ReportItem) =>
+              item.reportId === report.reportId ? { ...item, reportStatus: newStatus } : item,
+            ),
+          };
+        },
+      );
+
+      // 신고 상세 캐시 업데이트
+      queryClient.setQueryData(
+        ["adminReportDetail", report.reportId],
+        (oldData: ReportItem | undefined) => {
+          if (!oldData) return oldData;
+          return { ...oldData, reportStatus: newStatus };
+        },
+      );
+    };
+
     try {
       if (report.reportType === "NUTRITION_UPDATE") {
         showConfirm(
           "사용자가 요청한 영양성분 정보로 업데이트됩니다.",
           async () => {
             try {
+              // 낙관적 업데이트 적용
+              updateReportStatus("ACCEPTED" as ReportStatus);
+
               await acceptNutritionReport(report.reportId);
               showSuccess("영양성분이 성공적으로 수정되었습니다.");
               setTimeout(() => navigate(-1), 2000);
             } catch {
+              // 실패 시 캐시 되돌리기
+              queryClient.invalidateQueries({ queryKey: ["adminReports"] });
+              queryClient.invalidateQueries({ queryKey: ["adminReportDetail", report.reportId] });
               showError("영양성분 수정 중 오류가 발생했습니다.");
             }
           },
@@ -127,11 +162,17 @@ const AdminReportDetail: React.FC = () => {
           "업로드한 이미지로 제품 이미지가 교체됩니다.",
           async () => {
             try {
+              // 낙관적 업데이트 적용
+              updateReportStatus("ACCEPTED" as ReportStatus);
+
               // 이미지 신고 승인 (새 이미지 파일과 함께)
               await acceptImageReport(report.reportId, newImage);
               showSuccess("이미지가 성공적으로 교체되었습니다.");
               setTimeout(() => navigate(-1), 2000);
             } catch (error) {
+              // 실패 시 캐시 되돌리기
+              queryClient.invalidateQueries({ queryKey: ["adminReports"] });
+              queryClient.invalidateQueries({ queryKey: ["adminReportDetail", report.reportId] });
               console.error("이미지 교체 오류:", error);
               showError("이미지 교체 중 오류가 발생했습니다.");
             }
@@ -151,10 +192,40 @@ const AdminReportDetail: React.FC = () => {
       "신고가 거부되며 되돌릴 수 없습니다.",
       async () => {
         try {
+          // 낙관적 업데이트: 즉시 UI 상태 변경
+          // 신고 리스트 캐시 업데이트
+          queryClient.setQueriesData(
+            { queryKey: ["adminReports"] },
+            (oldData: ReportListResult | undefined) => {
+              if (!oldData || !oldData.reportList) return oldData;
+
+              return {
+                ...oldData,
+                reportList: oldData.reportList.map((item: ReportItem) =>
+                  item.reportId === report.reportId
+                    ? { ...item, reportStatus: "REJECTED" as ReportStatus }
+                    : item,
+                ),
+              };
+            },
+          );
+
+          // 신고 상세 캐시 업데이트
+          queryClient.setQueryData(
+            ["adminReportDetail", report.reportId],
+            (oldData: ReportItem | undefined) => {
+              if (!oldData) return oldData;
+              return { ...oldData, reportStatus: "REJECTED" as ReportStatus };
+            },
+          );
+
           await rejectReport(report.reportId);
           showSuccess("신고가 거부되었습니다.");
           setTimeout(() => navigate(-1), 2000);
         } catch {
+          // 실패 시 캐시 되돌리기
+          queryClient.invalidateQueries({ queryKey: ["adminReports"] });
+          queryClient.invalidateQueries({ queryKey: ["adminReportDetail", report.reportId] });
           showError("신고 거부 중 오류가 발생했습니다.");
         }
       },

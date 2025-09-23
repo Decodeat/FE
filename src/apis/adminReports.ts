@@ -18,7 +18,12 @@ export const getAdminReportDetail = async (reportId: number): Promise<ReportDeta
 
 // 영양성분 수정 신고 승인
 export const acceptNutritionReport = async (reportId: number) => {
-  const response = await API.patch(`/admin/reports/${reportId}/accept`);
+  const formData = new FormData(); //영양성분은 빈 formData 전송
+  const response = await API.patch(`/admin/reports/${reportId}/accept`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
   return response.data;
 };
 
@@ -29,7 +34,7 @@ export const acceptImageReport = async (reportId: number, newImageFile?: File) =
   // 새 이미지가 있으면 PNG로 변환하여 추가
   if (newImageFile) {
     const pngImage = await convertToPng(newImageFile);
-    formData.append("newImage", pngImage);
+    formData.append("newImageUrl", pngImage);
   }
 
   const response = await API.patch(`/admin/reports/${reportId}/accept`, formData, {
