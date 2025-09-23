@@ -153,31 +153,34 @@ const AdminReportDetail: React.FC = () => {
           "영양성분 수정을 승인하시겠습니까?",
         );
       } else if (report.reportType === "INAPPROPRIATE_IMAGE") {
-        if (!newImage) {
-          showError("새로운 이미지를 업로드해주세요.");
-          return;
-        }
+        const confirmMessage = newImage
+          ? "업로드한 이미지로 제품 이미지가 교체됩니다."
+          : "부적절한 이미지가 삭제됩니다.";
+
+        const successMessage = newImage
+          ? "이미지가 성공적으로 교체되었습니다."
+          : "부적절한 이미지가 성공적으로 삭제되었습니다.";
 
         showConfirm(
-          "업로드한 이미지로 제품 이미지가 교체됩니다.",
+          confirmMessage,
           async () => {
             try {
               // 낙관적 업데이트 적용
               updateReportStatus("ACCEPTED" as ReportStatus);
 
-              // 이미지 신고 승인 (새 이미지 파일과 함께)
-              await acceptImageReport(report.reportId, newImage);
-              showSuccess("이미지가 성공적으로 교체되었습니다.");
+              // 이미지 신고 승인 (새 이미지가 있으면 첨부, 없으면 빈 FormData)
+              await acceptImageReport(report.reportId, newImage || undefined);
+              showSuccess(successMessage);
               setTimeout(() => navigate(-1), 2000);
             } catch (error) {
               // 실패 시 캐시 되돌리기
               queryClient.invalidateQueries({ queryKey: ["adminReports"] });
               queryClient.invalidateQueries({ queryKey: ["adminReportDetail", report.reportId] });
-              console.error("이미지 교체 오류:", error);
-              showError("이미지 교체 중 오류가 발생했습니다.");
+              console.error("이미지 처리 오류:", error);
+              showError("이미지 처리 중 오류가 발생했습니다.");
             }
           },
-          "이미지 교체를 승인하시겠습니까?",
+          "이미지 신고를 승인하시겠습니까?",
         );
       }
     } catch {
