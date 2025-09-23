@@ -6,6 +6,7 @@ import { getProductDetail } from "../apis/productDetail";
 import { createCalorieInfo } from "../utils/nutritionUtils";
 import NutritionChart from "../components/detail/NutritionChart";
 import DetailedNutrients from "../components/detail/DetailedNutrients";
+import RecommendedProducts from "../components/detail/RecommendedProducts";
 import { useImageReport } from "../hooks/useReport";
 import { useMessageModal } from "../hooks/useMessageModal";
 import { useAuthStore } from "../store/useAuthStore";
@@ -254,6 +255,9 @@ const ProductDetailPage = () => {
 
         {/* 세부 영양소 섹션 */}
         <DetailedNutrients product={product} />
+
+        {/* 추천 상품 섹션 */}
+        <RecommendedProducts productId={product.productId} />
       </div>
 
       {/* 메시지 모달 */}

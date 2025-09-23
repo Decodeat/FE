@@ -1,5 +1,10 @@
 import { API } from "./axios";
-import type { LatestProductsResponse, LatestProductsParams } from "../types/productList";
+import type {
+  LatestProductsResponse,
+  LatestProductsParams,
+  ProductBasedRecommendationResponse,
+  ProductBasedRecommendationParams,
+} from "../types/productList";
 
 // 홈화면용 최신순 제품 조회
 export const getLatestProducts = async (
@@ -18,6 +23,28 @@ export const getLatestProducts = async (
 
   if (!response.data.isSuccess) {
     throw new Error(response.data.message || "최신 제품 조회에 실패했습니다.");
+  }
+
+  return response.data;
+};
+
+// 상품 기반 추천 조회
+export const getProductBasedRecommendation = async (
+  params: ProductBasedRecommendationParams,
+): Promise<ProductBasedRecommendationResponse> => {
+  const searchParams = new URLSearchParams();
+  searchParams.append("productId", params.productId.toString());
+
+  if (params.limit) {
+    searchParams.append("limit", params.limit.toString());
+  }
+
+  const response = await API.get<ProductBasedRecommendationResponse>(
+    `/products/recommendation/product-based?${searchParams.toString()}`,
+  );
+
+  if (!response.data.isSuccess) {
+    throw new Error(response.data.message || "추천 상품 조회에 실패했습니다.");
   }
 
   return response.data;

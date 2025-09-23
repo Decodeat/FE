@@ -1,6 +1,6 @@
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { getLatestProducts } from "../apis/productList";
-import type { LatestProduct } from "../types/productList";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { getLatestProducts, getProductBasedRecommendation } from "../apis/productList";
+import type { LatestProduct, ProductBasedRecommendationParams } from "../types/productList";
 
 // 무한스크롤용 최신 제품 조회 훅
 export const useLatestProducts = () => {
@@ -36,4 +36,15 @@ export const useLatestProductsList = () => {
     hasProducts: products.length > 0,
     hasNextPage: query.hasNextPage,
   };
+};
+
+// 상품 기반 추천 훅
+export const useProductBasedRecommendation = (params: ProductBasedRecommendationParams) => {
+  return useQuery({
+    queryKey: ["products", "recommendation", "product-based", params.productId, params.limit],
+    queryFn: () => getProductBasedRecommendation(params),
+    enabled: !!params.productId, // productId가 있을 때만 실행
+    staleTime: 10 * 60 * 1000, // 10분간 캐시 유지
+    gcTime: 15 * 60 * 1000, // 15분간 가비지 컬렉션 방지
+  });
 };
