@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { ChevronDown, Menu, ShoppingCart, User, LogOut } from "lucide-react";
-import { pagesMenu, accountMenu, accountPages } from "../../config/menuConfig";
+import { pagesMenu } from "../../config/menuConfig";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../store/useAuthStore";
 import { useLogout, useUser } from "../../hooks/useAuth";
@@ -38,12 +38,7 @@ const TopGNB = () => {
 
   // 현재 경로 기반 상위 메뉴 활성화 감지
   const nutritionHrefs = pagesMenu.flatMap((s) => s.items.map((i) => i.href));
-  const accountHrefs = [
-    ...accountMenu.flatMap((s) => s.items.map((i) => i.href)),
-    ...accountPages.map((i) => i.href),
-  ];
   const isNutritionActive = nutritionHrefs.some((h) => location.pathname.startsWith(h));
-  const isAccountActive = accountHrefs.some((h) => location.pathname.startsWith(h));
 
   // 드롭다운 토글 핸들러
   const toggleDropdown = (dropdownName: string | null) => {
@@ -125,59 +120,6 @@ const TopGNB = () => {
                         </div>
                       </div>
                     ))}
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* 추천제품 드롭다운 */}
-            <div className="relative">
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  toggleDropdown("account");
-                }}
-                className={`flex items-center space-x-1 px-4 py-2 font-medium transition-colors text-gray-700 hover:text-emerald-600 cursor-pointer ${
-                  isAccountActive
-                    ? "text-[1.125rem] border-b-2 border-emerald-500 font-semibold"
-                    : "text-[1rem]"
-                }`}
-              >
-                <span>추천 제품</span>
-                <ChevronDown className="w-4 h-4" />
-              </button>
-
-              {openDropdown === "account" && (
-                <div className="absolute top-full left-0 mt-2 w-64 rounded-lg shadow-lg border bg-white border-gray-200 z-50">
-                  <div className="p-4 space-y-4">
-                    {accountMenu.map((section, index) => (
-                      <div key={index}>
-                        <h4 className="font-medium text-sm mb-2 text-gray-900">{section.title}</h4>
-                        <div className="space-y-1">
-                          {section.items.map((item, itemIndex) => (
-                            <a
-                              key={itemIndex}
-                              href={item.href}
-                              className="block px-3 py-1 text-sm rounded transition-colors text-gray-600 hover:text-emerald-600 hover:bg-gray-50"
-                            >
-                              {item.name}
-                            </a>
-                          ))}
-                        </div>
-                      </div>
-                    ))}
-                    <hr className="my-2 border-gray-200" />
-                    <div className="space-y-1">
-                      {accountPages.map((item, index) => (
-                        <a
-                          key={index}
-                          href={item.href}
-                          className="block px-3 py-1 text-sm rounded transition-colors text-gray-600 hover:text-emerald-600 hover:bg-gray-50"
-                        >
-                          {item.name}
-                        </a>
-                      ))}
-                    </div>
                   </div>
                 </div>
               )}
@@ -293,9 +235,6 @@ const TopGNB = () => {
               </NavLink>
               <a href="/pages" className="block text-base font-medium text-gray-900">
                 영양소 정보
-              </a>
-              <a href="/account" className="block text-base font-medium text-gray-900">
-                추천 제품
               </a>
               <NavLink
                 to="/support"
