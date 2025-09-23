@@ -14,11 +14,14 @@ interface AuthState {
   setLoading: (loading: boolean) => void;
   setShowLoginModal: (show: boolean) => void;
   logout: () => void;
+
+  // 헬퍼 함수들
+  isAdmin: () => boolean;
 }
 
 export const useAuthStore = create<AuthState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       // 초기 상태
       user: null,
       isAuthenticated: false,
@@ -45,6 +48,11 @@ export const useAuthStore = create<AuthState>()(
           isAuthenticated: false,
           showLoginModal: false,
         }),
+
+      // 헬퍼 함수들
+      isAdmin: () => {
+        return get().user?.role === "ADMIN";
+      },
     }),
     {
       name: "auth-store", // localStorage 키 이름

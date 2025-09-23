@@ -4,6 +4,7 @@ import type { ApiResponse } from "./common";
 export interface User {
   email: string;
   nickname: string;
+  role: "USER" | "ADMIN";
 }
 
 // 사용자 정보 API 응답 타입

@@ -10,7 +10,7 @@ import { useLogout, useUser } from "../hooks/useAuth";
 import MessageModal from "../components/ui/MessageModal";
 
 const MyPage: FC = () => {
-  const { user, isAuthenticated } = useAuthStore();
+  const { user, isAuthenticated, isAdmin } = useAuthStore();
   const navigate = useNavigate();
   const logoutMutation = useLogout();
   useUser(); // 사용자 정보 쿼리 관리
@@ -27,13 +27,28 @@ const MyPage: FC = () => {
     }
   }, [isAuthenticated, user]);
 
+  // USER가 admin 탭에 접근하려 할 때 리디렉션
+  useEffect(() => {
+    if (activeTab === "admin" && !isAdmin()) {
+      setActiveTab("analysis");
+      setSearchParams({ tab: "analysis" });
+    }
+  }, [activeTab, isAdmin, setSearchParams]);
+
   // URL 파라미터에서 탭 상태 읽기
   useEffect(() => {
     const tab = searchParams.get("tab");
-    if (tab && ["overview", "settings", "analysis", "admin", "signout"].includes(tab)) {
+    const validTabs = ["overview", "settings", "analysis", "signout"];
+
+    // ADMIN일 때만 admin 탭 허용
+    if (isAdmin()) {
+      validTabs.push("admin");
+    }
+
+    if (tab && validTabs.includes(tab)) {
       setActiveTab(tab as "overview" | "settings" | "analysis" | "admin" | "signout");
     }
-  }, [searchParams]);
+  }, [searchParams, isAdmin]);
 
   // 탭 변경 시 URL 파라미터 업데이트
   const handleTabChange = (tab: "overview" | "settings" | "analysis" | "admin" | "signout") => {
@@ -124,14 +139,16 @@ const MyPage: FC = () => {
             >
               내 제품 분석 결과
             </button>
-            <button
-              onClick={() => handleTabChange("admin")}
-              className={`w-full text-left flex items-center px-3 py-2 rounded hover:bg-gray-100 ${
-                activeTab === "admin" ? "bg-emerald-100 text-emerald-700 font-medium" : ""
-              }`}
-            >
-              신고 요청 관리
-            </button>
+            {isAdmin() && (
+              <button
+                onClick={() => handleTabChange("admin")}
+                className={`w-full text-left flex items-center px-3 py-2 rounded hover:bg-gray-100 ${
+                  activeTab === "admin" ? "bg-emerald-100 text-emerald-700 font-medium" : ""
+                }`}
+              >
+                신고 요청 관리
+              </button>
+            )}
             <button
               onClick={() => handleTabChange("signout")}
               className={`w-full text-left flex items-center px-3 py-2 rounded hover:bg-gray-100 ${

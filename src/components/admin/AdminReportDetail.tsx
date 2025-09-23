@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft, Upload } from "lucide-react";
 import { useAdminReportDetail } from "../../hooks/useAdminReportDetail";
-import { getReportTypeText } from "../../types/report";
 import { useMessageModal } from "../../hooks/useMessageModal";
 import MessageModal from "../ui/MessageModal";
 import { acceptNutritionReport, acceptImageReport, rejectReport } from "../../apis/adminReports";
@@ -216,10 +215,6 @@ const AdminReportDetail: React.FC = () => {
           </button>
           <div>
             <h1 className="text-2xl font-bold text-gray-900">신고 상세 조회</h1>
-            <p className="text-gray-600">
-              신고자 : {report.nickname} | {getReportTypeText(report.reportType)} |{" "}
-              {formatDate(report.createdAt)}
-            </p>
           </div>
         </div>
 
@@ -235,7 +230,7 @@ const AdminReportDetail: React.FC = () => {
                   <p className="text-gray-600 text-lg">{product.manufacturer}</p>
                 </div>
                 <div className="text-sm text-gray-500">
-                  <p>신고자 ID: {report.reporterId}</p>
+                  <p>신고자 이름: {report.nickname}</p>
                   <p>신고 일시: {formatDate(report.createdAt)}</p>
                 </div>
               </div>
@@ -393,7 +388,7 @@ const AdminReportDetail: React.FC = () => {
                   <p className="text-gray-600 text-lg">{product.manufacturer}</p>
                 </div>
                 <div className="text-sm text-gray-500">
-                  <p>신고자 ID: {report.reporterId}</p>
+                  <p>신고자 이름: {report.nickname}</p>
                   <p>신고 일시: {formatDate(report.createdAt)}</p>
                 </div>
               </div>
