@@ -52,12 +52,6 @@ const AnalysisResultItem: FC<AnalysisResultItemProps> = ({ record }) => {
               분석 결과 보기 →
             </button>
           )}
-
-          {(record.decodeStatus === "CANCELLED" || record.decodeStatus === "FAILED") && (
-            <button className="text-sm text-blue-600 hover:text-blue-700 font-medium cursor-pointer">
-              다시 분석하기 →
-            </button>
-          )}
         </div>
       </div>
     </div>
