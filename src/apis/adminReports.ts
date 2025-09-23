@@ -24,7 +24,7 @@ export const acceptNutritionReport = async (reportId: number) => {
 // 이미지 신고 승인 (새 이미지 URL과 함께)
 export const acceptImageReport = async (reportId: number, newImageUrl: string) => {
   const response = await API.patch(`/admin/reports/${reportId}/accept`, {
-    imageUrl: newImageUrl,
+    newImageUrl : newImageUrl,
   });
   return response.data;
 };
