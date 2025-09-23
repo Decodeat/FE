@@ -65,12 +65,12 @@ const AdminReportDetail: React.FC = () => {
           "업로드한 이미지로 제품 이미지가 교체됩니다.",
           async () => {
             try {
-              // TODO: 이미지를 서버에 업로드하고 URL을 받아와야 함
-              const imageUrl = "uploaded_image_url"; // 실제로는 이미지 업로드 API 호출 필요
-              await acceptImageReport(report.reportId, imageUrl);
+              // 이미지 신고 승인 (새 이미지 파일과 함께)
+              await acceptImageReport(report.reportId, newImage);
               showSuccess("이미지가 성공적으로 교체되었습니다.");
               setTimeout(() => navigate(-1), 2000);
-            } catch {
+            } catch (error) {
+              console.error("이미지 교체 오류:", error);
               showError("이미지 교체 중 오류가 발생했습니다.");
             }
           },

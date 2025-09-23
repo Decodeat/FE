@@ -1,5 +1,6 @@
 import { API } from "./axios";
 import type { ReportListResponse, ReportDetailResponse } from "../types/report";
+import { convertToPng } from "../utils/image";
 
 // 관리자 신고 리스트 조회
 export const getAdminReports = async (page = 0, size = 10): Promise<ReportListResponse> => {
@@ -21,15 +22,28 @@ export const acceptNutritionReport = async (reportId: number) => {
   return response.data;
 };
 
-// 이미지 신고 승인 (새 이미지 URL과 함께)
-export const acceptImageReport = async (reportId: number, newImageUrl: string) => {
-  const response = await API.patch(`/admin/reports/${reportId}/accept`, {
-    newImageUrl : newImageUrl,
-  });
-  return response.data;
-};
+// 이미지 신고 승인 (새 이미지 파일과 함께)
+export const acceptImageReport = async (reportId: number, newImageFile?: File) => {
+  const formData = new FormData();
 
-// 신고 거부
+  // 새 이미지가 있으면 PNG로 변환하여 추가
+  if (newImageFile) {
+    const pngImage = await convertToPng(newImageFile);
+    formData.append("newImage", pngImage);
+  }
+
+  const response = await API.patch(`/admin/reports/${reportId}/accept`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+
+  if (!response.data.isSuccess) {
+    throw new Error(response.data.message || "이미지 신고 승인에 실패했습니다.");
+  }
+
+  return response.data;
+}; // 신고 거부
 export const rejectReport = async (reportId: number) => {
   const response = await API.patch(`/admin/reports/${reportId}/reject`);
   return response.data;
