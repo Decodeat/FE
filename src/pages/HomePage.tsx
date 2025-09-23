@@ -5,7 +5,7 @@ const HomePage = () => {
   return (
     <div>
       {/* 배너는 전체 너비 */}
-      <SearchBanner />
+      <SearchBanner showFilter={false} />
 
       {/* 아래 콘텐츠는 패딩 적용 */}
       <div className="px-4 md:px-6 lg:px-8">

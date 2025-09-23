@@ -30,7 +30,7 @@ const SearchProductGrid = () => {
     }
   }, [searchQuery]);
 
-  // LeftGNB에서 선택된 카테고리를 자동으로 검색에 반영
+  // FilterBox에서 선택된 카테고리를 자동으로 검색에 반영
   useEffect(() => {
     const selectedCategories = getSelectedProductCategories();
     setSearchParams((prev) => ({

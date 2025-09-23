@@ -10,6 +10,7 @@ interface FilterState {
   setSortBy: (sortBy: string) => void;
   getSelectedFilters: () => string[];
   getSelectedProductCategories: () => ProductCategory[];
+  getSelectedCount: () => number;
   clearAllFilters: () => void;
 }
 
@@ -48,6 +49,12 @@ export const useFilterStore = create<FilterState>()((set, get) => ({
   getSelectedFilters: () => {
     const { checkedItems } = get();
     return Object.keys(checkedItems).filter((key) => checkedItems[key]);
+  },
+
+  // 선택된 필터 개수 반환
+  getSelectedCount: () => {
+    const { checkedItems } = get();
+    return Object.values(checkedItems).filter(Boolean).length;
   },
 
   // API용 ProductCategory 배열 반환
