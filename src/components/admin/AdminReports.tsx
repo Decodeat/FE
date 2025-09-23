@@ -124,13 +124,13 @@ const AdminReports: React.FC = () => {
                             src={
                               report.reportType === "INAPPROPRIATE_IMAGE" && report.imageUrl
                                 ? report.imageUrl
-                                : report.productInfo.productImage || "/gyul.png"
+                                : report.productInfo.productImage || "/decodeatLogo.ico"
                             }
                             alt={report.productInfo.productName}
                             onClick={() => navigate(`/detail/${report.productInfo.productId}`)}
                             onError={(e) => {
                               const target = e.target as HTMLImageElement;
-                              target.src = "/gyul.png";
+                              target.src = "/decodeatLogo.ico";
                             }}
                           />
                         </div>

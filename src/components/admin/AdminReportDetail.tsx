@@ -435,12 +435,12 @@ const AdminReportDetail: React.FC = () => {
                     {allImages.length > 0 ? (
                       <>
                         <img
-                          src={allImages[currentImageIndex] || "/gyul.png"}
+                          src={allImages[currentImageIndex] || "/decodeatLogo.ico"}
                           alt={`${product.productName} - ${currentImageIndex + 1}`}
                           className="w-full h-full object-cover hover:opacity-90 transition-opacity"
                           onError={(e) => {
                             const target = e.target as HTMLImageElement;
-                            target.src = "/gyul.png";
+                            target.src = "/decodeatLogo.ico";
                           }}
                         />
                         {allImages.length > 1 && (
@@ -465,7 +465,11 @@ const AdminReportDetail: React.FC = () => {
                       </>
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">
-                        <img src="/gyul.png" alt="No image" className="w-32 h-32 opacity-50" />
+                        <img
+                          src="/decodeatLogo.ico"
+                          alt="No image"
+                          className="w-32 h-32 opacity-50"
+                        />
                       </div>
                     )}
                   </div>
@@ -592,12 +596,12 @@ const AdminReportDetail: React.FC = () => {
                   onClick={handleProductImageClick}
                 >
                   <img
-                    src={product.productImage || "/gyul.png"}
+                    src={product.productImage || "/decodeatLogo.ico"}
                     alt={product.productName}
                     className="w-full h-full object-cover hover:opacity-90 transition-opacity"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
-                      target.src = "/gyul.png";
+                      target.src = "/decodeatLogo.ico";
                     }}
                   />
                 </div>
