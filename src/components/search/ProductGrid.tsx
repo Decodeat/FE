@@ -37,7 +37,7 @@ const ProductCard = ({
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
           onError={(e) => {
             const target = e.target as HTMLImageElement;
-            target.src = "/decodeatLogo.ico"; // 기본 이미지로 대체
+            target.src = "/gyul.png"; // 기본 이미지로 대체
           }}
         />
       </div>
@@ -136,7 +136,7 @@ const ProductGrid = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {products.map((product) => {
           // 표시할 이미지 결정 (제품 사진 우선, 없으면 기본 이미지)
-          const displayImage = product.productImage || "/decodeatLogo.ico";
+          const displayImage = product.productImage || "/gyul.png";
 
           return (
             <ProductCard

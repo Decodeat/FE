@@ -244,12 +244,12 @@ const AdminReportDetail: React.FC = () => {
                     {allImages.length > 0 ? (
                       <>
                         <img
-                          src={allImages[currentImageIndex] || "/decodeatLogo.ico"}
+                          src={allImages[currentImageIndex] || "/gyul.png"}
                           alt={`${product.productName} - ${currentImageIndex + 1}`}
                           className="w-full h-full object-cover"
                           onError={(e) => {
                             const target = e.target as HTMLImageElement;
-                            target.src = "/decodeatLogo.ico";
+                            target.src = "/gyul.png";
                           }}
                         />
                         {allImages.length > 1 && (
@@ -274,11 +274,7 @@ const AdminReportDetail: React.FC = () => {
                       </>
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">
-                        <img
-                          src="/decodeatLogo.ico"
-                          alt="No image"
-                          className="w-32 h-32 opacity-50"
-                        />
+                        <img src="/gyul.png" alt="No image" className="w-32 h-32 opacity-50" />
                       </div>
                     )}
                   </div>
@@ -402,12 +398,12 @@ const AdminReportDetail: React.FC = () => {
                 </div>
                 <div className="relative bg-gray-100 aspect-square">
                   <img
-                    src={product.productImage || "/decodeatLogo.ico"}
+                    src={product.productImage || "/gyul.png"}
                     alt={product.productName}
                     className="w-full h-full object-cover"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
-                      target.src = "/decodeatLogo.ico";
+                      target.src = "/gyul.png";
                     }}
                   />
                 </div>

@@ -78,7 +78,7 @@ const SearchProductGrid = () => {
           {/* 상품 그리드 */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {searchResult.content.map((product) => {
-              const displayImage = product.productImage || "/decodeatLogo.ico";
+              const displayImage = product.productImage || "/gyul.png";
 
               return (
                 <div
@@ -93,7 +93,7 @@ const SearchProductGrid = () => {
                       className="w-full h-full object-cover"
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
-                        target.src = "/decodeatLogo.ico"; // 기본 이미지로 대체
+                        target.src = "/gyul.png"; // 기본 이미지로 대체
                       }}
                     />
                   </div>
