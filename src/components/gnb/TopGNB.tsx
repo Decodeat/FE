@@ -37,7 +37,7 @@ const TopGNB = () => {
   };
 
   // 현재 경로 기반 상위 메뉴 활성화 감지
-  const nutritionHrefs = pagesMenu.flatMap((s) => s.items.map((i) => i.href));
+  const nutritionHrefs = pagesMenu.map((item) => item.href);
   const isNutritionActive = nutritionHrefs.some((h) => location.pathname.startsWith(h));
 
   // 드롭다운 토글 핸들러
@@ -103,22 +103,15 @@ const TopGNB = () => {
 
               {openDropdown === "pages" && (
                 <div className="absolute top-full left-0 mt-2 w-80 rounded-lg shadow-lg border bg-white border-gray-200 z-50">
-                  <div className="p-4 space-y-4">
-                    {pagesMenu.map((section, index) => (
-                      <div key={index}>
-                        <h4 className="font-medium text-sm mb-2 text-gray-900">{section.title}</h4>
-                        <div className="space-y-1">
-                          {section.items.map((item, itemIndex) => (
-                            <a
-                              key={itemIndex}
-                              href={item.href}
-                              className="block px-3 py-1 text-sm rounded transition-colors text-gray-600 hover:text-emerald-600 hover:bg-gray-50"
-                            >
-                              {item.name}
-                            </a>
-                          ))}
-                        </div>
-                      </div>
+                  <div className="p-4 space-y-2">
+                    {pagesMenu.map((item, index) => (
+                      <a
+                        key={index}
+                        href={item.href}
+                        className="block px-3 py-2 text-sm rounded transition-colors text-gray-600 hover:text-emerald-600 hover:bg-gray-50"
+                      >
+                        {item.name}
+                      </a>
                     ))}
                   </div>
                 </div>

@@ -5,7 +5,7 @@ export interface MenuItem {
 }
 
 export interface MenuSection {
-  title: string;
+  title?: string;
   items: MenuItem[];
 }
 
@@ -26,30 +26,14 @@ export const megaMenuLandings: MenuItem[] = [
   { name: "Blog Homepage", href: "/blog" },
 ];
 
-export const pagesMenu: MenuSection[] = [
-  {
-    title: "탄수화물",
-    items: [
-      { name: "정제 탄수화물", href: "/nutrition/refined-carbohydrate" },
-      { name: "복합 탄수화물", href: "/nutrition/complex-carbohydrate" },
-    ],
-  },
-  {
-    title: "단백질",
-    items: [
-      { name: "분리유청 단백질", href: "/nutrition/whey-protein-isolate" },
-      { name: "농축유청 단백질", href: "/nutrition/whey-protein-concentrate" },
-      { name: "식물성 단백질", href: "/nutrition/plant-protein" },
-      { name: "동물성 단백질", href: "/nutrition/animal-protein" },
-    ],
-  },
-  {
-    title: "식이섬유",
-    items: [
-      { name: "수용성 식이섬유", href: "/nutrition/soluble-fiber" },
-      { name: "불용성 식이섬유", href: "/nutrition/insoluble-fiber" },
-    ],
-  },
+export const pagesMenu: MenuItem[] = [
+  { name: "정제 탄수화물", href: "/nutrition/refined-carbohydrate" },
+  { name: "복합 탄수화물", href: "/nutrition/complex-carbohydrate" },
+  { name: "식물성 단백질", href: "/nutrition/plant-protein" },
+  { name: "동물성 단백질", href: "/nutrition/animal-protein" },
+  { name: "알레르기 유발요소", href: "/nutrition/allergens" },
+  { name: "첨가물", href: "/nutrition/additives" },
+  { name: "기타", href: "/nutrition/others" },
 ];
 
 export const accountMenu: MenuSection[] = [
