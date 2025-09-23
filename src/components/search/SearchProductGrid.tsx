@@ -77,30 +77,35 @@ const SearchProductGrid = () => {
 
           {/* 상품 그리드 */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {searchResult.content.map((product) => (
-              <div
-                key={product.productId}
-                onClick={() => handleProductClick(product.productId)}
-                className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden cursor-pointer hover:shadow-md transition-shadow"
-              >
-                <div className="aspect-square bg-gray-100">
-                  <img
-                    src={product.productImage}
-                    alt={product.productName}
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = "/placeholder-product.jpg";
-                    }}
-                  />
+            {searchResult.content.map((product) => {
+              const displayImage = product.productImage || "/decodeatLogo.ico";
+
+              return (
+                <div
+                  key={product.productId}
+                  onClick={() => handleProductClick(product.productId)}
+                  className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden cursor-pointer hover:shadow-md transition-shadow"
+                >
+                  <div className="aspect-square bg-gray-100">
+                    <img
+                      src={displayImage}
+                      alt={product.productName}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = "/decodeatLogo.ico"; // 기본 이미지로 대체
+                      }}
+                    />
+                  </div>
+                  <div className="p-4">
+                    <p className="text-xs text-gray-500 mb-1">{product.manufacturer}</p>
+                    <h3 className="text-sm font-medium text-gray-900 line-clamp-2">
+                      {product.productName}
+                    </h3>
+                  </div>
                 </div>
-                <div className="p-4">
-                  <p className="text-xs text-gray-500 mb-1">{product.manufacturer}</p>
-                  <h3 className="text-sm font-medium text-gray-900 line-clamp-2">
-                    {product.productName}
-                  </h3>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           {/* 페이지네이션 */}
