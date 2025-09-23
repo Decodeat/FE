@@ -120,13 +120,14 @@ const AdminReports: React.FC = () => {
                       <div className="flex items-center">
                         <div className="h-12 w-12 flex-shrink-0">
                           <img
-                            className="h-12 w-12 rounded-lg object-cover"
+                            className="h-12 w-12 rounded-lg object-cover cursor-pointer hover:opacity-80 transition-opacity"
                             src={
                               report.reportType === "INAPPROPRIATE_IMAGE" && report.imageUrl
                                 ? report.imageUrl
                                 : report.productInfo.productImage || "/gyul.png"
                             }
                             alt={report.productInfo.productName}
+                            onClick={() => navigate(`/detail/${report.productInfo.productId}`)}
                             onError={(e) => {
                               const target = e.target as HTMLImageElement;
                               target.src = "/gyul.png";

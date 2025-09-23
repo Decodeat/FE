@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft, Upload } from "lucide-react";
 import { useAdminReportDetail } from "../../hooks/useAdminReportDetail";
@@ -13,6 +13,7 @@ const AdminReportDetail: React.FC = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [newImage, setNewImage] = useState<File | null>(null);
   const [newImagePreview, setNewImagePreview] = useState<string | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
 
   const {
     data: report,
@@ -23,6 +24,68 @@ const AdminReportDetail: React.FC = () => {
   });
 
   const { modalState, showSuccess, showError, showConfirm, hideModal } = useMessageModal();
+
+  // 드래그 앤 드롭 및 클립보드 이벤트 처리
+  useEffect(() => {
+    const handleDragEnter = (e: DragEvent) => {
+      if (e.dataTransfer?.types.includes("Files")) {
+        setIsDragging(true);
+      }
+    };
+
+    const handleDragLeave = (e: DragEvent) => {
+      if (e.clientX === 0 && e.clientY === 0) {
+        setIsDragging(false);
+      }
+    };
+
+    const handleDrop = () => setIsDragging(false);
+
+    // 클립보드 붙여넣기 이벤트 처리
+    const handlePaste = (e: ClipboardEvent) => {
+      if (report?.reportType !== "INAPPROPRIATE_IMAGE") return;
+
+      const items = e.clipboardData?.items;
+      if (!items) return;
+
+      for (let i = 0; i < items.length; i++) {
+        const item = items[i];
+        if (item.type.startsWith("image/")) {
+          e.preventDefault();
+          const file = item.getAsFile();
+          if (file) {
+            setNewImage(file);
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              setNewImagePreview(e.target?.result as string);
+            };
+            reader.readAsDataURL(file);
+            showSuccess("클립보드에서 이미지가 추가되었습니다!");
+          }
+          break;
+        }
+      }
+    };
+
+    window.addEventListener("dragenter", handleDragEnter);
+    window.addEventListener("dragleave", handleDragLeave);
+    window.addEventListener("drop", handleDrop);
+    window.addEventListener("paste", handlePaste);
+
+    return () => {
+      window.removeEventListener("dragenter", handleDragEnter);
+      window.removeEventListener("dragleave", handleDragLeave);
+      window.removeEventListener("drop", handleDrop);
+      window.removeEventListener("paste", handlePaste);
+    };
+  }, [report, showSuccess]);
+
+  // 제품 상세 페이지로 이동
+  const handleProductImageClick = () => {
+    if (report?.productInfo?.productId) {
+      navigate(`/detail/${report.productInfo.productId}`);
+    }
+  };
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -101,8 +164,49 @@ const AdminReportDetail: React.FC = () => {
 
   // 이미지 업로드 컴포넌트
   const ImageUpload: React.FC = () => {
+    const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      setIsDragging(false);
+
+      const files = e.dataTransfer.files;
+      if (files && files[0]) {
+        const file = files[0];
+        if (file.type.startsWith("image/")) {
+          setNewImage(file);
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            setNewImagePreview(e.target?.result as string);
+          };
+          reader.readAsDataURL(file);
+        }
+      }
+    };
+
+    const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+      e.preventDefault();
+    };
+
+    const handleDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      setIsDragging(true);
+    };
+
+    const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      // 컴포넌트 경계를 벗어날 때만 isDragging을 false로 설정
+      if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+        setIsDragging(false);
+      }
+    };
+
     return (
-      <div className="relative bg-gray-100 aspect-square">
+      <div
+        className="relative bg-gray-100 aspect-square"
+        onDrop={handleDrop}
+        onDragOver={handleDragOver}
+        onDragEnter={handleDragEnter}
+        onDragLeave={handleDragLeave}
+      >
         {newImagePreview ? (
           <div className="w-full h-full relative">
             <img
@@ -121,7 +225,13 @@ const AdminReportDetail: React.FC = () => {
             </button>
           </div>
         ) : (
-          <div className="w-full h-full flex flex-col items-center justify-center border-2 border-dashed border-gray-300 hover:border-[#79CCB1] transition-colors">
+          <div
+            className={`w-full h-full flex flex-col items-center justify-center border-2 border-dashed transition-colors ${
+              isDragging
+                ? "border-[#2D5945] bg-[#D2EDE4]"
+                : "border-gray-300 hover:border-[#79CCB1]"
+            }`}
+          >
             <Upload className="h-16 w-16 text-gray-400 mb-4" />
             <div className="text-center">
               <label className="cursor-pointer">
@@ -135,7 +245,11 @@ const AdminReportDetail: React.FC = () => {
                   onChange={handleImageChange}
                 />
               </label>
-              <p className="text-gray-500 text-sm mt-2">또는 이미지를 드래그하세요</p>
+              <p className="text-gray-500 text-sm mt-2">
+                {isDragging
+                  ? "이미지를 놓아주세요"
+                  : "또는 이미지를 드래그하거나 Ctrl+V로 붙여넣으세요"}
+              </p>
             </div>
           </div>
         )}
@@ -240,13 +354,16 @@ const AdminReportDetail: React.FC = () => {
               {/* 왼쪽: 제품 이미지 */}
               <div className="lg:col-span-1">
                 <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-                  <div className="relative bg-gray-100 aspect-square">
+                  <div
+                    className="relative bg-gray-100 aspect-square cursor-pointer"
+                    onClick={handleProductImageClick}
+                  >
                     {allImages.length > 0 ? (
                       <>
                         <img
                           src={allImages[currentImageIndex] || "/gyul.png"}
                           alt={`${product.productName} - ${currentImageIndex + 1}`}
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-cover hover:opacity-90 transition-opacity"
                           onError={(e) => {
                             const target = e.target as HTMLImageElement;
                             target.src = "/gyul.png";
@@ -396,11 +513,14 @@ const AdminReportDetail: React.FC = () => {
                 <div className="p-4">
                   <h2 className="text-lg font-semibold mb-4">현재 제품 이미지</h2>
                 </div>
-                <div className="relative bg-gray-100 aspect-square">
+                <div
+                  className="relative bg-gray-100 aspect-square cursor-pointer"
+                  onClick={handleProductImageClick}
+                >
                   <img
                     src={product.productImage || "/gyul.png"}
                     alt={product.productName}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover hover:opacity-90 transition-opacity"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
                       target.src = "/gyul.png";
