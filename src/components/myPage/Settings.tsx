@@ -40,23 +40,10 @@ export const Settings: FC = () => {
           </div>
         </div>
 
-        {/* 언어 설정 */}
-        <div>
-          <h3 className="font-semibold text-lg mb-3">언어 설정</h3>
-          <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500">
-            <option value="ko">한국어</option>
-            <option value="en">English</option>
-            <option value="ja">日本語</option>
-          </select>
-        </div>
-
         {/* 계정 관리 */}
         <div>
           <h3 className="font-semibold text-lg mb-3">계정 관리</h3>
           <div className="space-y-2">
-            <button className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded cursor-pointer">
-              비밀번호 변경
-            </button>
             <button className="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded cursor-pointer">
               계정 삭제
             </button>
