@@ -258,9 +258,10 @@ const EnrollPage: FC = () => {
         <div className="relative z-10 text-center max-w-2xl mx-auto px-4">
           <h1 className="text-2xl md:text-3xl font-bold text-[#2D5945] mb-2">제품 등록하기</h1>
           <p className="text-gray-700 mb-2">Tip. 영양정보 라벨이 잘 보이게 찍어주세요!</p>
-          <p className="text-sm text-gray-600">
-            📋 클립보드에 복사한 이미지를 Ctrl+V로 붙여넣을 수 있어요!
+          <p className="text-sm text-gray-600 mb-1">
+            📋 클립보드에 복사한 이미지를 Ctrl+V로 붙여넣거나 드래그로 이미지를 첨부할 수 있어요!
           </p>
+          <p className="text-xs text-gray-500">🔧 대용량 이미지는 자동으로 압축되어 업로드됩니다</p>
         </div>
       </section>
 
@@ -344,7 +345,7 @@ const EnrollPage: FC = () => {
           disabled={isPending}
           className="mt-16 w-full bg-[#D2EDE4] text-[#2D5945] py-4 rounded-lg font-medium hover:bg-[#79CCB1] transition-colors disabled:opacity-50"
         >
-          {isPending ? "등록 중…" : "제품 분석 요청하기"}
+          {isPending ? "이미지 압축 및 업로드 중…" : "제품 분석 요청하기"}
         </button>
       </section>
 
