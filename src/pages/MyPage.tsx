@@ -85,16 +85,24 @@ const MyPage: FC = () => {
         return <AdminReports />;
       case "signout":
         return (
-          <div className="bg-white rounded-xl p-6 shadow-sm">
-            <h2 className="text-xl font-bold mb-4">로그아웃</h2>
-            <p className="text-gray-600 mb-6">로그아웃 하시겠습니까?</p>
-            <div className="flex space-x-4">
+          <div className="bg-white rounded-xl p-4 lg:p-6 shadow-sm mx-2 lg:mx-0">
+            <h2 className="text-lg lg:text-xl font-bold mb-3 lg:mb-4">로그아웃</h2>
+            <p className="text-gray-600 mb-4 lg:mb-6 text-sm lg:text-base">
+              로그아웃 하시겠습니까?
+            </p>
+            <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
               <button
                 onClick={handleLogout}
                 disabled={logoutMutation.isPending}
-                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 disabled:opacity-50"
+                className="w-full sm:w-auto px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 disabled:opacity-50 text-sm lg:text-base"
               >
                 {logoutMutation.isPending ? "로그아웃 중..." : "로그아웃"}
+              </button>
+              <button
+                onClick={() => handleTabChange("analysis")}
+                className="w-full sm:w-auto px-4 py-2 border border-gray-300 text-gray-700 rounded hover:bg-gray-50 text-sm lg:text-base"
+              >
+                취소
               </button>
             </div>
           </div>
@@ -106,10 +114,93 @@ const MyPage: FC = () => {
 
   return (
     <div className="pt-16 bg-secondary min-h-screen">
+      {/* 모바일 프로필 헤더 */}
+      <div className="lg:hidden bg-white border-b px-4 py-4">
+        <div className="flex items-center space-x-3">
+          <div className="w-12 h-12 bg-[#D2EDE4] rounded-full flex items-center justify-center">
+            <span className="text-lg font-bold text-[#2D5945]">
+              {user?.nickname ? user.nickname.charAt(0).toUpperCase() : "U"}
+            </span>
+          </div>
+          <div>
+            <h3 className="font-semibold text-gray-900">{user?.nickname || "사용자"}</h3>
+            <p className="text-sm text-gray-500">{user?.email || ""}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* 모바일 탭 내비게이션 */}
+      <div className="lg:hidden bg-white border-b">
+        <div className="flex overflow-x-auto scrollbar-hide px-4 py-2">
+          <button
+            onClick={() => handleTabChange("analysis")}
+            className={`flex-shrink-0 px-4 py-2 mx-1 rounded-full text-sm font-medium transition-colors ${
+              activeTab === "analysis"
+                ? "bg-emerald-100 text-emerald-700"
+                : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+            }`}
+          >
+            분석 결과
+          </button>
+          <button
+            onClick={() => handleTabChange("liked")}
+            className={`flex-shrink-0 px-4 py-2 mx-1 rounded-full text-sm font-medium transition-colors ${
+              activeTab === "liked"
+                ? "bg-emerald-100 text-emerald-700"
+                : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+            }`}
+          >
+            좋아요
+          </button>
+          <button
+            onClick={() => handleTabChange("overview")}
+            className={`flex-shrink-0 px-4 py-2 mx-1 rounded-full text-sm font-medium transition-colors ${
+              activeTab === "overview"
+                ? "bg-emerald-100 text-emerald-700"
+                : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+            }`}
+          >
+            개인정보
+          </button>
+          <button
+            onClick={() => handleTabChange("settings")}
+            className={`flex-shrink-0 px-4 py-2 mx-1 rounded-full text-sm font-medium transition-colors ${
+              activeTab === "settings"
+                ? "bg-emerald-100 text-emerald-700"
+                : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+            }`}
+          >
+            설정
+          </button>
+          {isAdmin() && (
+            <button
+              onClick={() => handleTabChange("admin")}
+              className={`flex-shrink-0 px-4 py-2 mx-1 rounded-full text-sm font-medium transition-colors ${
+                activeTab === "admin"
+                  ? "bg-emerald-100 text-emerald-700"
+                  : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+              }`}
+            >
+              신고관리
+            </button>
+          )}
+          <button
+            onClick={() => handleTabChange("signout")}
+            className={`flex-shrink-0 px-4 py-2 mx-1 rounded-full text-sm font-medium transition-colors ${
+              activeTab === "signout"
+                ? "bg-emerald-100 text-emerald-700"
+                : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+            }`}
+          >
+            로그아웃
+          </button>
+        </div>
+      </div>
+
       {/* 컨텐츠 */}
-      <div className="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-4 gap-6">
-        {/* 사이드바 */}
-        <aside className="col-span-1 space-y-6 sticky top-16 self-start">
+      <div className="container mx-auto px-4 py-6 lg:py-0 lg:grid lg:grid-cols-4 lg:gap-6">
+        {/* 데스크톱 사이드바 */}
+        <aside className="hidden lg:block col-span-1 space-y-6 sticky top-20 self-start">
           <div className="text-center bg-white rounded-xl p-6 shadow-sm">
             <div className="w-16 h-16 mx-auto bg-[#D2EDE4] rounded-full flex items-center justify-center mb-3">
               <span className="text-2xl font-bold text-[#2D5945]">
@@ -174,12 +265,12 @@ const MyPage: FC = () => {
         </aside>
 
         {/* 대시보드 */}
-        <main className="col-span-3">{renderContent()}</main>
+        <main className="lg:col-span-3">{renderContent()}</main>
       </div>
 
       {/* 푸터 */}
-      <footer className="mt-12 bg-dark text-white py-8">
-        <div className="container mx-auto text-center text-sm">
+      <footer className="mt-8 lg:mt-12 bg-dark text-white py-6 lg:py-8">
+        <div className="container mx-auto text-center text-xs lg:text-sm px-4">
           © 2025 Around. All rights reserved.
         </div>
       </footer>
