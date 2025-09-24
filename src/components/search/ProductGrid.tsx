@@ -119,7 +119,7 @@ const ProductGrid = () => {
 
   // 첫 로딩 시 스켈레톤 표시
   if (isLoading && products.length === 0) {
-    return <ProductGridSkeleton count={8} />;
+    return <ProductGridSkeleton count={10} />;
   }
 
   return (
@@ -152,7 +152,7 @@ const ProductGrid = () => {
       {/* 추가 로딩 시 스켈레톤 */}
       {isFetchingNextPage && (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-6">
-          {Array.from({ length: 4 }).map((_, index) => (
+          {Array.from({ length: 5 }).map((_, index) => (
             <div
               key={`loading-skeleton-${index}`}
               className="bg-white rounded-lg border border-gray-200 overflow-hidden"

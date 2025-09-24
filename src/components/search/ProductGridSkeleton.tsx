@@ -4,7 +4,7 @@ interface ProductGridSkeletonProps {
   count?: number;
 }
 
-const ProductGridSkeleton = ({ count = 8 }: ProductGridSkeletonProps) => {
+const ProductGridSkeleton = ({ count = 10 }: ProductGridSkeletonProps) => {
   return (
     <div className="w-full">
       {/* 헤더 스켈레톤 */}
@@ -16,7 +16,7 @@ const ProductGridSkeleton = ({ count = 8 }: ProductGridSkeletonProps) => {
       </div>
 
       {/* 제품 그리드 스켈레톤 */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
         {Array.from({ length: count }).map((_, index) => (
           <div
             key={`skeleton-${index}`}
