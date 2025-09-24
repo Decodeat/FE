@@ -23,14 +23,9 @@ const StandardProductCard = ({
 
   return (
     <div
-      className="group relative bg-[#D2EDE4] rounded-lg border border-emerald-300 overflow-hidden hover:shadow-lg transition-shadow duration-200 cursor-pointer flex-none w-48"
+      className="group relative bg-[#D2EDE4] border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-200 cursor-pointer flex-none w-48"
       onClick={() => onProductClick(product.productId)}
     >
-      {/* 표준 상품 라벨 */}
-      <div className="absolute top-2 left-2 bg-emerald-600 text-white text-xs px-2 py-1 rounded-full z-10">
-        기준 상품
-      </div>
-
       {/* 제품 이미지 */}
       <div className="aspect-square bg-gray-100 overflow-hidden">
         <img
@@ -181,15 +176,8 @@ const UserBehaviorRecommendation = () => {
 
   const { message, standardProduct, products } = data.result;
 
-  // 표준 상품을 찾기 (standardProduct.productId와 일치하는 product)
-  const standardProductData = products.find(
-    (product) => product.productId === standardProduct.productId,
-  );
-
-  // 나머지 추천 상품들 (표준 상품 제외)
-  const otherProducts = products.filter(
-    (product) => product.productId !== standardProduct.productId,
-  );
+  // standardProduct는 별도로 제공되므로 직접 사용
+  // products 배열에는 추천 상품들만 있음
 
   return (
     <section className="py-8">
@@ -206,12 +194,10 @@ const UserBehaviorRecommendation = () => {
       {/* 가로 스크롤 가능한 추천 상품 그리드 */}
       <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
         {/* 표준 상품 (먼저 표시) */}
-        {standardProductData && (
-          <StandardProductCard product={standardProductData} onProductClick={handleProductClick} />
-        )}
+        <StandardProductCard product={standardProduct} onProductClick={handleProductClick} />
 
-        {/* 나머지 추천 상품들 */}
-        {otherProducts.map((product) => (
+        {/* 추천 상품들 */}
+        {products.map((product) => (
           <RecommendedProductCard
             key={product.productId}
             product={product}
@@ -221,7 +207,7 @@ const UserBehaviorRecommendation = () => {
       </div>
 
       {/* 스크롤 힌트 */}
-      {products.length > 3 && (
+      {products.length > 2 && (
         <p className="text-xs text-gray-400 text-center mt-2">
           ← 좌우로 스크롤하여 더 많은 상품을 확인해보세요 →
         </p>

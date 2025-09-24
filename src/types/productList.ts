@@ -48,7 +48,9 @@ export interface UserBehaviorRecommendationResult {
   message: string;
   standardProduct: {
     productId: number;
+    manufacturer: string;
     productName: string;
+    productImage: string | null;
   };
   products: UserBehaviorRecommendedProduct[];
 }
