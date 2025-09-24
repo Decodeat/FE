@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
-import { ChevronDown, Menu, ShoppingCart, User, LogOut } from "lucide-react";
-import { pagesMenu } from "../../config/menuConfig";
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { Menu, ShoppingCart, User, LogOut } from "lucide-react";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../store/useAuthStore";
 import { useLogout, useUser } from "../../hooks/useAuth";
 
@@ -9,9 +8,7 @@ import Logo from "../../assets/logo/decodeat.svg";
 
 const TopGNB = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
-  const location = useLocation();
   const navigate = useNavigate();
 
   // 인증 상태 가져오기
@@ -36,27 +33,17 @@ const TopGNB = () => {
     }
   };
 
-  // 현재 경로 기반 상위 메뉴 활성화 감지
-  const nutritionHrefs = pagesMenu.map((item) => item.href);
-  const isNutritionActive = nutritionHrefs.some((h) => location.pathname.startsWith(h));
-
-  // 드롭다운 토글 핸들러
-  const toggleDropdown = (dropdownName: string | null) => {
-    setOpenDropdown(openDropdown === dropdownName ? null : dropdownName);
-  };
-
   // 바깥 클릭시 드롭다운 닫기
   useEffect(() => {
     const handleClickOutside = () => {
-      setOpenDropdown(null);
       setIsUserDropdownOpen(false);
     };
 
-    if (openDropdown || isUserDropdownOpen) {
+    if (isUserDropdownOpen) {
       document.addEventListener("click", handleClickOutside);
       return () => document.removeEventListener("click", handleClickOutside);
     }
-  }, [openDropdown, isUserDropdownOpen]);
+  }, [isUserDropdownOpen]);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 transition-all duration-100 bg-white border-b border-gray-200">
@@ -84,39 +71,19 @@ const TopGNB = () => {
               제품 등록
             </NavLink>
 
-            {/* 영양소 정보 드롭다운 */}
-            <div className="relative">
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  toggleDropdown("pages");
-                }}
-                className={`flex items-center space-x-1 px-4 py-2 font-medium transition-colors text-gray-700 hover:text-emerald-600 cursor-pointer ${
-                  isNutritionActive
-                    ? "text-[1.125rem] border-b-2 border-emerald-500 font-semibold"
+            {/* 영양소 백과사전 링크 */}
+            <NavLink
+              to="/nutrition/encyclopedia"
+              className={({ isActive }) =>
+                `px-4 py-2 transition-colors text-gray-700 hover:text-emerald-600 ${
+                  isActive
+                    ? "font-semibold text-[1.125rem] border-b-2 border-emerald-500"
                     : "text-[1rem]"
-                }`}
-              >
-                <span>영양소 정보</span>
-                <ChevronDown className="w-4 h-4" />
-              </button>
-
-              {openDropdown === "pages" && (
-                <div className="absolute top-full left-0 mt-2 w-80 rounded-lg shadow-lg border bg-white border-gray-200 z-50">
-                  <div className="p-4 space-y-2">
-                    {pagesMenu.map((item, index) => (
-                      <a
-                        key={index}
-                        href={item.href}
-                        className="block px-3 py-2 text-sm rounded transition-colors text-gray-600 hover:text-emerald-600 hover:bg-gray-50"
-                      >
-                        {item.name}
-                      </a>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
+                }`
+              }
+            >
+              영양소 백과사전
+            </NavLink>
 
             <NavLink
               to="/support"
@@ -165,7 +132,6 @@ const TopGNB = () => {
                 >
                   <User className="w-5 h-5" />
                   <span>{user.nickname}님</span>
-                  <ChevronDown className="w-4 h-4" />
                 </button>
 
                 {/* 사용자 드롭다운 메뉴 */}
@@ -196,7 +162,7 @@ const TopGNB = () => {
               // 로그아웃 상태: 로그인 버튼
               <button
                 onClick={() => navigate("/login")}
-                className="hidden sm:flex items-center bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded-lg text-lg font-medium transition-colors cursor-pointer"
+                className="hidden sm:flex items-center bg-[#2D5945] hover:bg-emerald-700 text-white px-6 py-2 rounded-lg text-lg font-medium transition-colors cursor-pointer"
               >
                 <span>로그인</span>
               </button>
@@ -226,9 +192,15 @@ const TopGNB = () => {
               >
                 제품 등록
               </NavLink>
-              <a href="/pages" className="block text-base font-medium text-gray-900">
+              <NavLink
+                to="/nutrition/encyclopedia"
+                onClick={() => setIsMenuOpen(false)}
+                className={({ isActive }) =>
+                  `block text-base font-medium text-gray-900 ${isActive ? "underline underline-offset-4" : ""}`
+                }
+              >
                 영양소 정보
-              </a>
+              </NavLink>
               <NavLink
                 to="/support"
                 onClick={() => setIsMenuOpen(false)}

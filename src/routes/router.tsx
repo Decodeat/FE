@@ -11,6 +11,7 @@ import SupportPage from "../pages/SupportPage";
 import SearchPage from "../pages/SearchPage";
 import AuthLayout from "../layout/AuthLayout";
 import AdminReportDetail from "../components/admin/AdminReportDetail";
+import NutritionEncyclopediaPage from "../pages/NutritionEncyclopediaPage";
 
 const router = createBrowserRouter([
   {
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
       {
         path: "support",
         element: <SupportPage />,
+      },
+      {
+        path: "nutrition/encyclopedia",
+        element: <NutritionEncyclopediaPage />,
       },
       {
         path: "admin/reports/:reportId",
