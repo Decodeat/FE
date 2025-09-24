@@ -4,6 +4,7 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import { PersonalInfo } from "../components/myPage/PersonalInfo";
 import { Settings } from "../components/myPage/Settings";
 import { AnalysisResults } from "../components/myPage/AnalysisResults";
+import LikedProducts from "../components/myPage/LikedProducts";
 import AdminReports from "../components/admin/AdminReports";
 import { useAuthStore } from "../store/useAuthStore";
 import { useLogout, useUser } from "../hooks/useAuth";
@@ -17,7 +18,7 @@ const MyPage: FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [activeTab, setActiveTab] = useState<
-    "overview" | "settings" | "analysis" | "admin" | "signout"
+    "overview" | "settings" | "analysis" | "liked" | "admin" | "signout"
   >("analysis");
 
   // 로그인 상태 확인
@@ -38,7 +39,7 @@ const MyPage: FC = () => {
   // URL 파라미터에서 탭 상태 읽기
   useEffect(() => {
     const tab = searchParams.get("tab");
-    const validTabs = ["overview", "settings", "analysis", "signout"];
+    const validTabs = ["overview", "settings", "analysis", "liked", "signout"];
 
     // ADMIN일 때만 admin 탭 허용
     if (isAdmin()) {
@@ -46,12 +47,14 @@ const MyPage: FC = () => {
     }
 
     if (tab && validTabs.includes(tab)) {
-      setActiveTab(tab as "overview" | "settings" | "analysis" | "admin" | "signout");
+      setActiveTab(tab as "overview" | "settings" | "analysis" | "liked" | "admin" | "signout");
     }
   }, [searchParams, isAdmin]);
 
   // 탭 변경 시 URL 파라미터 업데이트
-  const handleTabChange = (tab: "overview" | "settings" | "analysis" | "admin" | "signout") => {
+  const handleTabChange = (
+    tab: "overview" | "settings" | "analysis" | "liked" | "admin" | "signout",
+  ) => {
     setActiveTab(tab);
     setSearchParams({ tab });
   };
@@ -76,6 +79,8 @@ const MyPage: FC = () => {
         return <Settings />;
       case "analysis":
         return <AnalysisResults />;
+      case "liked":
+        return <LikedProducts />;
       case "admin":
         return <AdminReports />;
       case "signout":
@@ -138,6 +143,14 @@ const MyPage: FC = () => {
               }`}
             >
               내 제품 분석 결과
+            </button>
+            <button
+              onClick={() => handleTabChange("liked")}
+              className={`w-full text-left flex items-center px-3 py-2 rounded hover:bg-gray-100 ${
+                activeTab === "liked" ? "bg-emerald-100 text-emerald-700 font-medium" : ""
+              }`}
+            >
+              내가 좋아요한 상품
             </button>
             {isAdmin() && (
               <button

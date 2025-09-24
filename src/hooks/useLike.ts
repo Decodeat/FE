@@ -1,6 +1,7 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toggleProductLike } from "../apis/like";
+import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
+import { toggleProductLike, getLikedProducts } from "../apis/like";
 import type { LatestProduct } from "../types/productList";
+import type { LikedProductsParams } from "../types/like";
 
 export const useLikeMutation = (productId: number) => {
   const queryClient = useQueryClient();
@@ -62,6 +63,17 @@ export const useLikeMutation = (productId: number) => {
       // 완료 후 관련 쿼리 갱신
       queryClient.invalidateQueries({ queryKey: ["products", "latest"] });
       queryClient.invalidateQueries({ queryKey: ["product", productId.toString()] });
+      queryClient.invalidateQueries({ queryKey: ["products", "liked"] });
     },
+  });
+};
+
+// 좋아요한 상품 목록 조회 훅
+export const useLikedProducts = (params?: LikedProductsParams) => {
+  return useQuery({
+    queryKey: ["products", "liked", params?.page, params?.size],
+    queryFn: () => getLikedProducts(params),
+    staleTime: 5 * 60 * 1000, // 5분간 캐시 유지
+    gcTime: 10 * 60 * 1000, // 10분간 가비지 컬렉션 방지
   });
 };
