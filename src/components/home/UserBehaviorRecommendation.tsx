@@ -118,7 +118,7 @@ const UserBehaviorRecommendation = () => {
           <div className="h-4 bg-gray-200 rounded w-96 animate-pulse"></div>
         </div>
         <div className="flex gap-4 overflow-x-auto pb-4">
-          {Array.from({ length: 4 }).map((_, index) => (
+          {Array.from({ length: 7 }).map((_, index) => (
             <div key={index} className="flex-none w-48 bg-gray-100 rounded-lg animate-pulse">
               <div className="aspect-square bg-gray-200 rounded-t-lg" />
               <div className="p-3 space-y-2">
