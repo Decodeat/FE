@@ -19,37 +19,50 @@ const PieChart = ({ data }: PieChartProps) => {
     <div className="flex items-center gap-8">
       {/* 원형 차트 */}
       <svg width={svgSize} height={svgSize}>
-        {data.map((item, index) => {
-          const percentage = item.value / total;
-          const angle = percentage * 2 * Math.PI;
+        {data.length === 1 ? (
+          // 단일 요소일 때는 전체 원을 그림
+          <circle
+            cx={center}
+            cy={center}
+            r={radius}
+            fill={data[0].color}
+            stroke="white"
+            strokeWidth={strokeWidth}
+          />
+        ) : (
+          // 여러 요소일 때는 기존 로직 사용
+          data.map((item, index) => {
+            const percentage = item.value / total;
+            const angle = percentage * 2 * Math.PI;
 
-          const x1 = center + Math.cos(currentAngle) * radius;
-          const y1 = center + Math.sin(currentAngle) * radius;
-          const x2 = center + Math.cos(currentAngle + angle) * radius;
-          const y2 = center + Math.sin(currentAngle + angle) * radius;
+            const x1 = center + Math.cos(currentAngle) * radius;
+            const y1 = center + Math.sin(currentAngle) * radius;
+            const x2 = center + Math.cos(currentAngle + angle) * radius;
+            const y2 = center + Math.sin(currentAngle + angle) * radius;
 
-          const largeArcFlag = angle > Math.PI ? 1 : 0;
+            const largeArcFlag = angle > Math.PI ? 1 : 0;
 
-          const pathData = [
-            `M ${center} ${center}`,
-            `L ${x1} ${y1}`,
-            `A ${radius} ${radius} 0 ${largeArcFlag} 1 ${x2} ${y2}`,
-            "Z",
-          ].join(" ");
+            const pathData = [
+              `M ${center} ${center}`,
+              `L ${x1} ${y1}`,
+              `A ${radius} ${radius} 0 ${largeArcFlag} 1 ${x2} ${y2}`,
+              "Z",
+            ].join(" ");
 
-          const slice = (
-            <path
-              key={index}
-              d={pathData}
-              fill={item.color}
-              stroke="white"
-              strokeWidth={strokeWidth}
-            />
-          );
+            const slice = (
+              <path
+                key={index}
+                d={pathData}
+                fill={item.color}
+                stroke="white"
+                strokeWidth={strokeWidth}
+              />
+            );
 
-          currentAngle += angle;
-          return slice;
-        })}
+            currentAngle += angle;
+            return slice;
+          })
+        )}
       </svg>
 
       {/* 영양성분 범례 */}
