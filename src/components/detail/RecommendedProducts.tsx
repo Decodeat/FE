@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { useRef } from "react";
 import { useProductBasedRecommendation } from "../../hooks/useProductList";
 import type { RecommendedProduct } from "../../types/productList";
 
@@ -50,6 +51,15 @@ const RecommendedProducts = ({ productId }: RecommendedProductsProps) => {
     productId,
     limit: 10,
   });
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  // 마우스 휠로 가로 스크롤 처리
+  const handleWheel = (e: React.WheelEvent) => {
+    if (scrollContainerRef.current) {
+      e.preventDefault();
+      scrollContainerRef.current.scrollLeft += e.deltaY;
+    }
+  };
 
   if (isLoading) {
     return (
@@ -101,7 +111,11 @@ const RecommendedProducts = ({ productId }: RecommendedProductsProps) => {
       </p>
 
       {/* 가로 스크롤 가능한 추천 상품 그리드 */}
-      <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
+      <div
+        ref={scrollContainerRef}
+        className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide"
+        onWheel={handleWheel}
+      >
         {data.result.map((product) => (
           <RecommendedProductCard key={product.productId} product={product} />
         ))}

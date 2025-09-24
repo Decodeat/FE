@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { useRef } from "react";
 
 import { useUserBehaviorRecommendation } from "../../hooks/useProductList";
 import { useAuthStore } from "../../store/useAuthStore";
@@ -94,9 +95,18 @@ const UserBehaviorRecommendation = () => {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuthStore();
   const { data, isLoading, error } = useUserBehaviorRecommendation();
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const handleProductClick = (productId: number) => {
     navigate(`/detail/${productId}`);
+  };
+
+  // 마우스 휠로 가로 스크롤 처리
+  const handleWheel = (e: React.WheelEvent) => {
+    if (scrollContainerRef.current) {
+      e.preventDefault();
+      scrollContainerRef.current.scrollLeft += e.deltaY;
+    }
   };
 
   // 비로그인 상태일 때 로그인 안내 표시
@@ -165,7 +175,11 @@ const UserBehaviorRecommendation = () => {
       </div>
 
       {/* 가로 스크롤 가능한 추천 상품 그리드 */}
-      <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
+      <div
+        ref={scrollContainerRef}
+        className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide"
+        onWheel={handleWheel}
+      >
         {/* 표준 상품 (먼저 표시) */}
         <StandardProductCard product={standardProduct} onProductClick={handleProductClick} />
 
