@@ -252,7 +252,7 @@ const EnrollPage: FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-10">
+    <form onSubmit={handleSubmit} className="space-y-10 xl:space-y-16 2xl:space-y-20">
       {/* 배너 */}
       <section className="w-full bg-[#D2EDE4] py-16 text-center relative overflow-hidden">
         <div className="relative z-10 text-center max-w-2xl mx-auto px-4">
@@ -265,14 +265,14 @@ const EnrollPage: FC = () => {
         </div>
       </section>
 
-      <section className="max-w-6xl mx-auto px-4 pb-12">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+      <section className="max-w-6xl xl:max-w-7xl 2xl:max-w-8xl mx-auto px-4 xl:px-6 2xl:px-8 pb-12 xl:pb-16 2xl:pb-20">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 xl:gap-16 2xl:gap-20">
           {/* 원재료/영양정보 표 */}
           <div className="flex flex-col gap-3">
-            <label className="text-sm font-medium text-gray-800">
+            <label className="text-sm xl:text-base 2xl:text-lg font-medium text-gray-800">
               원재료명 및 영양정보 표 사진 등록 <span className="text-red-500">*</span>
             </label>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 xl:gap-6 2xl:gap-8">
               <UploadSlot
                 preview={ingNutriPreviews[0]}
                 onChange={(file) => handleIngSlotChange(0, file)}
@@ -290,14 +290,16 @@ const EnrollPage: FC = () => {
                 isDragging={isDragging}
               />
             </div>
-            <p className="text-xs text-gray-500">
+            <p className="text-xs xl:text-sm 2xl:text-base text-gray-500">
               원재료와 영양정보 표가 한 장에 다 보이지 않을 때만 사진을 두 장 등록해 주세요.
             </p>
           </div>
 
           {/* 제품 사진 */}
-          <div className="flex flex-col gap-3">
-            <label className="text-sm font-medium text-gray-800">제품 사진 등록 (선택)</label>
+          <div className="flex flex-col gap-3 xl:gap-4 2xl:gap-5">
+            <label className="text-sm xl:text-base 2xl:text-lg font-medium text-gray-800">
+              제품 사진 등록 (선택)
+            </label>
             <UploadSlot
               preview={productPhotoPreview}
               onChange={handleProdSlotChange}
@@ -310,7 +312,7 @@ const EnrollPage: FC = () => {
         </div>
 
         {/* 텍스트 필드들 */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 xl:gap-8 2xl:gap-10 mt-10 xl:mt-16 2xl:mt-20">
           <div className="space-y-2">
             <label className="text-sm font-medium text-gray-700">
               제품명 <span className="text-red-500">*</span>
@@ -320,13 +322,13 @@ const EnrollPage: FC = () => {
               value={productName}
               onChange={(e) => setProductName(e.target.value)}
               disabled={isPending}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#79CCB1] focus:border-[#79CCB1] outline-none"
+              className="w-full px-4 xl:px-5 2xl:px-6 py-3 xl:py-4 2xl:py-5 border border-gray-300 rounded-lg xl:rounded-xl 2xl:rounded-2xl text-base xl:text-lg 2xl:text-xl focus:ring-2 focus:ring-[#79CCB1] focus:border-[#79CCB1] outline-none"
               placeholder="제품명을 입력하세요"
             />
           </div>
 
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700">
+          <div className="space-y-2 xl:space-y-3 2xl:space-y-4">
+            <label className="text-sm xl:text-base 2xl:text-lg font-medium text-gray-700">
               회사명 <span className="text-red-500">*</span>
             </label>
             <input
@@ -334,7 +336,7 @@ const EnrollPage: FC = () => {
               value={companyName}
               onChange={(e) => setCompanyName(e.target.value)}
               disabled={isPending}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#79CCB1] focus:border-[#79CCB1] outline-none"
+              className="w-full px-4 xl:px-5 2xl:px-6 py-3 xl:py-4 2xl:py-5 border border-gray-300 rounded-lg xl:rounded-xl 2xl:rounded-2xl text-base xl:text-lg 2xl:text-xl focus:ring-2 focus:ring-[#79CCB1] focus:border-[#79CCB1] outline-none"
               placeholder="회사명을 입력하세요"
             />
           </div>
@@ -343,7 +345,7 @@ const EnrollPage: FC = () => {
         <button
           type="submit"
           disabled={isPending}
-          className="mt-16 w-full bg-[#D2EDE4] text-[#2D5945] py-4 rounded-lg font-medium hover:bg-[#79CCB1] transition-colors disabled:opacity-50"
+          className="mt-16 xl:mt-20 2xl:mt-24 w-full bg-[#D2EDE4] text-[#2D5945] py-4 xl:py-5 2xl:py-6 rounded-lg xl:rounded-xl 2xl:rounded-2xl font-medium xl:text-lg 2xl:text-xl hover:bg-[#79CCB1] transition-colors disabled:opacity-50"
         >
           {isPending ? "이미지 압축 및 업로드 중…" : "제품 분석 요청하기"}
         </button>

@@ -48,7 +48,7 @@ const UploadSlot: React.FC<UploadSlotProps> = ({
     <div
       className={`
         relative
-        w-28 sm:w-32 md:w-[150px] lg:w-[180px]
+        w-28 sm:w-32 md:w-[150px] lg:w-[180px] xl:w-[220px] 2xl:w-[250px]
         aspect-square
         border-2 border-dashed rounded-lg bg-white
         flex items-center justify-center transition-colors
@@ -81,8 +81,8 @@ const UploadSlot: React.FC<UploadSlotProps> = ({
         </>
       ) : (
         <div className="space-y-2 text-center text-gray-500 pointer-events-none">
-          <Camera className="mx-auto w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 text-gray-400" />
-          <p className="text-[12px] sm:text-xs md:text-sm">사진 업로드</p>
+          <Camera className="mx-auto w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 xl:w-16 xl:h-16 2xl:w-18 2xl:h-18 text-gray-400" />
+          <p className="text-[12px] sm:text-xs md:text-sm xl:text-base 2xl:text-lg">사진 업로드</p>
         </div>
       )}
 
