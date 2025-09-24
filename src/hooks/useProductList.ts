@@ -1,5 +1,9 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { getLatestProducts, getProductBasedRecommendation } from "../apis/productList";
+import {
+  getLatestProducts,
+  getProductBasedRecommendation,
+  getUserBehaviorRecommendation,
+} from "../apis/productList";
 import type { LatestProduct, ProductBasedRecommendationParams } from "../types/productList";
 
 // 무한스크롤용 최신 제품 조회 훅
@@ -44,6 +48,16 @@ export const useProductBasedRecommendation = (params: ProductBasedRecommendation
     queryKey: ["products", "recommendation", "product-based", params.productId, params.limit],
     queryFn: () => getProductBasedRecommendation(params),
     enabled: !!params.productId, // productId가 있을 때만 실행
+    staleTime: 10 * 60 * 1000, // 10분간 캐시 유지
+    gcTime: 15 * 60 * 1000, // 15분간 가비지 컬렉션 방지
+  });
+};
+
+// 사용자 행동 기반 추천 훅
+export const useUserBehaviorRecommendation = () => {
+  return useQuery({
+    queryKey: ["products", "recommendation", "user-behavior-based"],
+    queryFn: () => getUserBehaviorRecommendation(),
     staleTime: 10 * 60 * 1000, // 10분간 캐시 유지
     gcTime: 15 * 60 * 1000, // 15분간 가비지 컬렉션 방지
   });

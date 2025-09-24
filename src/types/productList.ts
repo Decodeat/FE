@@ -34,3 +34,24 @@ export interface ProductBasedRecommendationParams {
 
 // 상품 기반 추천 응답 타입
 export type ProductBasedRecommendationResponse = ApiResponse<RecommendedProduct[]>;
+
+// 사용자 행동 기반 추천 아이템 타입 (동일한 구조)
+export interface UserBehaviorRecommendedProduct {
+  productId: number;
+  manufacturer: string;
+  productName: string;
+  productImage: string | null;
+}
+
+// 사용자 행동 기반 추천 결과 타입
+export interface UserBehaviorRecommendationResult {
+  message: string;
+  standardProduct: {
+    productId: number;
+    productName: string;
+  };
+  products: UserBehaviorRecommendedProduct[];
+}
+
+// 사용자 행동 기반 추천 응답 타입
+export type UserBehaviorRecommendationResponse = ApiResponse<UserBehaviorRecommendationResult>;

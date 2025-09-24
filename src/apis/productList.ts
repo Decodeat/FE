@@ -4,6 +4,7 @@ import type {
   LatestProductsParams,
   ProductBasedRecommendationResponse,
   ProductBasedRecommendationParams,
+  UserBehaviorRecommendationResponse,
 } from "../types/productList";
 
 // 홈화면용 최신순 제품 조회
@@ -49,3 +50,17 @@ export const getProductBasedRecommendation = async (
 
   return response.data;
 };
+
+// 사용자 행동 기반 추천 조회
+export const getUserBehaviorRecommendation =
+  async (): Promise<UserBehaviorRecommendationResponse> => {
+    const response = await API.get<UserBehaviorRecommendationResponse>(
+      `/products/recommendation/user-behavior-based`,
+    );
+
+    if (!response.data.isSuccess) {
+      throw new Error(response.data.message || "사용자 행동 기반 추천 조회에 실패했습니다.");
+    }
+
+    return response.data;
+  };
