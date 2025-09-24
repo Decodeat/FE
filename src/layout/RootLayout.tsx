@@ -1,4 +1,5 @@
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import TopGNB from "../components/gnb/TopGNB";
 import MessageModal from "../components/ui/MessageModal";
 import { useAuthStore } from "../store/useAuthStore";
@@ -13,6 +14,11 @@ const RootLayout = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { showLoginModal, setShowLoginModal } = useAuthStore();
+
+  // 페이지 변경 시 스크롤 최상단으로 이동
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
   const isEnrollPage = location.pathname === "/enroll";
   const isOnboardingPage = location.pathname === "/onboarding";
