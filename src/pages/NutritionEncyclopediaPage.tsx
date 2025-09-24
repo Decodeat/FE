@@ -16,8 +16,8 @@ const NutritionEncyclopediaPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white pt-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="min-h-screen  pt-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* 영양소 카드 그리드 */}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
           {NUTRITION_ENCYCLOPEDIA.map((nutrient) => (
