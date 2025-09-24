@@ -50,6 +50,20 @@ export const NUTRIENT_CATEGORIES = [
     bgColor: "bg-blue-50",
   },
   {
+    key: "solubleDietaryFibers" as keyof ProductDetail,
+    title: "수용성 식이섬유",
+    color: "bg-teal-500",
+    textColor: "text-teal-700",
+    bgColor: "bg-teal-50",
+  },
+  {
+    key: "insolubleDietaryFibers" as keyof ProductDetail,
+    title: "불용성 식이섬유",
+    color: "bg-cyan-500",
+    textColor: "text-cyan-700",
+    bgColor: "bg-cyan-50",
+  },
+  {
     key: "additives" as keyof ProductDetail,
     title: "첨가물",
     color: "bg-red-500",

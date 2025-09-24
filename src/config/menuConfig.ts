@@ -31,6 +31,8 @@ export const pagesMenu: MenuItem[] = [
   { name: "복합 탄수화물", href: "/nutrition/complex-carbohydrate" },
   { name: "식물성 단백질", href: "/nutrition/plant-protein" },
   { name: "동물성 단백질", href: "/nutrition/animal-protein" },
+  { name: "수용성 식이섬유", href: "/nutrition/soluble-dietary-fibers" },
+  { name: "불용성 식이섬유", href: "/nutrition/insoluble-dietary-fibers" },
   { name: "알레르기 유발요소", href: "/nutrition/allergens" },
   { name: "첨가물", href: "/nutrition/additives" },
   { name: "기타", href: "/nutrition/others" },

@@ -24,6 +24,8 @@ export interface ProductDetail {
   plantProteins: string[];
   complexCarbs: string[];
   refinedCarbs: string[];
+  solubleDietaryFibers: string[];
+  insolubleDietaryFibers: string[];
   // 첨가제, 알레르겐, 기타
   additives: string[];
   allergens: string[];

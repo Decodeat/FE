@@ -14,6 +14,16 @@ const FilterBox = ({ className = "" }: FilterBoxProps) => {
     { id: "complex-carbohydrate", label: "복합 탄수화물", apiCategory: "COMPLEX_CARBOHYDRATE" },
     { id: "plant-protein", label: "식물성 단백질", apiCategory: "PLANT_PROTEIN" },
     { id: "animal-protein", label: "동물성 단백질", apiCategory: "ANIMAL_PROTEIN" },
+    {
+      id: "soluble-dietary-fibers",
+      label: "수용성 식이섬유",
+      apiCategory: "SOLUBLE_DIETARY_FIBERS",
+    },
+    {
+      id: "insoluble-dietary-fibers",
+      label: "불용성 식이섬유",
+      apiCategory: "INSOLUBLE_DIETARY_FIBERS",
+    },
     { id: "allergens", label: "알레르기 유발요소", apiCategory: "ALLERGENS" },
     { id: "additives", label: "첨가물", apiCategory: "ADDITIVES" },
     { id: "others", label: "기타", apiCategory: "OTHERS" },

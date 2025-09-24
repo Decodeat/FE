@@ -446,16 +446,30 @@ const AdminReportDetail: React.FC = () => {
                         {allImages.length > 1 && (
                           <>
                             <button
-                              onClick={handlePrev}
-                              className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 text-white rounded-full p-2 hover:bg-black/70"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handlePrev();
+                              }}
+                              className="absolute left-2 top-1/2 transform -translate-y-1/2 
+                                       bg-white/70 border border-gray-300 
+                                       rounded-full w-8 h-8 
+                                       flex items-center justify-center 
+                                       hover:bg-white transition cursor-pointer"
                             >
-                              ‹
+                              {"<"}
                             </button>
                             <button
-                              onClick={handleNext}
-                              className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 text-white rounded-full p-2 hover:bg-black/70"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleNext();
+                              }}
+                              className="absolute right-2 top-1/2 transform -translate-y-1/2 
+                                       bg-white/70 border border-gray-300 
+                                       rounded-full w-8 h-8 
+                                       flex items-center justify-center 
+                                       hover:bg-white transition cursor-pointer"
                             >
-                              ›
+                              {">"}
                             </button>
                             <div className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-black/50 text-white text-sm px-2 py-1 rounded">
                               {currentImageIndex + 1} / {allImages.length}
