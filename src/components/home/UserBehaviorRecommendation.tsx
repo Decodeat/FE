@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import { Heart } from "lucide-react";
+
 import { useUserBehaviorRecommendation } from "../../hooks/useProductList";
-import { useLikeMutation } from "../../hooks/useLike";
 import { useAuthStore } from "../../store/useAuthStore";
 import type { UserBehaviorRecommendedProduct } from "../../types/productList";
 
@@ -14,12 +13,6 @@ const StandardProductCard = ({
   onProductClick: (productId: number) => void;
 }) => {
   const displayImage = product.productImage || "/decodeatLogo.ico";
-  const likeMutation = useLikeMutation(product.productId);
-
-  const handleLikeClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    likeMutation.mutate();
-  };
 
   return (
     <div
@@ -46,13 +39,6 @@ const StandardProductCard = ({
             <h3 className="font-medium text-gray-900 text-sm line-clamp-2 flex-1 pr-2">
               {product.productName}
             </h3>
-            <button
-              onClick={handleLikeClick}
-              className="p-1 rounded-full hover:bg-emerald-100 transition-colors cursor-pointer flex-shrink-0"
-              disabled={likeMutation.isPending}
-            >
-              <Heart className="w-4 h-4 text-gray-400 hover:text-red-500 transition-colors" />
-            </button>
           </div>
           <p className="text-xs text-gray-600">{product.manufacturer}</p>
         </div>
@@ -70,12 +56,6 @@ const RecommendedProductCard = ({
   onProductClick: (productId: number) => void;
 }) => {
   const displayImage = product.productImage || "/decodeatLogo.ico";
-  const likeMutation = useLikeMutation(product.productId);
-
-  const handleLikeClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    likeMutation.mutate();
-  };
 
   return (
     <div
@@ -102,13 +82,6 @@ const RecommendedProductCard = ({
             <h3 className="font-medium text-gray-900 text-sm line-clamp-2 flex-1 pr-2">
               {product.productName}
             </h3>
-            <button
-              onClick={handleLikeClick}
-              className="p-1 rounded-full hover:bg-gray-100 transition-colors cursor-pointer flex-shrink-0"
-              disabled={likeMutation.isPending}
-            >
-              <Heart className="w-4 h-4 text-gray-400 hover:text-red-500 transition-colors" />
-            </button>
           </div>
           <p className="text-xs text-gray-500">{product.manufacturer}</p>
         </div>
